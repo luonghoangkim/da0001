@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "1.0.0",
+    "@types/mongoose": "5.11.97",
     "antd": "5.19.3",
     "bcrypt": "^5.1.1",
     "mongoose": "8.6.0",
