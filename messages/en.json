@@ -15,6 +15,14 @@
         "invalidEmail": "Email is invalid!",
         "invalidPassword": "Password is invalid!",
         "emailExists": "Email already exists!",
-        "errorOccurred": "Error, please try again!"
+        "errorOccurred": "Error, please try again!",
+        "username": "username",
+        "nameRequired": "Name is required!",
+        "continueWithGoogle": "Continue with Google",
+        "orSignUpWith": "Or sign up with",
+        "alreadyHaveAccount": "Already an account",
+        "signInHere": "Sign in here",
+        "passwordRequired": "Password is required",
+        "emailRequired" : "Email is required"
     }
 }
