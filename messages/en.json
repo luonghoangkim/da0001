@@ -1,7 +1,20 @@
 {
+    "Home": {
+        "welcomeMessage": "Welcome to the Home Page",
+        "goToSignUp": "Go to Sign Up"
+    },
     "Login": {
         "login": "login",
         "username": "username",
         "password": "password"
+    },
+    "Register": {
+        "signUp": "Sign Up",
+        "email": "Email",
+        "password": "Password",
+        "invalidEmail": "Email is invalid!",
+        "invalidPassword": "Password is invalid!",
+        "emailExists": "Email already exists!",
+        "errorOccurred": "Error, please try again!"
     }
 }
