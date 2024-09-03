@@ -3,8 +3,13 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { signUp } from './service/sigup-service';
+import {useTranslations} from 'next-intl';
+
 
 const SignupForm = () => {
+
+  const t = useTranslations('Register');
+
   const [error, setError] = useState('');
 
   const isValidEmail = (email: string) => {
@@ -19,12 +24,12 @@ const SignupForm = () => {
     const password = form.password.value;
 
     if (!isValidEmail(email)) {
-      setError('Email is invalid!');
+      setError(t('invalidEmail'));
       return;
     }
 
     if (!password) {
-      setError('Password is invalid!');
+      setError(t('invalidPassword'));
       return;
     }
 
@@ -32,23 +37,23 @@ const SignupForm = () => {
       const res = await signUp(email, password);
 
       if (res.status === 400) {
-        setError('Email already exists!');
+        setError(t('emailExists'));
       } else if (res.status === 200) {
         setError('');
       }
     } catch (error) {
-      setError('Error, please try again!');
+      setError(t('errorOccurred')); 
       console.log(error);
     }
   };
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
-      <h2>Sign Up</h2>
+      <h2>{t('signUp')}</h2> 
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t('email')}</label>
           <input
             type="email"
             id="email"
@@ -57,7 +62,7 @@ const SignupForm = () => {
           />
         </div>
         <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t('password')}</label>
           <input
             type="password"
             id="password"
@@ -77,7 +82,7 @@ const SignupForm = () => {
             cursor: 'pointer',
           }}
         >
-          Sign Up
+        {t('signUp')}
         </button>
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </form>

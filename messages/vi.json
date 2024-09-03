@@ -1,7 +1,20 @@
 {
+    "Home": {
+        "welcomeMessage": "Chào mừng đến với Trang Chủ",
+        "goToSignUp": "Đi đến Đăng ký"
+    },
     "Login": {
         "login": "Đăng nhập",
         "username": "Tên đăng nhập",
         "password": "Mật khẩu"
+    },
+    "Register": {
+        "signUp": "Đăng ký",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "invalidEmail": "Email không hợp lệ!",
+        "invalidPassword": "Mật khẩu không hợp lệ!",
+        "emailExists": "Email đã tồn tại!",
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
     }
 }
