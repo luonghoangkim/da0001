@@ -1,17 +1,22 @@
 // models/YourModel.ts
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose from "mongoose";
 
-export interface IYourModel extends Document {
-  name: string;
-  age: number;
-}
+// Định nghĩa mô hình (model) MongoDB
 
-const YourModelSchema: Schema<IYourModel> = new Schema({
-  name: { type: String, required: true },
-  age: { type: Number, required: true },
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true, // Đánh dấu trường email là duy nhất
+  },
+  password: {
+    type: String,
+    required: true,
+  },
 });
 
-const YourModel: Model<IYourModel> =
-  mongoose.models.YourModel || mongoose.model("YourModel", YourModelSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
-export default YourModel;
+export default User;

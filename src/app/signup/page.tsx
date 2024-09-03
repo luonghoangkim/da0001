@@ -1,83 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-  });
+  const [error, setError] = useState('');
 
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const isValidEmail = (email: string) => {
+    const emailRgx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+    return emailRgx.test(email);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
+    const form = e.target as HTMLFormElement;
+    const email = form.email.value;
+    const password = form.password.value;
 
-    if (!formData.name || !formData.age) {
-      setError('Name and age are required');
+    if (!isValidEmail(email)) {
+      setError('Email is invalid!');
+      return;
+    }
+
+    if (!password) {
+      setError('Password is invalid!');
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/signupapi",
+      const res = await fetch("api/signupapi",
         { // Sửa URL nếu cần thiết
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         body: JSON.stringify({
-          name: formData.name,
-          age: parseInt(formData.age, 10), // Chỉ định cơ số 10 cho parseInt
+          email,
+          password,
         }),
       });
 
-      if (response.ok) {
-        setFormData({ name: '', age: '' });
-        setSuccess('User registered successfully');
-      } else {
-        const data = await response.json();
-        setError(data.message || 'Something went wrong');
+      if (res.status === 400) {
+        setError('Email already exists!');
+      } else if (res.status === 200) {
+        setError('');
       }
     } catch (error) {
-      setError('Failed to register user');
+      setError('Error, please try again!');
+      console.log(error);
     }
   };
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
       <h2>Sign Up</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="email">Email:</label>
           <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
+            type="email"
+            id="email"
+            name="email"
             style={{ width: '100%', padding: '8px', marginTop: '5px' }}
           />
         </div>
         <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="age">Age:</label>
+          <label htmlFor="password">Password:</label>
           <input
-            type="number"
-            id="age"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
+            type="password"
+            id="password"
+            name="password"
             style={{ width: '100%', padding: '8px', marginTop: '5px' }}
           />
         </div>
@@ -95,6 +88,7 @@ const Signup = () => {
         >
           Sign Up
         </button>
+        {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </form>
     </div>
   );

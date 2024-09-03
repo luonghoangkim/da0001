@@ -1,33 +1,35 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import connectDB from "@/lib/connectDb";
+import User from "@/models/user.modal";
+import bcrypt from "bcrypt";
 
-// Kết nối tới MongoDB
-const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) return;
-  return mongoose.connect(process.env.MONGODB_URI as string);
-};
-
-// Định nghĩa mô hình (model) MongoDB
-const UserSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-});
-
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
 
 // Xử lý phương thức POST
-export async function POST(request: Request) {
+export async function POST(request: any) {
+  
+  const {email, password} = await request.json()
   await connectDB();
 
+  const existUser = await User.findOne({ email });
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const newUser = new User({
+    email,
+    password: hashPassword
+  })
+  
+  if (existUser) {
+    return new NextResponse("User already existing", {status:400})
+  }
+
   try {
-    const data = await request.json();
-    const newUser = new User(data);
     await newUser.save();
 
     return NextResponse.json(
       { message: "User registered successfully" },
-      { status: 201 }
+      { status: 200 }
     );
+
   } catch (error) {
     console.error("Error registering user:", error);
     return NextResponse.json(
