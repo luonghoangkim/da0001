@@ -15,6 +15,14 @@
         "invalidEmail": "Email không hợp lệ!",
         "invalidPassword": "Mật khẩu không hợp lệ!",
         "emailExists": "Email đã tồn tại!",
-        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!",
+        "username": "Tên đăng nhập",
+        "nameRequired": "Vui lòng nhập tên đăng nhập",
+        "continueWithGoogle": "Tiếp tục với Google",
+        "orSignUpWith": "Hoặc",
+        "alreadyHaveAccount": "Đã có tài khoản?",
+        "signInHere": "Đăng nhập",
+        "passwordRequired": "Vui lòng nhập mật khẩu",
+        "emailRequired": "Vui lòng nhập email"
     }
 }
