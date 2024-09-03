@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "1.0.0",
+    "@types/mongoose": "5.11.97",
     "antd": "5.19.3",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "5.1.1",
     "mongoose": "8.6.0",
     "next": "14.2.7",
     "next-intl": "^3.19.0",
@@ -21,6 +22,7 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "20.14.12",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
