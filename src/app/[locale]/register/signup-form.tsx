@@ -5,8 +5,10 @@ import { GoogleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { signUp } from './service/sigup-service';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 
-const { Title, Text, Link } = Typography;
+
+const { Title, Text } = Typography;
 
 const SignupForm = () => {
   const t = useTranslations('Register');

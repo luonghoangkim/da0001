@@ -4,9 +4,14 @@
         "goToSignUp": "Go to Sign Up"
     },
     "Login": {
-        "login": "login",
-        "username": "username",
-        "password": "password"
+        "login": "Login",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "notHaveAccount": "Not an account?",
+        "signUp": "Sign Up",
+        "orSignUpWith": "Or sign up with",
+        "continueWithGoogle": "Continue with Google"
     },
     "Register": {
         "signUp": "Sign Up",
@@ -23,6 +28,6 @@
         "alreadyHaveAccount": "Already an account",
         "signInHere": "Sign in here",
         "passwordRequired": "Password is required",
-        "emailRequired" : "Email is required"
+        "emailRequired": "Email is required"
     }
 }
