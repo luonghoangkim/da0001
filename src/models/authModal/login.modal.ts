@@ -16,6 +16,6 @@ const loginSchema = new Schema({
   },
 });
 
-const LoginUser = mongoose.models.login || mongoose.model("Login", loginSchema);
+const LoginUser = mongoose.models.login || mongoose.model("LoginUser", loginSchema);
 
 export default LoginUser;

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
-import LoginUser from "@/models/authModal/login.modal";
+import User from "@/models/authModal/user.modal";
 import bcrypt from "bcrypt";
 
 // Xử lý phương thức POST
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
   try {
     // Kiểm tra xem user có tồn tại không
-    const user = await LoginUser.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         message: "Login successful",
-        user: { name: user.name, email: user.email },
+        user: { username: user.username, email: user.email },
       },
       { status: 200 }
     );
