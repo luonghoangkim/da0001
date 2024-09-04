@@ -11,8 +11,10 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "1.0.0",
     "@types/mongoose": "5.11.97",
+    "@types/mongoose-auto-increment": "^5.0.38",
     "antd": "5.19.3",
     "bcrypt": "5.1.1",
+    "mongodb": "^6.8.0",
     "mongoose": "8.6.0",
     "next": "14.2.7",
     "next-intl": "^3.19.0",

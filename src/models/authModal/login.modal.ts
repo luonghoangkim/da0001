@@ -1,11 +1,10 @@
-// models/YourModel.ts
 import mongoose from "mongoose";
 
 // Định nghĩa mô hình (model) MongoDB
 
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const loginSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -17,6 +16,6 @@ const userSchema = new Schema({
   },
 });
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const LoginUser = mongoose.models.login || mongoose.model("LoginUser", loginSchema);
 
-export default User;
+export default LoginUser;

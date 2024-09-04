@@ -1,22 +1,23 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
-import User from "@/models/user.modal";
+import User from "@/models/authModal/user.modal";
 import bcrypt from "bcrypt";
 
 
 // Xử lý phương thức POST
 export async function POST(request: any) {
   
-  const {email, password} = await request.json()
+  const {username, email, password} = await request.json()
   await connectDB();
 
   const existUser = await User.findOne({ email });
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = new User({
+    username,
     email,
-    password: hashPassword
-  })
+    password: hashPassword,
+  });
   
   if (existUser) {
     return new NextResponse("User already existing", {status:400})
