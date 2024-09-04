@@ -18,7 +18,7 @@ const SignupForm = () => {
   };
 
   const onFinish = async (values: any) => {
-    const { email, password } = values;
+    const { username, email, password } = values;
 
     if (!isValidEmail(email)) {
       setError(t('invalidEmail'));
@@ -31,7 +31,7 @@ const SignupForm = () => {
     }
 
     try {
-      const res = await signUp(email, password);
+      const res = await signUp(username, email, password);
 
       if (res.status === 400) {
         setError(t('emailExists'));
@@ -80,9 +80,9 @@ const SignupForm = () => {
         </Form.Item>
       </Form>
       <Divider>{t('orSignUpWith')}</Divider>
-      <Button icon={<GoogleOutlined />} block>
-        {t('continueWithGoogle')}
-      </Button>
+      <Button icon={<GoogleOutlined />} block >
+          {t('continueWithGoogle')}
+        </Button>
       <Text style={{ marginTop: '20px', display: 'block' }}>
         {t('alreadyHaveAccount')} <Link href="/login">{t('signInHere')}</Link>
       </Text>

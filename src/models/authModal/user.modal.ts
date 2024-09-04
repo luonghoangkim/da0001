@@ -1,4 +1,3 @@
-// models/YourModel.ts
 import mongoose from "mongoose";
 
 // Định nghĩa mô hình (model) MongoDB
@@ -6,6 +5,11 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique:true
+  },
   email: {
     type: String,
     required: true,
@@ -16,6 +20,8 @@ const userSchema = new Schema({
     required: true,
   },
 });
+
+
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
