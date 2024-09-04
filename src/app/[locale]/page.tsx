@@ -8,7 +8,7 @@ const Home = () => {
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
       <h1>{t('welcomeMessage')}</h1>  
       <p>
-        <Link href="/signup">
+        <Link href="/register">
           {t('goToSignUp')} 
         </Link>
       </p>

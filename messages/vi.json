@@ -6,7 +6,12 @@
     "Login": {
         "login": "Đăng nhập",
         "username": "Tên đăng nhập",
-        "password": "Mật khẩu"
+        "email": "Email",
+        "password": "Mật khẩu",
+        "notHaveAccount": "Chưa có tài khoản?",
+        "signUp": "Đăng ký",
+        "orSignUpWith": "Hoặc",
+        "continueWithGoogle": "Tiếp tục với Google"
     },
     "Register": {
         "signUp": "Đăng ký",
