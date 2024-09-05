@@ -11,7 +11,12 @@
         "notHaveAccount": "Not an account?",
         "signUp": "Sign Up",
         "orSignUpWith": "Or sign up with",
-        "continueWithGoogle": "Continue with Google"
+        "emailExists": "Email already exists!",
+        "continueWithGoogle": "Continue with Google",
+        "wrongPassword" : "Wrong password",
+        "loginErr" : "Login Error",
+        "passwordRequired": "Password is required",
+        "emailRequired": "Email is required"
     },
     "Register": {
         "signUp": "Sign Up",
