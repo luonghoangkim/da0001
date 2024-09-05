@@ -56,7 +56,7 @@ function AppSideMenu() {
   return (
     <Sider width={250} theme="dark" style={{ height: '100vh' }}>
       <div style={{ padding: '16px', color: 'white' }}>
-        <h2 style={{ color: 'white' }}>FINEbank.IO</h2>
+        <h2 style={{ color: 'white' }}>MyFinanceManager</h2>
       </div>
       <Menu theme="dark" mode="inline" items={menuItems} />
       <div style={{ position: 'absolute', bottom: 0, width: '100%', padding: '16px' }}>
