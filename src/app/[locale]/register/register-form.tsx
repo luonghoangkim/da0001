@@ -12,9 +12,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const { Title, Text } = Typography;
 
-const SignupForm = () => {
+const RegisterForm = () => {
   const t = useTranslations('Register');
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const isValidEmail = (email: string) => {
     const emailRgx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -25,32 +26,29 @@ const SignupForm = () => {
     const { username, email, password } = values;
 
     if (!isValidEmail(email)) {
-      setError(t('invalidEmail'));
       toast.error(t('invalidEmail'));  
       return;
     }
 
     if (!password) {
-      setError(t('invalidPassword'));
       toast.error(t('invalidPassword'));  
       return;
     }
+    setIsLoading(true);
+
 
     try {
       const res = await signUp(username, email, password);
 
       if (res.status === 400) {
-        setError(t('emailExists'));
         toast.error(t('emailExists')); 
       } else if (res.status === 200) {
-        setError('');
         toast.success(t('registerSuccess')); 
       }
     } catch (error) {
-      setError(t('errorOccurred'));
       toast.error(t('errorOccurred')); 
-      console.log(error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -84,7 +82,7 @@ const SignupForm = () => {
           {t('agreeTerms')} <Link href="/terms">{t('termsOfService')}</Link>.
         </Text> */}
         <Form.Item>
-          <Button type="primary" htmlType="submit" block style={{ backgroundColor: '#37B29E' }}>
+          <Button type="primary" htmlType="submit" block style={{ backgroundColor: '#37B29E' }} loading={isLoading}>
             {t('signUp')}
           </Button>
         </Form.Item>
@@ -96,9 +94,8 @@ const SignupForm = () => {
       <Text style={{ marginTop: '20px', display: 'block' }}>
         {t('alreadyHaveAccount')} <Link href="/login">{t('signInHere')}</Link>
       </Text>
-      {error && <Text type="danger" style={{ marginTop: '10px' }}>{error}</Text>}
     </div>
   );
 };
 
-export default SignupForm;
+export default RegisterForm;
