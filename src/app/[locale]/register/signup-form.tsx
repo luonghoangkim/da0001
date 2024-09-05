@@ -6,6 +6,8 @@ import React, { useState } from 'react';
 import { signUp } from './service/sigup-service';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const { Title, Text } = Typography;
@@ -24,11 +26,13 @@ const SignupForm = () => {
 
     if (!isValidEmail(email)) {
       setError(t('invalidEmail'));
+      toast.error(t('invalidEmail'));  
       return;
     }
 
     if (!password) {
       setError(t('invalidPassword'));
+      toast.error(t('invalidPassword'));  
       return;
     }
 
@@ -37,17 +41,21 @@ const SignupForm = () => {
 
       if (res.status === 400) {
         setError(t('emailExists'));
+        toast.error(t('emailExists')); 
       } else if (res.status === 200) {
         setError('');
+        toast.success(t('registerSuccess')); 
       }
     } catch (error) {
       setError(t('errorOccurred'));
+      toast.error(t('errorOccurred')); 
       console.log(error);
     }
   };
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
+      <ToastContainer />
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
       <Title level={4}>{t('signUp')}</Title>
       <Form layout="vertical" onFinish={onFinish}>

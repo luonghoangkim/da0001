@@ -13,8 +13,8 @@
         "orSignUpWith": "Or sign up with",
         "emailExists": "Email already exists!",
         "continueWithGoogle": "Continue with Google",
-        "wrongPassword" : "Wrong password",
-        "loginErr" : "Login Error",
+        "wrongPassword": "Wrong password",
+        "loginErr": "Login Error",
         "passwordRequired": "Password is required",
         "emailRequired": "Email is required"
     },
@@ -33,6 +33,7 @@
         "alreadyHaveAccount": "Already an account",
         "signInHere": "Sign in here",
         "passwordRequired": "Password is required",
-        "emailRequired": "Email is required"
+        "emailRequired": "Email is required",
+        "registerSuccess": "Register successfully"
     }
 }
