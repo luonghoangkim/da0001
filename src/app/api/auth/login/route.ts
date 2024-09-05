@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
 import User from "@/models/authModal/user.modal";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const secretKey = process.env.JWT_SECRET;
 
 // Xử lý phương thức POST
 export async function POST(request: Request) {
@@ -26,14 +29,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Nếu mọi thứ đều ổn, trả về thông báo đăng nhập thành công
+    // Tạo token JWT
+    const token = jwt.sign({ id: user._id, email: user.email }, secretKey!, {
+      expiresIn: "1h", // Thời gian hết hạn token
+    });
+
     return NextResponse.json(
-      {
-        message: "Login successful",
-        user: { username: user.username, email: user.email },
-      },
+      { token: token },
       { status: 200 }
     );
+    
   } catch (error) {
     console.error("Error during login:", error);
     return NextResponse.json(
