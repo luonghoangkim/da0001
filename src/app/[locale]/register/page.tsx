@@ -1,6 +1,6 @@
 'use client'
 
-import SignupForm from "./signup-form"
+import RegisterForm from "./register-form"
 
 
 
@@ -8,7 +8,7 @@ const RegisterPage = () => {
   return (
     <div>
       <div className='flex justify-center'>
-        <SignupForm />
+        <RegisterForm />
       </div>
     </div>
   )

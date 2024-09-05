@@ -1,7 +1,7 @@
 {
     "Home": {
         "welcomeMessage": "Chào mừng đến với Trang Chủ",
-        "goToSignUp": "Đi đến Đăng ký"
+        "goToLogin": "Đi đến Đăng nhập"
     },
     "Login": {
         "login": "Đăng nhập",

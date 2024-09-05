@@ -1,7 +1,7 @@
 {
     "Home": {
         "welcomeMessage": "Welcome to the Home Page",
-        "goToSignUp": "Go to Sign Up"
+        "goToLogin": "Go to Login"
     },
     "Login": {
         "login": "Login",

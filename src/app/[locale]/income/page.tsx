@@ -2,14 +2,14 @@
 
 import AuthenticatedLayout from '../authenticated-layout';
 
-const DashboardPage = () => {
+const IncomePage = () => {
   return (
     <AuthenticatedLayout>
       <div className='flex justify-center'>
-        This is dashboard
+        This is income
       </div>
     </AuthenticatedLayout>
   )
 }
 
-export default DashboardPage;
+export default IncomePage;
