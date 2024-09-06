@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
-import User from "@/models/authModal/user.modal";
+import User from "@/models/auth_modal/user.modal";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

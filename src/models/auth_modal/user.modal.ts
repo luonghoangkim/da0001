@@ -4,7 +4,16 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const loginSchema = new Schema({
+const userSchema = new Schema({
+  user_id: {
+    type: Schema.ObjectId,
+    require: true
+  },
+  username: {
+    type: String,
+    required: true,
+    unique:true
+  },
   email: {
     type: String,
     required: true,
@@ -16,6 +25,8 @@ const loginSchema = new Schema({
   },
 });
 
-const LoginUser = mongoose.models.login || mongoose.model("LoginUser", loginSchema);
 
-export default LoginUser;
+
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;
