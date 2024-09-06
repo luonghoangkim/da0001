@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
-import User from "@/models/authModal/user.modal";
+import User from "@/models/auth-modal/user.modal";
 import bcrypt from "bcrypt";
-
 
 // Xử lý phương thức POST
 export async function POST(request: any) {
-  
-  const {username, email, password} = await request.json()
+  const { username, email, password } = await request.json();
   await connectDB();
 
   const existUser = await User.findOne({ email });
@@ -18,9 +16,9 @@ export async function POST(request: any) {
     email,
     password: hashPassword,
   });
-  
+
   if (existUser) {
-    return new NextResponse("User already existing", {status:400})
+    return new NextResponse("User already existing", { status: 400 });
   }
 
   try {
@@ -30,7 +28,6 @@ export async function POST(request: any) {
       { message: "User registered successfully" },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error registering user:", error);
     return NextResponse.json(

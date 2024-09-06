@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDb";
-import User from "@/models/authModal/user.modal";
+import User from "@/models/auth-modal/user.modal";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -34,11 +34,7 @@ export async function POST(request: Request) {
       expiresIn: "1h", // Thời gian hết hạn token
     });
 
-    return NextResponse.json(
-      { token: token },
-      { status: 200 }
-    );
-    
+    return NextResponse.json({ token: token }, { status: 200 });
   } catch (error) {
     console.error("Error during login:", error);
     return NextResponse.json(
