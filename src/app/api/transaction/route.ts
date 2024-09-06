@@ -1,5 +1,5 @@
 import connectDB from "@/lib/connectDb";
-import Transactions from "@/models/trans_modal/trans.modal";
+import Transactions from "@/models/trans-modal/trans.modal";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
