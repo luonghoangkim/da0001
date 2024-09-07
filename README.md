@@ -13,6 +13,9 @@ pnpm dev
 # or
 bun dev
 ```
+npm run build   # Build dự án
+npm run start   # Chạy ứng dụng sau khi build
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

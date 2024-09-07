@@ -3,6 +3,9 @@
         "welcomeMessage": "Welcome to the Home Page",
         "goToLogin": "Go to Login"
     },
+    "MenuApp": {
+        "logoutSuccess": "Logout success"
+    },
     "Login": {
         "login": "Login",
         "username": "Username",
@@ -16,7 +19,8 @@
         "wrongPassword": "Wrong password",
         "loginErr": "Login Error",
         "passwordRequired": "Password is required",
-        "emailRequired": "Email is required"
+        "emailRequired": "Email is required",
+        "loginSuccess": "Login success"
     },
     "Register": {
         "signUp": "Sign Up",
