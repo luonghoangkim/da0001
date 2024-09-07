@@ -70,14 +70,14 @@ const DashboardPage = () => {
     <AuthenticatedLayout>
       <div style={{ padding: "24px" }}>
         <Row gutter={16}>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card title="Total Balance" bordered={false}>
               <Statistic title="All Accounts" value={240399} precision={2} />
               <Divider style={{ margin: "10px 0" }} />
               <Statistic title="Credit Card" value={25000} precision={2} />
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card title="Goals" bordered={false}>
               <Statistic title="Target Achieved" value={12500} precision={2} />
               <Progress percent={60} />
@@ -88,7 +88,7 @@ const DashboardPage = () => {
               />
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card title="Upcoming Bill" bordered={false}>
               <List
                 itemLayout="horizontal"
@@ -119,12 +119,12 @@ const DashboardPage = () => {
         </Row>
 
         <Row gutter={16} style={{ marginTop: "24px" }}>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Card title="Recent Transactions" bordered={false}>
               <Table dataSource={data} columns={columns} pagination={false} />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Card title="Statistics">
               <ResponsiveContainer width="100%" height={330}>
                 <LineChart data={weeklyData}>
@@ -141,7 +141,7 @@ const DashboardPage = () => {
         </Row>
 
         <Row gutter={16} style={{ marginTop: "24px" }}>
-          <Col span={24}>
+          <Col xs={24}>
             <Card title="Expenses Breakdown" bordered={false}>
               <List
                 grid={{ gutter: 16, column: 4 }}
