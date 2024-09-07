@@ -96,7 +96,7 @@ export async function PATCH(request: Request) {
     const { amount, description, category_name, type, status } =
       await request.json();
 
-    // Tìm hoặc tạo danh mục
+    // Tìm danh mục
     let category;
     if (category_name) {
       category = await Category.findOne({ category_name });
