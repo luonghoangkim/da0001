@@ -3,6 +3,9 @@
         "welcomeMessage": "Chào mừng đến với Trang Chủ",
         "goToLogin": "Đi đến Đăng nhập"
     },
+    "MenuApp": {
+        "logoutSuccess": "Đăng xuất thành công"
+    },
     "Login": {
         "login": "Đăng nhập",
         "username": "Tên đăng nhập",
@@ -12,11 +15,12 @@
         "signUp": "Đăng ký",
         "orSignUpWith": "Hoặc",
         "continueWithGoogle": "Tiếp tục với Google",
-        "emailExists": "Email đã tồn tại!",
+        "emailExists": "Không tìm thấy tài khoản!",
         "wrongPassword": "Mật khẩu sai",
         "loginErr": "Lỗi đăng nhập",
         "passwordRequired": "Vui lòng nhập mật khẩu",
-        "emailRequired": "Vui lòng nhập email"
+        "emailRequired": "Vui lòng nhập email",
+        "loginSuccess": "Đăng nhập thành công"
     },
     "Register": {
         "signUp": "Đăng ký",

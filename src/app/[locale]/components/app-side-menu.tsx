@@ -1,76 +1,90 @@
-import { Link } from '@/i18n/routing';
-import { Menu, Layout, Avatar, Tooltip } from 'antd';
+import { Link, useRouter, usePathname } from "@/i18n/routing";
+import { Menu, Layout, Avatar, Tooltip } from "antd";
 import {
   DashboardOutlined,
   WalletOutlined,
   SwapOutlined,
-  FileTextOutlined,
-  DollarOutlined,
-  FlagOutlined,
   SettingOutlined,
   LogoutOutlined,
-} from '@ant-design/icons';
-import React from 'react';
+} from "@ant-design/icons";
+import React from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useTranslations } from "next-intl";
 
 const { Sider } = Layout;
 
 function AppSideMenu() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const t = useTranslations("MenuApp");
+
   const menuItems = [
     {
-      key: 'dashboard',
+      key: "/dashboard",
       icon: <DashboardOutlined />,
       label: <Link href="/dashboard">DashBoard</Link>,
     },
     {
-      key: 'expenditure',
+      key: "/expenditure",
       icon: <WalletOutlined />,
       label: <Link href="/expenditure">Expenditure</Link>,
     },
     {
-      key: 'income',
+      key: "/income",
       icon: <SwapOutlined />,
       label: <Link href="/income">Income</Link>,
     },
-    // {
-    //   key: 'bills',
-    //   icon: <FileTextOutlined />,
-    //   label: <Link href="/bills">Bills</Link>,
-    // },
-    // {
-    //   key: 'expenses',
-    //   icon: <DollarOutlined />,
-    //   label: <Link href="/expenses">Expenses</Link>,
-    // },
-    // {
-    //   key: 'goals',
-    //   icon: <FlagOutlined />,
-    //   label: <Link href="/goals">Goals</Link>,
-    // },
     {
-      key: 'settings',
+      key: "/settings",
       icon: <SettingOutlined />,
       label: <Link href="/settings">Settings</Link>,
     },
   ];
 
+  const handleLogout = () => {
+    toast.success(t("logoutSuccess"));
+    router.push("/login");
+  };
+
+  const logoutMenuItem = [
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Logout",
+      onClick: handleLogout,
+    },
+  ];
+
   return (
-    <Sider width={250} theme="dark" style={{ height: '100vh' }}>
-      <div style={{ padding: '16px', color: 'white' }}>
-        <h2 style={{ color: 'white' }}>MyFinanceManager</h2>
+    <Sider width={250} theme="dark" style={{ height: "100vh" }}>
+      <ToastContainer />
+      <div style={{ padding: "16px", color: "white" }}>
+        <h2 style={{ color: "white" }}>MyFinanceManager</h2>
       </div>
-      <Menu theme="dark" mode="inline" items={menuItems} />
-      <div style={{ position: 'absolute', bottom: 0, width: '100%', padding: '16px' }}>
-        <Menu theme="dark" mode="inline">
-          <Menu.Item key="logout" icon={<LogoutOutlined />}>
-            Logout
-          </Menu.Item>
-        </Menu>
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: '16px' }}>
-          <Avatar src="https://example.com/avatar.jpg" />
-          <div style={{ marginLeft: '8px', color: 'white' }}>
+      <Menu
+        theme="dark"
+        mode="inline"
+        items={menuItems}
+        selectedKeys={[pathname]}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          padding: "16px",
+        }}
+      >
+        <Menu theme="dark" mode="inline" items={logoutMenuItem} />
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "16px" }}
+        >
+          <Avatar src="https://img4.thuthuatphanmem.vn/uploads/2020/12/25/anh-avt-anime-doc_115939861.jpg" />
+          <div style={{ marginLeft: "8px", color: "white" }}>
             <div>hoangkimluong</div>
             <Tooltip title="View profile">
-              <a style={{ color: 'rgba(255,255,255,0.65)' }}>View profile</a>
+              <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
             </Tooltip>
           </div>
         </div>
