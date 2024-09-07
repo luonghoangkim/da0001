@@ -1,26 +1,36 @@
 import connectDB from "@/lib/connectDb";
+import Category from "@/models/categories-modal/categories.modal";
 import Transactions from "@/models/trans-modal/trans.modal";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   await connectDB();
-  const { amount, description, category, type, status } = await request.json();
+  const { amount, description, category_name, type, status } =
+    await request.json();
+
+  let category = await Category.findOne({ category_name });
+
+  if (!category) {
+    console.log("Category name not found");
+  }
 
   const newTrans = new Transactions({
     amount,
     description,
-    category,
+    category_id: category._id,
     type,
     status,
   });
 
   try {
-    await newTrans.save();
+    const saveTrans = await newTrans.save();
 
-    return NextResponse.json(
-      { message: "Transactions add successfully" },
-      { status: 200 }
-    );
+    const getCateName = await Transactions.findById(saveTrans._id).populate({
+      path: "category_id",
+      select: "category_name",
+    });
+
+    return NextResponse.json({ transaction: getCateName }, { status: 200 });
   } catch (error: any) {
     console.log("Error: ", error);
     return NextResponse.json(
@@ -35,7 +45,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type"); // Lọc theo loại giao dịch ("income" hoặc "expense")
-  const category = searchParams.get("category"); // Lọc theo danh mục giao dịch
+  const category = searchParams.get("category_id"); // Lọc theo danh mục giao dịch
   const startDate = searchParams.get("startDate"); // Lọc theo khoảng thời gian (bắt đầu)
   const endDate = searchParams.get("endDate"); // Lọc theo khoảng thời gian (kết thúc)
 
@@ -46,14 +56,17 @@ export async function GET(request: Request) {
     query.type = type;
   }
   if (category) {
-    query.category = category;
+    query.category_id = category;
   }
   if (startDate && endDate) {
     query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
 
   try {
-    const transactions = await Transactions.find(query);
+    const transactions = await Transactions.find(query).populate({
+      path: "category_id",
+      select: "category_name",
+    });
 
     return NextResponse.json({ transactions }, { status: 200 });
   } catch (error: any) {
@@ -67,16 +80,46 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   await connectDB();
+
+  // Lấy transaction_id từ URL
   const { searchParams } = new URL(request.url);
   const transaction_id = searchParams.get("transaction_id");
-  const { amount, description, category, type, status } = await request.json();
+
+  if (!transaction_id) {
+    return NextResponse.json(
+      { message: "Transaction ID is required" },
+      { status: 400 }
+    );
+  }
 
   try {
+    const { amount, description, category_name, type, status } =
+      await request.json();
+
+    // Tìm hoặc tạo danh mục
+    let category;
+    if (category_name) {
+      category = await Category.findOne({ category_name });
+      if (!category) {
+        console.log("Category name not found, creating a new category");
+      }
+    }
+
+    // Cập nhật giao dịch
     const updatedTransaction = await Transactions.findByIdAndUpdate(
       transaction_id,
-      { amount, description, category, type, status },
-      { new: true } // Trả về tài liệu đã được cập nhật
-    );
+      {
+        amount,
+        description,
+        category_id: category ? category._id : undefined,
+        type,
+        status,
+      },
+      { new: true }
+    ).populate({
+      path: "category_id",
+      select: "category_name",
+    });
 
     if (!updatedTransaction) {
       return NextResponse.json(
@@ -93,7 +136,7 @@ export async function PATCH(request: Request) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error updating transaction: ", error);
+    console.error("Error updating transaction:", error);
     return NextResponse.json(
       { message: "Failed to update transaction" },
       { status: 500 }

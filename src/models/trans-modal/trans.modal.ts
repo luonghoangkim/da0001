@@ -3,15 +3,20 @@ import mongoose, { Schema, model, models } from "mongoose";
 const transactionSchema = new Schema(
   {
     transaction_id: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       require: true,
     },
     user_id: {
-      type: Schema.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: "User",
       require: true,
     }, //(FK -> Users.user_id)
 
+    category_id: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Category",
+      required: true,
+    },
     amount: {
       type: Number,
       min: [0, "Amount must be than 0"],
@@ -21,10 +26,7 @@ const transactionSchema = new Schema(
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-      required: true, //(FK -> Categories.category_id)
-    },
+
     date: {
       type: Date,
       required: true,
