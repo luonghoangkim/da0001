@@ -4,7 +4,10 @@
         "goToLogin": "Go to Login"
     },
     "MenuApp": {
-        "logoutSuccess": "Logout success"
+        "logoutSuccess": "Logout success",
+        "creditCard": "Creadit card",
+        "transaction": "Transaction",
+        "logOut": "Log out"
     },
     "Login": {
         "login": "Login",

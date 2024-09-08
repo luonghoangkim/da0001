@@ -4,7 +4,10 @@
         "goToLogin": "Đi đến Đăng nhập"
     },
     "MenuApp": {
-        "logoutSuccess": "Đăng xuất thành công"
+        "logoutSuccess": "Đăng xuất thành công",
+        "creditCard": "Thẻ ngân hàng",
+        "transaction": "Giao dịch",
+        "logOut" : "Đăng xuất"
     },
     "Login": {
         "login": "Đăng nhập",

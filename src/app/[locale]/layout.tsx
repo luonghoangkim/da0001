@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
-// import "@/app/[locale]/globals.css"
-import {getMessages} from 'next-intl/server';
-import {NextIntlClientProvider} from 'next-intl';
+import "@/app/[locale]/globals.css"
+import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,19 +15,19 @@ export const metadata: Metadata = {
 
 export default async function LocaleLayout({
   children,
-  params: {locale}
+  params: { locale }
 }: {
   children: React.ReactNode;
-  params: {locale: string};
+  params: { locale: string };
 }) {
   const messages = await getMessages();
   return (
     <html lang={locale}>
       <body className={inter.className}>
-      <NextIntlClientProvider messages={messages}>
-        <AntdRegistry>
-          {children}
-        </AntdRegistry>
+        <NextIntlClientProvider messages={messages}>
+          <AntdRegistry>
+            {children}
+          </AntdRegistry>
         </NextIntlClientProvider>
       </body>
     </html>
