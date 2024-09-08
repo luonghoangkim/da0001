@@ -26,12 +26,12 @@ export async function POST(request: Request) {
 
     const { user_id } = decoded as { user_id: string }; // Extract user_id from the decoded token
 
-    // Extract the card_name from the request body
-    const { card_name, card_number } = await request.json();
+    // Extract the bank_name from the request body
+    const { bank_name, card_number } = await request.json();
 
     // Create the new credit card with the user_id
     const newCard = new CreditCard({
-      card_name,
+      bank_name,
       card_number,
       user_id, // Store the user_id in the credit card document
     });
