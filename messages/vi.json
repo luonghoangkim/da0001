@@ -7,7 +7,7 @@
         "logoutSuccess": "Đăng xuất thành công",
         "creditCard": "Thẻ ngân hàng",
         "transaction": "Giao dịch",
-        "logOut" : "Đăng xuất"
+        "logOut": "Đăng xuất"
     },
     "Login": {
         "login": "Đăng nhập",
@@ -42,5 +42,18 @@
         "passwordRequired": "Vui lòng nhập mật khẩu",
         "emailRequired": "Vui lòng nhập email",
         "registerSuccess": "Đăng ký thành công!"
+    },
+    "CreditCard": {
+        "addSuccess": "Thêm thẻ thành công",
+        "addError": "Lỗi thêm dữ liệu",
+        "bankName": "Tên ngân hàng",
+        "pleaseEnterBankName": "Vui lòng nhập tên ngân hàng!",
+        "cardNumber": "Số thẻ",
+        "pleaseEnterCardNumber": "Vui lòng nhập số thẻ!",
+        "add": "Thêm",
+        "cancel": "Huỷ",
+        "remove": "Xoá",
+        "edit": "Chỉnh sửa",
+        "totalAmount": "Tổng tiền"
     }
 }

@@ -9,8 +9,7 @@ import {
   CreditCardOutlined,
 } from "@ant-design/icons";
 import React from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 
 const { Sider } = Layout;
@@ -59,7 +58,6 @@ function AppSideMenu() {
 
   return (
     <Sider width={250} theme="dark" style={{ height: "100vh" }}>
-      <ToastContainer />
       <div style={{ padding: "16px", color: "white" }}>
         <h2 style={{ color: "white" }}>MyFinanceManager</h2>
       </div>

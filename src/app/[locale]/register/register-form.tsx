@@ -6,8 +6,7 @@ import React, { useState } from 'react';
 import { signUp } from './service/sigup-service';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { toast, ToastContainer } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify'; 
 
 
 const { Title, Text } = Typography;
@@ -53,7 +52,6 @@ const RegisterForm = () => {
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
-      <ToastContainer />
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
       <Title level={4}>{t('signUp')}</Title>
       <Form layout="vertical" onFinish={onFinish}>
