@@ -42,5 +42,15 @@
         "passwordRequired": "Password is required",
         "emailRequired": "Email is required",
         "registerSuccess": "Register successfully"
+    },
+    "CreditCard": {
+        "addSuccess": "Add card succesfully",
+        "addError": "Add error",
+        "bankName": "Bank name",
+        "pleaseEnterBankName": "Please enter your bank name",
+        "cardNumber": "Card number",
+        "pleaseEnterCardNumber": "Please enter card number",
+        "add": "Add",
+        "cancel": "Cancel"
     }
 }

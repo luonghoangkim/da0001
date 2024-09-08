@@ -2,7 +2,11 @@
 import React, { useState } from "react";
 import { Card, Typography, Button, Space, Modal, Input, Form } from "antd";
 import AuthenticatedLayout from "../authenticated-layout";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CreditCardOutlined, BankOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { toast } from 'react-toastify';
+import { createCreditCard } from "./service/credit-card-service";
+import { useTranslations } from 'next-intl';
+
 
 const { Text, Title } = Typography;
 
@@ -11,35 +15,47 @@ interface CreditCardProps {
     accountNumber: string;
     totalAmount: number;
     onRemove: () => void;
+    onEdit: () => void;
 }
 
-const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accountNumber, totalAmount, onRemove }) => (
-    <Card style={{ width: 350, marginBottom: 16, height: 260 }} >
-        <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <Space
-                align="baseline"
-                style={{ width: "100%", justifyContent: "space-between" }}
-            >
-                <Text strong>{bankName}</Text>
+const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accountNumber, totalAmount, onRemove, onEdit }) => {
+    const t = useTranslations('CreditCard');
+
+    return (
+        <Card style={{ width: 350, marginBottom: 10, height: 260 }} >
+            <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                <Space
+                    align="baseline"
+                    style={{ width: "100%", justifyContent: "space-between" }}
+                >
+                    <BankOutlined style={{ fontSize: '22px' }} />
+                    <Text strong>{bankName}</Text>
+                </Space>
+                <Text type="secondary"> {t('cardNumber')}</Text>
+                <Title level={4} style={{ margin: 0 }}>
+                    <CreditCardOutlined style={{ paddingRight: "10px" }} /> {accountNumber}
+                </Title>
+                <Text type="secondary"> {t('totalAmount')}</Text>
+                <Title level={3} style={{ color: '#33CC33' }}>
+                    {totalAmount} VND
+                </Title>
+                <Space
+                    style={{ width: "100%", justifyContent: "flex-end" }}
+                >
+                    <Button type="text" style={{ padding: 0, color: "#0099FF" }} onClick={onEdit}>
+                        <EditOutlined />
+                        {t('edit')}
+                    </Button>
+
+                    <Button type="text" style={{ padding: 0, color: "#CC0033" }} onClick={onRemove}>
+                        <DeleteOutlined />
+                        {t('remove')}
+                    </Button>
+                </Space>
             </Space>
-            <Text type="secondary">Account Number</Text>
-            <Title level={4} style={{ margin: 0 }}>
-                {accountNumber}
-            </Title>
-            <Text type="secondary">Total amount</Text>
-            <Title level={3} style={{ margin: "4px 0" }}>
-                ${totalAmount}
-            </Title>
-            <Space
-                style={{ width: "100%", justifyContent: "flex-end", marginTop: 8 }}
-            >
-                <Button type="text" style={{ padding: 0, color: "#52c41a" }} onClick={onRemove}>
-                    Remove
-                </Button>
-            </Space>
-        </Space>
-    </Card>
-);
+        </Card>
+    );
+};
 
 const fakeCardData = [
     {
@@ -66,6 +82,9 @@ const CreditCardPage = () => {
     const [cards, setCards] = React.useState(fakeCardData);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [form] = Form.useForm();
+    const [isLoading, setIsLoading] = useState(false);
+    const t = useTranslations('CreditCard');
+
 
     const handleRemove = (id: number) => {
         setCards(cards.filter(card => card.id !== id));
@@ -75,21 +94,34 @@ const CreditCardPage = () => {
         setIsModalVisible(true);
     };
 
-    const handleAddCard = (values: any) => {
-        const newCard = {
-            id: cards.length + 1,
-            bankName: values.bankName,
-            accountNumber: values.accountNumber,
-            totalAmount: 0,  // Bạn có thể thay đổi giá trị mặc định nếu cần
-        };
-        setCards([...cards, newCard]);
-        setIsModalVisible(false);
-        form.resetFields();
+    const handleAddCard = async (values: any) => {
+        const { bankName, cardNumber } = values;
+        setIsLoading(true);
+
+        try {
+            const res = await createCreditCard(bankName, cardNumber);
+
+            if (res.ok) {
+                setCards([...cards]);
+                setIsModalVisible(false);
+                form.resetFields();
+
+                toast.success(t('addSuccess'));
+            } else {
+                toast.error(t('addError'));
+            }
+        } catch (error) {
+            console.error('Error during call:', error);
+            toast.error(t('addError'));
+        }
+        setIsLoading(false);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+
+    const handleEdit = () => { }
 
     return (
         <AuthenticatedLayout>
@@ -101,6 +133,7 @@ const CreditCardPage = () => {
                         accountNumber={card.accountNumber}
                         totalAmount={card.totalAmount}
                         onRemove={() => handleRemove(card.id)}
+                        onEdit={() => handleEdit()}
                     />
                 ))}
                 <Card
@@ -113,7 +146,6 @@ const CreditCardPage = () => {
                         alignItems: 'center',
                         cursor: 'pointer'
                     }}
-                    bodyStyle={{ padding: 16 }}
                     onClick={showAddCardModal}
                 >
                     <PlusOutlined style={{ fontSize: 24 }} />
@@ -128,22 +160,27 @@ const CreditCardPage = () => {
                 <Form form={form} layout="vertical" onFinish={handleAddCard}>
                     <Form.Item
                         name="bankName"
-                        label="Tên Ngân Hàng"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên ngân hàng!' }]}
+                        label={t('bankName')}
+                        rules={[{ required: true, message: t('pleaseEnterBankName') }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name="accountNumber"
-                        label="Số Thẻ"
-                        rules={[{ required: true, message: 'Vui lòng nhập số thẻ!' }]}
+                        name="cardNumber"
+                        label={t('cardNumber')}
+                        rules={[{ required: true, message: t('pleaseEnterCardNumber') }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Thêm
-                        </Button>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                            <Button style={{ backgroundColor: '#f5222d', color: '#fff' }} onClick={handleCancel}>
+                                {t('cancel')}
+                            </Button>
+                            <Button type="primary" htmlType="submit" loading={isLoading}>
+                                {t('add')}
+                            </Button>
+                        </div>
                     </Form.Item>
                 </Form>
             </Modal>
