@@ -6,6 +6,7 @@ import { PlusOutlined, CreditCardOutlined, BankOutlined, DeleteOutlined, EditOut
 import { toast } from 'react-toastify';
 import { createCreditCard } from "./service/credit-card-service";
 import { useTranslations } from 'next-intl';
+import { formatCurrency } from "@/utils";
 
 
 const { Text, Title } = Typography;
@@ -37,7 +38,7 @@ const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accountNumbe
                 </Title>
                 <Text type="secondary"> {t('totalAmount')}</Text>
                 <Title level={3} style={{ color: '#33CC33' }}>
-                    {totalAmount} VND
+                    {formatCurrency(totalAmount)} VND
                 </Title>
                 <Space
                     style={{ width: "100%", justifyContent: "flex-end" }}
