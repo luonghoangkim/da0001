@@ -44,6 +44,7 @@
         "registerSuccess": "Đăng ký thành công!"
     },
     "CreditCard": {
+        "addCard": "Thêm mới thẻ",
         "addSuccess": "Thêm thẻ thành công",
         "addError": "Lỗi thêm dữ liệu",
         "bankName": "Tên ngân hàng",
@@ -54,6 +55,15 @@
         "cancel": "Huỷ",
         "remove": "Xoá",
         "edit": "Chỉnh sửa",
-        "totalAmount": "Tổng tiền"
+        "totalAmount": "Tổng tiền",
+        "removeSuccess": "Xoá thẻ thành công!",
+        "removeError": "Xoá thẻ thất bại!",
+        "confirmDeleteMessage": "Bạn có chắc chắn muốn xoá thẻ?",
+        "confirmDelete": "Xác nhận xoá thẻ",
+        "fetchError": "Lỗi gọi dữ liệu!",
+        "editSuccess": "Chỉnh sửa thông tin thẻ thành công!",
+        "editError": "Lỗi chỉnh sửa!",
+        "save": "Lưu",
+        "editCard": "Chỉnh sửa thẻ"
     }
 }
