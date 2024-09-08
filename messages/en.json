@@ -7,7 +7,10 @@
         "logoutSuccess": "Logout success",
         "creditCard": "Creadit card",
         "transaction": "Transaction",
-        "logOut": "Log out"
+        "logOut": "Log out",
+        "logoutConfirmationMessage": "Log out?",
+        "cancel": "Cancel",
+        "yes": "Yes"
     },
     "Login": {
         "login": "Login",

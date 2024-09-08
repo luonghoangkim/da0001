@@ -1,5 +1,5 @@
 import { Link, useRouter, usePathname } from "@/i18n/routing";
-import { Menu, Layout, Avatar, Tooltip } from "antd";
+import { Menu, Layout, Avatar, Tooltip, Modal } from "antd";
 import {
   DashboardOutlined,
   WalletOutlined,
@@ -8,7 +8,7 @@ import {
   LogoutOutlined,
   CreditCardOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 
@@ -18,6 +18,7 @@ function AppSideMenu() {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("MenuApp");
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
   const menuItems = [
     {
@@ -42,7 +43,13 @@ function AppSideMenu() {
     },
   ];
 
+  const showLogoutModal = () => {
+    setIsLogoutModalVisible(true);
+  };
+
   const handleLogout = () => {
+    // Xóa authToken khỏi localStorage
+    localStorage.removeItem('authToken');
     toast.success(t("logoutSuccess"));
     router.push("/login");
   };
@@ -51,44 +58,56 @@ function AppSideMenu() {
     {
       key: "logout",
       icon: <LogoutOutlined />,
-      label: <div>{t("logOut")}</div>,
-      onClick: handleLogout,
+      label: t("logOut"),
+      onClick: showLogoutModal,
     },
   ];
 
   return (
-    <Sider width={250} theme="dark" style={{ height: "100vh" }}>
-      <div style={{ padding: "16px", color: "white" }}>
-        <h2 style={{ color: "white" }}>MyFinanceManager</h2>
-      </div>
-      <Menu
-        theme="dark"
-        mode="inline"
-        items={menuItems}
-        selectedKeys={[pathname]}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          width: "100%",
-          padding: "16px",
-        }}
-      >
-        <Menu theme="dark" mode="inline" items={logoutMenuItem} />
+    <>
+      <Sider width={250} theme="dark" style={{ height: "100vh" }}>
+        <div style={{ padding: "16px", color: "white" }}>
+          <h2 style={{ color: "white" }}>MyFinanceManager</h2>
+        </div>
+        <Menu
+          theme="dark"
+          mode="inline"
+          items={menuItems}
+          selectedKeys={[pathname]}
+        />
         <div
-          style={{ display: "flex", alignItems: "center", marginTop: "16px" }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            padding: "16px",
+          }}
         >
-          <Avatar src="https://img4.thuthuatphanmem.vn/uploads/2020/12/25/anh-avt-anime-doc_115939861.jpg" />
-          <div style={{ marginLeft: "8px", color: "white" }}>
-            <div>hoangkimluong</div>
-            <Tooltip title="View profile">
-              <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
-            </Tooltip>
+          <Menu theme="dark" mode="inline" items={logoutMenuItem} />
+          <div
+            style={{ display: "flex", alignItems: "center", marginTop: "16px" }}
+          >
+            <Avatar src="https://img4.thuthuatphanmem.vn/uploads/2020/12/25/anh-avt-anime-doc_115939861.jpg" />
+            <div style={{ marginLeft: "8px", color: "white" }}>
+              <div>hoangkimluong</div>
+              <Tooltip title="View profile">
+                <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
+              </Tooltip>
+            </div>
           </div>
         </div>
-      </div>
-    </Sider>
+      </Sider>
+      <Modal
+        title={t("logOut")}
+        open={isLogoutModalVisible}
+        onOk={handleLogout}
+        onCancel={() => setIsLogoutModalVisible(false)}
+        okText={t("yes")}
+        cancelText={t("cancel")}
+      >
+        <p>{t("logoutConfirmationMessage")}</p>
+      </Modal>
+    </>
   );
 }
 
