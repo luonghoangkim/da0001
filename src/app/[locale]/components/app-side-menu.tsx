@@ -6,6 +6,7 @@ import {
   SwapOutlined,
   SettingOutlined,
   LogoutOutlined,
+  CreditCardOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -26,14 +27,14 @@ function AppSideMenu() {
       label: <Link href="/dashboard">DashBoard</Link>,
     },
     {
-      key: "/expenditure",
-      icon: <WalletOutlined />,
-      label: <Link href="/expenditure">Expenditure</Link>,
+      key: "/transaction",
+      icon: <SwapOutlined />,
+      label: <Link href="/transaction">{t("transaction")}</Link>,
     },
     {
-      key: "/income",
-      icon: <SwapOutlined />,
-      label: <Link href="/income">Income</Link>,
+      key: "/credit-card",
+      icon: <CreditCardOutlined />,
+      label: <Link href="/credit-card">{t("creditCard")}</Link>,
     },
     {
       key: "/settings",
@@ -51,7 +52,7 @@ function AppSideMenu() {
     {
       key: "logout",
       icon: <LogoutOutlined />,
-      label: "Logout",
+      label: <div>{t("logOut")}</div>,
       onClick: handleLogout,
     },
   ];
