@@ -44,6 +44,7 @@
         "registerSuccess": "Register successfully"
     },
     "CreditCard": {
+        "addCard": "Add new card",
         "addSuccess": "Add card succesfully",
         "addError": "Add error",
         "bankName": "Bank name",
@@ -51,6 +52,15 @@
         "cardNumber": "Card number",
         "pleaseEnterCardNumber": "Please enter card number",
         "add": "Add",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "removeSuccess": "Remove card successfully",
+        "removeError": "Remove card error",
+        "confirmDeleteMessage": "Confirm delete card?",
+        "confirmDelete": "Confirm delete",
+        "fetchError": "Fetch error",
+        "editSuccess": "Edit card successfully",
+        "editError": "Edit card error",
+        "save": "Save",
+        "editCard": "Edit card"
     }
 }
