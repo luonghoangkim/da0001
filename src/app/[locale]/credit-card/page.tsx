@@ -102,7 +102,7 @@ const CreditCardPage = () => {
             const res = await createCreditCard(bankName, cardNumber);
 
             if (res.ok) {
-                setCards([...cards, { id: Date.now(), bankName, accountNumber: cardNumber, totalAmount: 0 }]);
+                setCards([...cards]);
                 setIsModalVisible(false);
                 form.resetFields();
 
