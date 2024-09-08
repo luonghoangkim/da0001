@@ -9,11 +9,6 @@ const cateSchema = new Schema({
     type: String,
     require: true,
   },
-  user_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    require: true,
-  },
 });
 
 const Category =
