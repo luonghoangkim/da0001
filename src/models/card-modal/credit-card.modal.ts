@@ -6,6 +6,10 @@ const cardSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       require: true,
     },
+    number_id: {
+      type: Number,
+      unique: true,
+    },
     bank_name: {
       type: String,
       require: true,

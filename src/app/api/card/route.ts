@@ -2,6 +2,7 @@ import connectDB from "@/lib/connectDb";
 import CreditCard from "@/models/card-modal/credit-card.modal";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import CountId from "@/models/card-modal/counting-id.modal";
 
 const secretKey = process.env.JWT_SECRET;
 
@@ -23,6 +24,20 @@ async function verifyToken(request: Request) {
   }
 }
 
+async function getNextSequence(name: string) {
+  const counter = await CountId.findOneAndUpdate(
+    { _id: name },
+    { $inc: { sequence_value: 1 } },
+    { new: true, upsert: true } // Tạo tài liệu nếu không tồn tại
+  );
+
+  if (!counter) {
+    throw new Error("Failed to generate number_id");
+  }
+
+  return counter.sequence_value;
+}
+
 export async function POST(request: Request) {
   connectDB();
   const { decoded, error, status } = await verifyToken(request);
@@ -31,16 +46,34 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { user_id } = decoded as { user_id: string }; // Extract user_id from the decoded token
-
-    // Extract the bank_name from the request body
+    const { user_id } = decoded as { user_id: string };
     const { bank_name, card_number } = await request.json();
+    // Lấy number_id tiếp theo
+    const number_id = await getNextSequence("credit_card_id");
+    console.log(number_id);
 
-    // Create the new credit card with the user_id
+    // Kiểm tra xem số number_id có bị trùng không
+    const existingCard = await CreditCard.findOne({ number_id });
+    if (existingCard) {
+      return NextResponse.json(
+        { message: `Card with number_id ${number_id} already exists` },
+        { status: 409 }
+      );
+    }
+
+    // Kiểm tra xem số card_number có bị trùng không
+    const existingNumber = await CreditCard.findOne({ card_number });
+    if (existingNumber) {
+      return NextResponse.json(
+        { message: `Card with card_number ${card_number} already exists` },
+        { status: 409 }
+      );
+    }
     const newCard = new CreditCard({
       bank_name,
       card_number,
-      user_id, // Store the user_id in the credit card document
+      number_id,
+      user_id,
     });
     await newCard.save();
 
