@@ -4,33 +4,28 @@ import Transactions from "@/models/trans-modal/trans.modal";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  await connectDB();
-  const { amount, description, category_name, type, status } =
+
+  const { payload } =
     await request.json();
+  await connectDB();
+  // let category = await Category.findOne({ category_name });
 
-  let category = await Category.findOne({ category_name });
-
-  if (!category) {
-    console.log("Category name not found");
-  }
+  // if (!category) {
+  //   console.log("Category name not found");
+  // }
 
   const newTrans = new Transactions({
-    amount,
-    description,
-    category_id: category._id,
-    type,
-    status,
+    amount: payload?.amount,
+    description: payload?.description,
+    category_id: payload?.category_id,
+    type: payload?.type,
+    status: payload?.status,
   });
 
   try {
     const saveTrans = await newTrans.save();
 
-    const getCateName = await Transactions.findById(saveTrans._id).populate({
-      path: "category_id",
-      select: "category_name",
-    });
-
-    return NextResponse.json({ transaction: getCateName }, { status: 200 });
+    return NextResponse.json({ transaction: saveTrans }, { status: 200 });
   } catch (error: any) {
     console.log("Error: ", error);
     return NextResponse.json(
