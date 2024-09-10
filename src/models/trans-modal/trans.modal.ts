@@ -4,18 +4,18 @@ const transactionSchema = new Schema(
   {
     transaction_id: {
       type: mongoose.Schema.ObjectId,
-      require: true,
+      // require: true,
     },
     user_id: {
-      type: mongoose.Schema.ObjectId,
+      type: String,
       ref: "User",
       require: true,
     }, //(FK -> Users.user_id)
 
     category_id: {
-      type: mongoose.Schema.ObjectId,
+      type: String,
       ref: "Category",
-      required: true,
+      // required: true,
     },
     amount: {
       type: Number,
@@ -24,23 +24,22 @@ const transactionSchema = new Schema(
     },
     description: {
       type: String,
-      required: true,
     },
 
     date: {
       type: Date,
-      required: true,
+      // required: true,
       default: Date.now, // Ngày giao dịch
     },
     type: {
       type: String,
       enum: ["income", "expense"], // "thu nhập" hoặc "chi tiêu"
-      required: true,
+      // required: true,
     },
     status: {
       type: String,
       enum: ["completed", "pending", "failed"], // Trạng thái giao dịch
-      required: true,
+      // required: true,
     },
   },
   {
