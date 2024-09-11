@@ -5,30 +5,36 @@ import { Tabs, Form, Input, Button, DatePicker, Select, Modal } from 'antd';
 import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
 import { createTransaction } from './service/transaction-service';
+import { toast } from 'react-toastify';
+
+const { Option } = Select;
 
 const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel: () => void }) => {
     const [form] = Form.useForm();
     const [activeTab, setActiveTab] = useState('expense');
 
-    const handleTabChange = (key: any) => {
+    const handleTabChange = (key: string) => {
         setActiveTab(key);
-        form.resetFields(); // Reset form khi chuyển tab
     };
 
     const handleSubmit = async (values: any) => {
+        console.log("Form Values:", values);
         const payload = {
-            amount: 10000,
-            description: "note",
-            category_id: "CTGR-001", // Lấy từ select category
-            type: activeTab, // 'income' hoặc 'expense'
-            status: 'pending', // Hoặc trạng thái khác tùy theo logic của bạn
+            amount: values.expenseAmount || values.incomeAmount,
+            description: values.note || '',
+            category_name: values.expenseCategory || '',
+            type: activeTab, // 'income' hoặc 'expense' dựa trên tab đang active
+            status: 'pending',
         };
 
         try {
             await createTransaction(payload);
+            toast.success('Giao dịch đã được thêm thành công!');
+            form.resetFields(); // Reset form sau khi thêm thành công
             onCancel(); // Đóng modal sau khi gửi thành công
         } catch (error) {
             console.error('Error creating transaction:', error);
+            toast.error('Có lỗi xảy ra khi thêm giao dịch.');
         }
     };
 
@@ -68,8 +74,8 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                             label="Thẻ chi"
                         >
                             <Select placeholder="Chọn thẻ chi">
-                                {/* <Option value="creditCard">Thẻ tín dụng</Option>
-                                <Option value="debitCard">Thẻ ghi nợ</Option> */}
+                                <Option value="creditCard">Thẻ tín dụng</Option>
+                                <Option value="debitCard">Thẻ ghi nợ</Option>
                             </Select>
                         </Form.Item>
 
@@ -78,9 +84,9 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                             label="Loại chi tiêu"
                         >
                             <Select placeholder="Chọn loại chi tiêu">
-                                {/* <Option value="food">Ăn uống</Option>
-                                <Option value="clothing">Quần áo</Option>
-                                <Option value="shopping">Mua sắm</Option> */}
+                                <Option value="Food">Ăn uống</Option>
+                                <Option value="Clothing">Quần áo</Option>
+                                <Option value="Shopping">Mua sắm</Option>
                             </Select>
                         </Form.Item>
 

@@ -2,14 +2,17 @@
 
 import { Table, Tabs, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuthenticatedLayout from '../authenticated-layout';
 import TransactionForm from './transaction-form'; // Import form
 
 const { TabPane } = Tabs;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const TransactionPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [transactions, setTransactions] = useState([]); // State để lưu giao dịch
+  const [loading, setLoading] = useState(true);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -18,6 +21,24 @@ const TransactionPage = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  // Hàm fetch dữ liệu giao dịch từ API
+  const fetchTransactions = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/transaction`); // Thay bằng endpoint API của bạn
+      const data = await response.json();
+      setTransactions(data.transactions); // Cập nhật state với dữ liệu giao dịch
+      setLoading(false); // Ngừng hiển thị trạng thái loading
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+
+  // Gọi API khi component được render lần đầu
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
 
   const columns = [
     {
@@ -32,9 +53,9 @@ const TransactionPage = () => {
       ),
     },
     {
-      title: 'Shop Name',
-      dataIndex: 'shop',
-      key: 'shop',
+      title: 'Category',
+      dataIndex: 'category_name',
+      key: 'category_name',
     },
     {
       title: 'Date',
@@ -42,9 +63,9 @@ const TransactionPage = () => {
       key: 'date',
     },
     {
-      title: 'Payment Method',
-      dataIndex: 'payment',
-      key: 'payment',
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
       title: 'Amount',
@@ -52,26 +73,11 @@ const TransactionPage = () => {
       key: 'amount',
       render: (text: string) => <span className="font-bold">${text}</span>,
     },
-  ];
-
-  const data = [
     {
-      key: '1',
-      item: 'GTR 5',
-      shop: 'Gadget & Gear',
-      date: '17 May, 2023',
-      payment: 'Credit Card',
-      amount: '160.00',
-      icon: '/icons/gadget.svg',
-    },
-    {
-      key: '2',
-      item: 'Polo shirt',
-      shop: 'XL fashions',
-      date: '17 May, 2023',
-      payment: 'Credit Card',
-      amount: '20.00',
-      icon: '/icons/shirt.svg',
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      render: (text: string) => <span className="font-bold">{text}</span>,
     },
   ];
 
@@ -86,7 +92,7 @@ const TransactionPage = () => {
         </div>
         <Tabs defaultActiveKey="1">
           <TabPane tab="All" key="1">
-            <Table columns={columns} dataSource={data} pagination={false} />
+            <Table columns={columns} dataSource={transactions} pagination={false} loading={loading} />
           </TabPane>
           <TabPane tab="Revenue" key="2">
             {/* Thêm bảng dữ liệu cho Revenue nếu cần */}
