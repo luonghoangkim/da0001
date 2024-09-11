@@ -1,23 +1,45 @@
 import connectDB from "@/lib/connectDb";
 import Category from "@/models/categories-modal/categories.modal";
 import Transactions from "@/models/trans-modal/trans.modal";
+import { message } from "antd";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+
+const secretKey = process.env.JWT_SECRET || "your-secret-key";
+
+async function verifyToken(request: Request) {
+  const authHeader = request.headers.get("Authorization");
+  console.log("Authorization Header:", authHeader); // Kiểm tra giá trị tiêu đề
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return { error: "Authorization token missing", status: 401 };
+  }
+
+  const token = authHeader.split(" ")[1];
+  console.log("Token:", token); // Kiểm tra giá trị token
+
+  try {
+    const decoded = jwt.verify(token, secretKey!);
+    return { decoded };
+  } catch (error) {
+    return { error: "Invalid or expired token", status: 403 };
+  }
+}
 
 export async function POST(request: Request) {
-
-  const { payload } =
-    await request.json();
+  const { decoded, error, status } = await verifyToken(request);
+  if (error) {
+    return NextResponse.json({ message: error }, { status });
+  }
+  const { user_id } = decoded as { user_id: string };
+  const { payload } = await request.json();
   await connectDB();
-  // let category = await Category.findOne({ category_name });
-
-  // if (!category) {
-  //   console.log("Category name not found");
-  // }
 
   const newTrans = new Transactions({
+    user_id,
     amount: payload?.amount,
     description: payload?.description,
-    category_id: payload?.category_id,
+    category_name: payload?.category_name,
     type: payload?.type,
     status: payload?.status,
   });
@@ -36,33 +58,30 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  await connectDB();
-
   const { searchParams } = new URL(request.url);
-  const type = searchParams.get("type"); // Lọc theo loại giao dịch ("income" hoặc "expense")
-  const category = searchParams.get("category_id"); // Lọc theo danh mục giao dịch
-  const startDate = searchParams.get("startDate"); // Lọc theo khoảng thời gian (bắt đầu)
-  const endDate = searchParams.get("endDate"); // Lọc theo khoảng thời gian (kết thúc)
+  const type = searchParams.get("type");
+  const category_name = searchParams.get("category_name");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+
+  await connectDB();
 
   const query: any = {};
 
-  // Áp dụng các bộ lọc nếu có
   if (type) {
     query.type = type;
   }
-  if (category) {
-    query.category_id = category;
+
+  if (category_name) {
+    query.category_name = category_name;
   }
+
   if (startDate && endDate) {
     query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
 
   try {
-    const transactions = await Transactions.find(query).populate({
-      path: "category_id",
-      select: "category_name",
-    });
-
+    const transactions = await Transactions.find(query);
     return NextResponse.json({ transactions }, { status: 200 });
   } catch (error: any) {
     console.error("Error fetching transactions: ", error);
@@ -74,64 +93,40 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const { decoded, error, status } = await verifyToken(request);
+  if (error) {
+    return NextResponse.json({ message: error }, { status });
+  }
+  const { user_id } = decoded as { user_id: string };
+  const { id, payload } = await request.json();
+
   await connectDB();
 
-  // Lấy transaction_id từ URL
-  const { searchParams } = new URL(request.url);
-  const transaction_id = searchParams.get("transaction_id");
-
-  if (!transaction_id) {
-    return NextResponse.json(
-      { message: "Transaction ID is required" },
-      { status: 400 }
-    );
-  }
-
   try {
-    const { amount, description, category_name, type, status } =
-      await request.json();
-
-    // Tìm danh mục
-    let category;
-    if (category_name) {
-      category = await Category.findOne({ category_name });
-      if (!category) {
-        console.log("Category name not found, creating a new category");
-      }
-    }
-
-    // Cập nhật giao dịch
-    const updatedTransaction = await Transactions.findByIdAndUpdate(
-      transaction_id,
+    const updatedTrans = await Transactions.findOneAndUpdate(
+      { _id: id, user_id },
       {
-        amount,
-        description,
-        category_id: category ? category._id : undefined,
-        type,
-        status,
+        $set: {
+          amount: payload?.amount,
+          description: payload?.description,
+          category_name: payload?.category_name,
+          type: payload?.type,
+          status: payload?.status,
+        },
       },
-      { new: true }
-    ).populate({
-      path: "category_id",
-      select: "category_name",
-    });
+      { new: true } // Return the updated document
+    );
 
-    if (!updatedTransaction) {
+    if (!updatedTrans) {
       return NextResponse.json(
         { message: "Transaction not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(
-      {
-        message: "Transaction updated successfully",
-        transaction: updatedTransaction,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ transaction: updatedTrans }, { status: 200 });
   } catch (error: any) {
-    console.error("Error updating transaction:", error);
+    console.error("Error updating transaction: ", error);
     return NextResponse.json(
       { message: "Failed to update transaction" },
       { status: 500 }
