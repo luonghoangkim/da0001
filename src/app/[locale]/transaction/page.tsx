@@ -1,18 +1,22 @@
 'use client';
 
-import { Table, Tabs, Button } from 'antd';
+import { Table, Tabs, Button, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import AuthenticatedLayout from '../authenticated-layout';
-import TransactionForm from './transaction-form'; // Import form
+import TransactionForm from './transaction-form';
+import { getTransaction } from './service/transaction-service';
+import { Transaction } from 'mongodb';
 
 const { TabPane } = Tabs;
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const TransactionPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [transactions, setTransactions] = useState([]); // State để lưu giao dịch
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Transaction[]>([]);
+  const [total, setTotal] = useState(0); // Tổng số bản ghi
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [pageSize, setPageSize] = useState(10); // Số lượng bản ghi mỗi trang
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -22,23 +26,38 @@ const TransactionPage = () => {
     setIsModalVisible(false);
   };
 
-  // Hàm fetch dữ liệu giao dịch từ API
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (page: number, size: number) => {
     try {
-      const response = await fetch(`${API_URL}/api/transaction`); // Thay bằng endpoint API của bạn
-      const data = await response.json();
-      setTransactions(data.transactions); // Cập nhật state với dữ liệu giao dịch
-      setLoading(false); // Ngừng hiển thị trạng thái loading
+      const response = await getTransaction(page, size);
+      console.log('Fetched data:', response);
+
+      if (response && response.transactions) {
+        setData(response.transactions);
+        setTotal(response.total); // Cập nhật tổng số bản ghi
+      } else {
+        console.error('Data format is not as expected:', response);
+        setData([]);
+      }
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching transactions:', error);
+      setLoading(false);
     }
   };
 
-  // Gọi API khi component được render lần đầu
+  // Gọi API khi component được render lần đầu hoặc khi trang hoặc kích thước trang thay đổi
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    fetchTransactions(currentPage, pageSize);
+  }, [currentPage, pageSize]);
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (current: number, size: number) => {
+    setPageSize(size);
+    setCurrentPage(1); // Reset trang khi thay đổi kích thước trang
+  };
 
   const columns = [
     {
@@ -92,7 +111,21 @@ const TransactionPage = () => {
         </div>
         <Tabs defaultActiveKey="1">
           <TabPane tab="All" key="1">
-            <Table columns={columns} dataSource={transactions} pagination={false} loading={loading} />
+            <Table
+              columns={columns}
+              dataSource={data}
+              pagination={false}
+              loading={loading}
+            />
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={total}
+              onChange={handlePageChange}
+              showSizeChanger
+              onShowSizeChange={handlePageSizeChange}
+              pageSizeOptions={['10']}
+            />
           </TabPane>
           <TabPane tab="Revenue" key="2">
             {/* Thêm bảng dữ liệu cho Revenue nếu cần */}
@@ -101,7 +134,6 @@ const TransactionPage = () => {
             {/* Thêm bảng dữ liệu cho Expenses nếu cần */}
           </TabPane>
         </Tabs>
-
 
         {/* Gọi modal form và truyền props */}
         <TransactionForm isVisible={isModalVisible} onCancel={handleCancel} />

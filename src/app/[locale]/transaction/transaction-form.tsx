@@ -20,7 +20,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
     const handleSubmit = async (values: any) => {
         console.log("Form Values:", values);
         const payload = {
-            amount: values.expenseAmount || values.incomeAmount,
+            amount: values.amount,
             description: values.note || '',
             category_name: values.expenseCategory || '',
             type: activeTab, // 'income' hoặc 'expense' dựa trên tab đang active
@@ -54,7 +54,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="expenseDate"
+                            name="date"
                             label="Ngày giao dịch"
                             rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
                         >
@@ -62,7 +62,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                         </Form.Item>
 
                         <Form.Item
-                            name="expenseAmount"
+                            name="amount"
                             label="Số tiền chi"
                             rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}
                         >
@@ -112,7 +112,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="incomeDate"
+                            name="date"
                             label="Ngày giao dịch"
                             rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
                         >
@@ -120,7 +120,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                         </Form.Item>
 
                         <Form.Item
-                            name="incomeAmount"
+                            name="amount"
                             label="Số tiền thu"
                             rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}
                         >
