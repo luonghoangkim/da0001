@@ -11,7 +11,10 @@ const transactionSchema = new Schema(
       ref: "User",
       require: true,
     }, //(FK -> Users.user_id)
-
+    card_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CreditCard",
+    },
     category_name: {
       type: String,
     },

@@ -17,6 +17,7 @@ const TransactionPage = () => {
   const [total, setTotal] = useState(0); // Tổng số bản ghi
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [pageSize, setPageSize] = useState(10); // Số lượng bản ghi mỗi trang
+  const [activeTab, setActiveTab] = useState('1'); // Tab hiện tại
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -26,9 +27,10 @@ const TransactionPage = () => {
     setIsModalVisible(false);
   };
 
-  const fetchTransactions = async (page: number, size: number) => {
+  const fetchTransactions = async (page: number, size: number, type?: string) => {
     try {
-      const response = await getTransaction(page, size);
+      setLoading(true);
+      const response = await getTransaction(page, size, type);
       console.log('Fetched data:', response);
 
       if (response && response.transactions) {
@@ -47,8 +49,9 @@ const TransactionPage = () => {
 
   // Gọi API khi component được render lần đầu hoặc khi trang hoặc kích thước trang thay đổi
   useEffect(() => {
-    fetchTransactions(currentPage, pageSize);
-  }, [currentPage, pageSize]);
+    const type = activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined;
+    fetchTransactions(currentPage, pageSize, type);
+  }, [currentPage, pageSize, activeTab]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -60,17 +63,6 @@ const TransactionPage = () => {
   };
 
   const columns = [
-    {
-      title: 'Items',
-      dataIndex: 'item',
-      key: 'item',
-      render: (text: string, record: any) => (
-        <div className="flex items-center">
-          <img src={record.icon} alt={text} className="w-6 h-6 mr-2" />
-          {text}
-        </div>
-      ),
-    },
     {
       title: 'Category',
       dataIndex: 'category_name',
@@ -109,7 +101,7 @@ const TransactionPage = () => {
             Add Transaction
           </Button>
         </div>
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="1" onChange={(key) => setActiveTab(key)}>
           <TabPane tab="All" key="1">
             <Table
               columns={columns}
@@ -124,19 +116,47 @@ const TransactionPage = () => {
               onChange={handlePageChange}
               showSizeChanger
               onShowSizeChange={handlePageSizeChange}
-              pageSizeOptions={['10']}
+              pageSizeOptions={['10', '20', '50']}
             />
           </TabPane>
           <TabPane tab="Revenue" key="2">
-            {/* Thêm bảng dữ liệu cho Revenue nếu cần */}
+            <Table
+              columns={columns}
+              dataSource={data}
+              pagination={false}
+              loading={loading}
+            />
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={total}
+              onChange={handlePageChange}
+              showSizeChanger
+              onShowSizeChange={handlePageSizeChange}
+              pageSizeOptions={['10', '20', '50']}
+            />
           </TabPane>
           <TabPane tab="Expenses" key="3">
-            {/* Thêm bảng dữ liệu cho Expenses nếu cần */}
+            <Table
+              columns={columns}
+              dataSource={data}
+              pagination={false}
+              loading={loading}
+            />
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={total}
+              onChange={handlePageChange}
+              showSizeChanger
+              onShowSizeChange={handlePageSizeChange}
+              pageSizeOptions={['10', '20', '50']}
+            />
           </TabPane>
         </Tabs>
 
         {/* Gọi modal form và truyền props */}
-        <TransactionForm isVisible={isModalVisible} onCancel={handleCancel} />
+        <TransactionForm isVisible={isModalVisible} onCancel={handleCancel} onSearch={() => fetchTransactions(currentPage, pageSize, activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined)} />
       </div>
     </AuthenticatedLayout>
   );

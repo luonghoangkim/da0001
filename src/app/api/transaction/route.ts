@@ -39,6 +39,7 @@ export async function POST(request: Request) {
     category_name: payload?.category_name,
     type: payload?.type,
     status: payload?.status,
+    card_id: payload?.card_id,
   });
 
   try {

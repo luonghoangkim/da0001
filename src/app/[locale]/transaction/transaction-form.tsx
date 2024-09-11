@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 const { Option } = Select;
 
-const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel: () => void }) => {
+const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean, onCancel: () => void, onSearch: () => void }) => {
     const [form] = Form.useForm();
     const [activeTab, setActiveTab] = useState('expense');
 
@@ -32,6 +32,7 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
             toast.success('Giao dịch đã được thêm thành công!');
             form.resetFields(); // Reset form sau khi thêm thành công
             onCancel(); // Đóng modal sau khi gửi thành công
+            onSearch();
         } catch (error) {
             console.error('Error creating transaction:', error);
             toast.error('Có lỗi xảy ra khi thêm giao dịch.');
@@ -125,6 +126,27 @@ const TransactionForm = ({ isVisible, onCancel }: { isVisible: boolean, onCancel
                             rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}
                         >
                             <Input placeholder="Nhập số tiền thu" />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="bankCard"
+                            label="Thẻ chi"
+                        >
+                            <Select placeholder="Chọn thẻ chi">
+                                <Option value="creditCard">Thẻ tín dụng</Option>
+                                <Option value="debitCard">Thẻ ghi nợ</Option>
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            name="expenseCategory"
+                            label="Loại thu nhập"
+                        >
+                            <Select placeholder="Chọn loại thu nhập">
+                                <Option value="Salary">Lương</Option>
+                                <Option value="Allowance">Tiền Phụ Cấp</Option>
+                                <Option value="Bonus">Tiền Thưởng</Option>
+                            </Select>
                         </Form.Item>
 
                         <Form.Item
