@@ -60,8 +60,6 @@ const LoginForm = () => {
   };
 
   return (
-
-
     <div style={{ width: '370px', padding: '50px 20px', textAlign: 'center', backgroundColor: 'white', borderRadius: '8px', }}>
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
       <Title level={4}>{t('login')}</Title>
