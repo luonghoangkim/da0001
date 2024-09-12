@@ -7,7 +7,7 @@ import AuthenticatedLayout from '../authenticated-layout';
 import TransactionForm from './transaction-form';
 import { getTransaction } from './service/transaction-service';
 import { Transaction } from 'mongodb';
-import { formatDate, formatCurrency } from "@/utils";
+import { formatDate, formatCurrency, formatCardNumber } from "@/utils";
 import { useTranslations } from 'next-intl';
 
 
@@ -92,10 +92,15 @@ const TransactionPage = () => {
       render: (text: string) => <span className="font-bold">{formatCurrency(Number(text))}</span>,
     },
     {
+      title: `${t('cardId')}`,
+      dataIndex: 'card_id',
+      key: 'card_id',
+      render: (text: number) => <span className="justify-center items-center">{formatCardNumber(text)}</span>,
+    },
+    {
       title: `${t('decription')}`,
       dataIndex: 'description',
       key: 'description',
-      render: (text: string) => <span className="font-bold">{text}</span>,
     },
   ];
 
@@ -126,7 +131,7 @@ const TransactionPage = () => {
               pageSizeOptions={['10', '20', '50']}
             />
           </TabPane>
-          <TabPane tab={t('revenue')} key="2">
+          <TabPane tab={t('expenses')} key="3">
             <Table
               columns={columns}
               dataSource={data}
@@ -143,7 +148,7 @@ const TransactionPage = () => {
               pageSizeOptions={['10', '20', '50']}
             />
           </TabPane>
-          <TabPane tab={t('expenses')} key="3">
+          <TabPane tab={t('revenue')} key="2">
             <Table
               columns={columns}
               dataSource={data}

@@ -12,7 +12,7 @@ const transactionSchema = new Schema(
       require: true,
     }, //(FK -> Users.user_id)
     card_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "CreditCard",
     },
     category_name: {
