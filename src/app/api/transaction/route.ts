@@ -29,11 +29,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: error }, { status });
   }
   const { user_id } = decoded as { user_id: string };
+  console.log({ user_id })
   const { payload } = await request.json();
   await connectDB();
 
   const newTrans = new Transactions({
-    user_id,
+    user_id: user_id,
     amount: payload?.amount,
     description: payload?.description,
     category_name: payload?.category_name,

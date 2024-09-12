@@ -10,13 +10,11 @@ import { Transaction } from 'mongodb';
 import { formatDate, formatCurrency, formatCardNumber } from "@/utils";
 import { useTranslations } from 'next-intl';
 
-
-
 const { TabPane } = Tabs;
 
 const TransactionPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Transaction[]>([]);
   const [total, setTotal] = useState(0); // Tổng số bản ghi
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
@@ -119,7 +117,7 @@ const TransactionPage = () => {
               columns={columns}
               dataSource={data}
               pagination={false}
-              loading={loading}
+              loading={isLoading}
             />
             <Pagination
               current={currentPage}
@@ -136,7 +134,7 @@ const TransactionPage = () => {
               columns={columns}
               dataSource={data}
               pagination={false}
-              loading={loading}
+              loading={isLoading}
             />
             <Pagination
               current={currentPage}
@@ -153,7 +151,7 @@ const TransactionPage = () => {
               columns={columns}
               dataSource={data}
               pagination={false}
-              loading={loading}
+              loading={isLoading}
             />
             <Pagination
               current={currentPage}
