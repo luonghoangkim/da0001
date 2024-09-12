@@ -89,6 +89,7 @@ export async function GET(request: Request) {
   try {
     const total = await Transactions.countDocuments(query); // Tổng số bản ghi
     const transactions = await Transactions.find(query)
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit) // Bỏ qua số lượng bản ghi dựa trên trang
       .limit(limit); // Giới hạn số lượng bản ghi mỗi trang
 
