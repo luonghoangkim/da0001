@@ -1,28 +1,8 @@
 import connectDB from "@/lib/connectDb";
 import CreditCard from "@/models/card-modal/credit-card.modal";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import CountId from "@/models/card-modal/counting-id.modal";
-
-const secretKey = process.env.JWT_SECRET;
-
-// Helper function to extract and verify token
-async function verifyToken(request: Request) {
-  const authHeader = request.headers.get("authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return { error: "Authorization token missing", status: 401 };
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, secretKey!);
-    return { decoded };
-  } catch (error) {
-    return { error: "Invalid or expired token", status: 403 };
-  }
-}
+import { verifyToken } from "@/utils/auth-token";
 
 async function getNextSequence(name: string) {
   const counter = await CountId.findOneAndUpdate(
@@ -40,10 +20,10 @@ async function getNextSequence(name: string) {
 
 export async function POST(request: Request) {
   connectDB();
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
+  const decoded = await verifyToken(request);
+  // if (error) {
+  //   return NextResponse.json({ message: error }, { status });
+  // }
 
   try {
     const { user_id } = decoded as { user_id: string };
@@ -90,10 +70,11 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
+  const decoded = await verifyToken(request);
+  // if (error) {
+  //   return NextResponse.json({ message: error }, { status });
+  // }
+  console.log(decoded);
 
   const { user_id } = decoded as { user_id: string };
 
@@ -115,11 +96,10 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
-
+  const decoded = await verifyToken(request);
+  // if (error) {
+  //   return NextResponse.json({ message: error }, { status });
+  // }
   const { user_id } = decoded as { user_id: string };
 
   try {
@@ -156,10 +136,10 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
+  const decoded = await verifyToken(request);
+  // if (error) {
+  //   return NextResponse.json({ message: error }, { status });
+  // }
 
   const { user_id } = decoded as { user_id: string };
 

@@ -1,40 +1,32 @@
 import connectDB from "@/lib/connectDb";
 import Category from "@/models/categories-modal/categories.modal";
 import Transactions from "@/models/trans-modal/trans.modal";
+import { verifyToken } from "@/utils/auth-token";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-
-const secretKey = process.env.JWT_SECRET || "your-secret-key";
-
-async function verifyToken(request: Request) {
-  const authHeader = request.headers.get("Authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return { error: "Authorization token missing", status: 401 };
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, secretKey!);
-    return { decoded };
-  } catch (error) {
-    return { error: "Invalid or expired token", status: 403 };
-  }
-}
 
 export async function POST(request: Request) {
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-  const { user_id } = decoded as { user_id: string };
-  console.log({ user_id })
+  // Check if decoded is a JwtPayload and contains an id
+  let userId: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    userId = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
+
   const { payload } = await request.json();
   await connectDB();
 
   const newTrans = new Transactions({
-    user_id: user_id,
+    user_id: decoded.id,
     amount: payload?.amount,
     description: payload?.description,
     category_name: payload?.category_name,
@@ -57,11 +49,22 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-  const { user_id } = decoded as { user_id: string };
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type");
@@ -114,10 +117,10 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
+  const decoded = await verifyToken(request);
+  // if (error) {
+  //   return NextResponse.json({ message: error }, { status });
+  // }
   const { user_id } = decoded as { user_id: string };
   const { id, payload } = await request.json();
 
