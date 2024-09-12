@@ -1,40 +1,30 @@
 import connectDB from "@/lib/connectDb";
-import Category from "@/models/categories-modal/categories.modal";
-import Transactions from "@/models/trans-modal/trans.modal";
-import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import User from "@/models/auth-modal/user.modal";
+import { NextResponse } from "next/server";
+import { verifyToken } from "@/utils/auth-token";
 
-const secretKey = process.env.JWT_SECRET || "your-secret-key";
-
-async function verifyToken(request: Request) {
-  const authHeader = request.headers.get("Authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return { error: "Authorization token missing", status: 401 };
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, secretKey!);
-    return { decoded };
-  } catch (error) {
-    return { error: "Invalid or expired token", status: 403 };
-  }
-}
 export async function GET(request: Request) {
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
-  }
-
-  const { user_id } = decoded as { user_id: string };
-
   await connectDB();
 
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
+
   try {
-    const user = await User.findById(user_id).select("-password"); // Exclude password
+    const user = await User.findById(user_id).select("-password");
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -44,6 +34,56 @@ export async function GET(request: Request) {
     console.error("Error fetching user profile: ", error);
     return NextResponse.json(
       { message: "Failed to fetch user profile" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  await connectDB();
+
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const body = await request.json();
+    const { fullName, email, phoneNumber, addressUser, genderUser } = body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user_id,
+      {
+        username: fullName, // Cập nhật theo tên người dùng
+        email,
+        phone_number: phoneNumber,
+        address: addressUser,
+        gender: genderUser,
+      },
+      { new: true, runValidators: true }
+    ).select("-password"); // Exclude password
+
+    if (!updatedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ user: updatedUser }, { status: 200 });
+  } catch (error) {
+    console.error("Error updating user profile: ", error);
+    return NextResponse.json(
+      { message: "Failed to update user profile" },
       { status: 500 }
     );
   }

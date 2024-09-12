@@ -21,16 +21,25 @@ async function getNextSequence(name: string) {
 export async function POST(request: Request) {
   connectDB();
   const decoded = await verifyToken(request);
-  // if (error) {
-  //   return NextResponse.json({ message: error }, { status });
-  // }
-
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
   try {
-    const { user_id } = decoded as { user_id: string };
     const { bank_name, card_number } = await request.json();
     // Lấy number_id tiếp theo
     const number_id = await getNextSequence("credit_card_id");
-    console.log(number_id);
 
     // Kiểm tra xem số number_id có bị trùng không
     const existingCard = await CreditCard.findOne({ number_id });
@@ -53,7 +62,7 @@ export async function POST(request: Request) {
       bank_name,
       card_number,
       number_id,
-      user_id,
+      user_id: user_id,
     });
     await newCard.save();
 
@@ -71,16 +80,25 @@ export async function GET(request: Request) {
   connectDB();
 
   const decoded = await verifyToken(request);
-  // if (error) {
-  //   return NextResponse.json({ message: error }, { status });
-  // }
-  console.log(decoded);
-
-  const { user_id } = decoded as { user_id: string };
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     // Find all credit cards associated with the user_id
-    const creditCards = await CreditCard.find({ user_id });
+    const creditCards = await CreditCard.find({ user_id: user_id });
 
     return NextResponse.json({ creditCards }, { status: 200 });
   } catch (error: any) {
@@ -97,10 +115,21 @@ export async function PATCH(request: Request) {
   connectDB();
 
   const decoded = await verifyToken(request);
-  // if (error) {
-  //   return NextResponse.json({ message: error }, { status });
-  // }
-  const { user_id } = decoded as { user_id: string };
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     const { card_id, bank_name, card_number } = await request.json();
@@ -137,11 +166,21 @@ export async function DELETE(request: Request) {
   connectDB();
 
   const decoded = await verifyToken(request);
-  // if (error) {
-  //   return NextResponse.json({ message: error }, { status });
-  // }
-
-  const { user_id } = decoded as { user_id: string };
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     const { card_id } = await request.json();

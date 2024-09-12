@@ -10,11 +10,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
   // Check if decoded is a JwtPayload and contains an id
-  let userId: string;
+  let user_id: string;
   if (typeof decoded === "string") {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   } else if ("id" in decoded) {
-    userId = decoded.id;
+    user_id = decoded.id;
   } else {
     return NextResponse.json(
       { message: "Invalid token structure" },
@@ -118,10 +118,22 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   const decoded = await verifyToken(request);
-  // if (error) {
-  //   return NextResponse.json({ message: error }, { status });
-  // }
-  const { user_id } = decoded as { user_id: string };
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
+
   const { id, payload } = await request.json();
 
   await connectDB();
