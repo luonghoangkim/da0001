@@ -31,19 +31,29 @@ export const createTransaction = async (payload: {
   }
 };
 
-export const getTransaction = async () => {
+export const getTransaction = async (
+  page: number,
+  limit: number,
+  type?: string
+) => {
   const token = localStorage.getItem("authToken");
+  const url = new URL(`${API_URL}/api/transaction`);
+  url.searchParams.append("page", page.toString());
+  url.searchParams.append("limit", limit.toString());
+  if (type) {
+    url.searchParams.append("type", type);
+  }
+
   try {
-    const res = await fetch(`${API_URL}/api/transaction`, {
+    const res = await fetch(url.toString(), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     });
     if (res.ok) {
       const data = await res.json();
-      return data.transaction;
+      return data;
     } else {
       const errorData = await res.json();
       throw new Error(errorData.message);

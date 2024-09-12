@@ -1,7 +1,6 @@
 import connectDB from "@/lib/connectDb";
 import Category from "@/models/categories-modal/categories.modal";
 import Transactions from "@/models/trans-modal/trans.modal";
-import { message } from "antd";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
@@ -9,14 +8,12 @@ const secretKey = process.env.JWT_SECRET || "your-secret-key";
 
 async function verifyToken(request: Request) {
   const authHeader = request.headers.get("Authorization");
-  console.log("Authorization Header:", authHeader); // Kiểm tra giá trị tiêu đề
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return { error: "Authorization token missing", status: 401 };
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("Token:", token); // Kiểm tra giá trị token
 
   try {
     const decoded = jwt.verify(token, secretKey!);
@@ -42,6 +39,7 @@ export async function POST(request: Request) {
     category_name: payload?.category_name,
     type: payload?.type,
     status: payload?.status,
+    card_id: payload?.card_id,
   });
 
   try {
@@ -58,15 +56,23 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+  const { decoded, error, status } = await verifyToken(request);
+  if (error) {
+    return NextResponse.json({ message: error }, { status });
+  }
+  const { user_id } = decoded as { user_id: string };
+
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type");
   const category_name = searchParams.get("category_name");
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
+  const page = parseInt(searchParams.get("page") || "1", 10); // Trang hiện tại
+  const limit = parseInt(searchParams.get("limit") || "10", 10); // Số lượng bản ghi mỗi trang
 
   await connectDB();
 
-  const query: any = {};
+  const query: any = { user_id };
 
   if (type) {
     query.type = type;
@@ -81,8 +87,21 @@ export async function GET(request: Request) {
   }
 
   try {
-    const transactions = await Transactions.find(query);
-    return NextResponse.json({ transactions }, { status: 200 });
+    const total = await Transactions.countDocuments(query); // Tổng số bản ghi
+    const transactions = await Transactions.find(query)
+      .skip((page - 1) * limit) // Bỏ qua số lượng bản ghi dựa trên trang
+      .limit(limit); // Giới hạn số lượng bản ghi mỗi trang
+
+    return NextResponse.json(
+      {
+        transactions,
+        total,
+        page,
+        pages: Math.ceil(total / limit), // Tổng số trang
+        limit,
+      },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error("Error fetching transactions: ", error);
     return NextResponse.json(
