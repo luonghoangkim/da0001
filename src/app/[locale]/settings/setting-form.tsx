@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, Form, Input, Button, } from 'antd';
 import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
-import { EnvironmentOutlined, HeartOutlined, HomeOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import AuthenticatedLayout from '../authenticated-layout';
+import { EnvironmentOutlined, HeartOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { getUser } from './service/setting-service';
 
 
 const ProfileForm = () => {
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(true);
 
   // Mock data, replace with actual API call
   const [profileData, setProfileData] = useState({
@@ -24,6 +25,23 @@ const ProfileForm = () => {
     console.log('Updated Profile Values:', values);
     // Here, send the updated values to your API
   };
+
+  const fetchUserProfile = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getUser();
+
+      if (response && response.transactions) {
+
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   return (
     <Tabs defaultActiveKey="1">
