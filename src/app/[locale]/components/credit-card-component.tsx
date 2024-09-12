@@ -1,8 +1,9 @@
 
-import { formatCurrency } from "@/utils";
+import { formatCurrency, formatCardNumber } from "@/utils";
 import { CreditCardOutlined, BankOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Card, Typography, Button, Space } from "antd";
 import { useTranslations } from 'next-intl';
+
 
 
 const { Text, Title } = Typography;
@@ -30,7 +31,7 @@ export const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accou
                 </Space>
                 <Text type="secondary"> {t('cardNumber')}</Text>
                 <Title level={4} style={{ margin: 0 }}>
-                    <CreditCardOutlined style={{ paddingRight: "10px" }} /> {accountNumber}
+                    <CreditCardOutlined style={{ paddingRight: "10px" }} /> {formatCardNumber(Number(accountNumber))}
                 </Title>
                 <Text type="secondary"> {t('totalAmount')}</Text>
                 <Title level={3} style={{ color: '#33CC33' }}>

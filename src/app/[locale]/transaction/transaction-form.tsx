@@ -6,6 +6,7 @@ import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
 import { createTransaction } from './service/transaction-service';
 import { toast } from 'react-toastify';
+import CartSelectedComponent from '../components/cart-selected-component';
 
 const { Option } = Select;
 
@@ -18,11 +19,11 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
     };
 
     const handleSubmit = async (values: any) => {
-        console.log("Form Values:", values);
         const payload = {
             amount: values.amount,
             description: values.note || '',
             category_name: values.expenseCategory || '',
+            card_id: values.bankCard,
             type: activeTab, // 'income' hoặc 'expense' dựa trên tab đang active
             status: 'pending',
         };
@@ -42,7 +43,7 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
     return (
         <Modal
             title="Thêm Giao Dịch Mới"
-            visible={isVisible}
+            open={isVisible}
             onCancel={onCancel}
             footer={null}
             width={600} // Điều chỉnh kích thước modal
@@ -70,24 +71,18 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                             <Input placeholder="Nhập số tiền chi" />
                         </Form.Item>
 
-                        <Form.Item
-                            name="bankCard"
-                            label="Thẻ chi"
-                        >
-                            <Select placeholder="Chọn thẻ chi">
-                                <Option value="creditCard">Thẻ tín dụng</Option>
-                                <Option value="debitCard">Thẻ ghi nợ</Option>
-                            </Select>
-                        </Form.Item>
+                        <CartSelectedComponent />
 
                         <Form.Item
                             name="expenseCategory"
                             label="Loại chi tiêu"
                         >
                             <Select placeholder="Chọn loại chi tiêu">
-                                <Option value="Food">Ăn uống</Option>
-                                <Option value="Clothing">Quần áo</Option>
-                                <Option value="Shopping">Mua sắm</Option>
+                                <Option value="Ăn uống">Ăn uống</Option>
+                                <Option value="Quần áo">Quần áo</Option>
+                                <Option value="Mua sắm">Mua sắm</Option>
+                                <Option value="Trả lãi">Trả lãi</Option>
+                                <Option value="Đầu tư">Đầu tư</Option>
                             </Select>
                         </Form.Item>
 
@@ -128,24 +123,16 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                             <Input placeholder="Nhập số tiền thu" />
                         </Form.Item>
 
-                        <Form.Item
-                            name="bankCard"
-                            label="Thẻ chi"
-                        >
-                            <Select placeholder="Chọn thẻ chi">
-                                <Option value="creditCard">Thẻ tín dụng</Option>
-                                <Option value="debitCard">Thẻ ghi nợ</Option>
-                            </Select>
-                        </Form.Item>
+                        <CartSelectedComponent />
 
                         <Form.Item
                             name="expenseCategory"
                             label="Loại thu nhập"
                         >
                             <Select placeholder="Chọn loại thu nhập">
-                                <Option value="Salary">Lương</Option>
-                                <Option value="Allowance">Tiền Phụ Cấp</Option>
-                                <Option value="Bonus">Tiền Thưởng</Option>
+                                <Option value="Lương">Lương</Option>
+                                <Option value="Tiền Phụ Cấp">Tiền Phụ Cấp</Option>
+                                <Option value="Tiền Thưởng">Tiền Thưởng</Option>
                             </Select>
                         </Form.Item>
 
