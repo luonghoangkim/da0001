@@ -7,6 +7,8 @@ import { loginService } from './service/login-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
+import Image from 'next/image'
+
 
 const { Title, Text } = Typography;
 
@@ -58,7 +60,9 @@ const LoginForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
+
+
+    <div style={{ width: '370px', minHeight: 'fit-content', padding: '50px 20px', textAlign: 'center', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
       <Title level={4}>{t('login')}</Title>
       <Form layout="vertical" onFinish={onFinish}>

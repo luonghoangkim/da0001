@@ -51,7 +51,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
+    <div style={{ width: '370px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
       <Title level={4}>{t('signUp')}</Title>
       <Form layout="vertical" onFinish={onFinish}>
