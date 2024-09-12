@@ -7,6 +7,10 @@ import AuthenticatedLayout from '../authenticated-layout';
 import TransactionForm from './transaction-form';
 import { getTransaction } from './service/transaction-service';
 import { Transaction } from 'mongodb';
+import { formatDate, formatCurrency } from "@/utils";
+import { useTranslations } from 'next-intl';
+
+
 
 const { TabPane } = Tabs;
 
@@ -18,6 +22,8 @@ const TransactionPage = () => {
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [pageSize, setPageSize] = useState(10); // Số lượng bản ghi mỗi trang
   const [activeTab, setActiveTab] = useState('1'); // Tab hiện tại
+  const t = useTranslations('Transaction');
+
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -64,28 +70,29 @@ const TransactionPage = () => {
 
   const columns = [
     {
-      title: 'Category',
+      title: `${t('category')}`,
       dataIndex: 'category_name',
       key: 'category_name',
     },
     {
-      title: 'Date',
+      title: `${t('date')}`,
       dataIndex: 'date',
       key: 'date',
+      render: (text: string) => <span className="justify-center items-center font-bold">{formatDate(text)}</span>,
     },
     {
-      title: 'Type',
+      title: `${t('type')}`,
       dataIndex: 'type',
       key: 'type',
     },
     {
-      title: 'Amount',
+      title: `${t('amount')}`,
       dataIndex: 'amount',
       key: 'amount',
-      render: (text: string) => <span className="font-bold">${text}</span>,
+      render: (text: string) => <span className="font-bold">{formatCurrency(Number(text))}</span>,
     },
     {
-      title: 'Description',
+      title: `${t('decription')}`,
       dataIndex: 'description',
       key: 'description',
       render: (text: string) => <span className="font-bold">{text}</span>,
@@ -96,13 +103,13 @@ const TransactionPage = () => {
     <AuthenticatedLayout>
       <div className="p-4 bg-white rounded-md shadow-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Recent Transaction</h2>
+          <h2 className="text-lg font-semibold">{t('recentTransaction')}</h2>
           <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
-            Add Transaction
+            {t('addTransaction')}
           </Button>
         </div>
         <Tabs defaultActiveKey="1" onChange={(key) => setActiveTab(key)}>
-          <TabPane tab="All" key="1">
+          <TabPane tab={t('all')} key="1">
             <Table
               columns={columns}
               dataSource={data}
@@ -119,7 +126,7 @@ const TransactionPage = () => {
               pageSizeOptions={['10', '20', '50']}
             />
           </TabPane>
-          <TabPane tab="Revenue" key="2">
+          <TabPane tab={t('revenue')} key="2">
             <Table
               columns={columns}
               dataSource={data}
@@ -136,7 +143,7 @@ const TransactionPage = () => {
               pageSizeOptions={['10', '20', '50']}
             />
           </TabPane>
-          <TabPane tab="Expenses" key="3">
+          <TabPane tab={t('expenses')} key="3">
             <Table
               columns={columns}
               dataSource={data}

@@ -9,7 +9,7 @@
         "transaction": "Giao dịch",
         "logOut": "Đăng xuất",
         "logoutConfirmationMessage": "Bạn có chắc chắn muốn đăng xuất?",
-          "cancel": "Huỷ",
+        "cancel": "Huỷ",
         "yes": "Đồng ý"
     },
     "Login": {
@@ -68,5 +68,27 @@
         "editError": "Lỗi chỉnh sửa!",
         "save": "Lưu",
         "editCard": "Chỉnh sửa thẻ"
+    },
+    "Transaction": {
+        "addTransaction": "Thêm giao dịch",
+        "recentTransaction": "Lịch sử giao dịch",
+        "all": "Tất cả",
+        "revenue": "Tiền chi",
+        "expenses": "Tiền thu",
+        "addSuccess": "Thêm giao dịch thành công",
+        "addError": "Lỗi thêm dữ liệu",
+        "date": "Ngày",
+        "type": "Loại",
+        "amount": "Số tiền",
+        "category": "Danh mục",
+        "decription": "Ghi chú",
+        "pleaseSelectDate": "Vui lòng chọn ngày!",
+        "pleaseSelectType": "Vui lòng chọn loại!",
+        "pleaseEnterAmount": "Vui lòng nhập số tiền!",
+        "pleaseSelectCategory": "Vui lòng chọn danh mục!",
+        "add": "Thêm",
+        "cancel": "Huỷ",
+        "remove": "Xoá",
+        "edit": "Chỉnh sửa"
     }
 }

@@ -65,5 +65,27 @@
         "editError": "Edit card error",
         "save": "Save",
         "editCard": "Edit card"
+    },
+    "Transaction": {
+        "addTransaction": "Add transaction",
+        "recentTransaction": "Recent transaction",
+        "addSuccess": "Thêm giao dịch thành công",
+        "all": "All",
+        "revenue": "Revenue",
+        "expenses": "Expenses",
+        "addError": "Lỗi thêm dữ liệu",
+        "date": "Ngày",
+        "type": "Loại",
+        "amount": "Số tiền",
+        "category": "Danh mục",
+        "decription": "Decription",
+        "pleaseSelectDate": "Vui lòng chọn ngày!",
+        "pleaseSelectType": "Vui lòng chọn loại!",
+        "pleaseEnterAmount": "Vui lòng nhập số tiền!",
+        "pleaseSelectCategory": "Vui lòng chọn danh mục!",
+        "add": "Thêm",
+        "cancel": "Huỷ",
+        "remove": "Xoá",
+        "edit": "Chỉnh sửa"
     }
 }
