@@ -11,14 +11,31 @@ import {
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
+import { getUser } from "../settings/service/setting-service";
 
 const { Sider } = Layout;
 
 function AppSideMenu() {
   const pathname = usePathname();
   const router = useRouter();
+  const [username, setUsername] = useState('');
+
   const t = useTranslations("MenuApp");
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await getUser();
+      const { user } = response;
+
+      setUsername(user.username);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      toast.error('Có lỗi xảy ra khi lấy thông tin người dùng.');
+    } finally {
+      console.log("error");
+    }
+  };
 
   const menuItems = [
     {
@@ -54,6 +71,10 @@ function AppSideMenu() {
     router.push("/login");
   };
 
+  React.useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
   const logoutMenuItem = [
     {
       key: "logout",
@@ -87,9 +108,9 @@ function AppSideMenu() {
           <div
             style={{ display: "flex", alignItems: "center", marginTop: "16px" }}
           >
-            <Avatar src="https://img4.thuthuatphanmem.vn/uploads/2020/12/25/anh-avt-anime-doc_115939861.jpg" />
+            <Avatar src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
             <div style={{ marginLeft: "8px", color: "white" }}>
-              <div>hoangkimluong</div>
+              <div>{username}</div>
               <Tooltip title="View profile">
                 <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
               </Tooltip>
