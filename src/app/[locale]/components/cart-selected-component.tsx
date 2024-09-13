@@ -33,9 +33,9 @@ const CartSelectedComponent = () => {
         <div>
             <Form.Item
                 name="bankCard"
-                label="Thẻ chi"
+                label="Ngân hàng"
             >
-                <Select placeholder="Chọn thẻ chi">
+                <Select placeholder="Chọn thẻ ngân hàng">
                     {cards.map((card) => (
                         <Option key={card._id} value={card.card_number}>
                             {`${card.bank_name} - ${card.card_number}`}

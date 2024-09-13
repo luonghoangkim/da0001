@@ -1,28 +1,8 @@
 import connectDB from "@/lib/connectDb";
 import CreditCard from "@/models/card-modal/credit-card.modal";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import CountId from "@/models/card-modal/counting-id.modal";
-
-const secretKey = process.env.JWT_SECRET;
-
-// Helper function to extract and verify token
-async function verifyToken(request: Request) {
-  const authHeader = request.headers.get("authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return { error: "Authorization token missing", status: 401 };
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, secretKey!);
-    return { decoded };
-  } catch (error) {
-    return { error: "Invalid or expired token", status: 403 };
-  }
-}
+import { verifyToken } from "@/utils/auth-token";
 
 async function getNextSequence(name: string) {
   const counter = await CountId.findOneAndUpdate(
@@ -40,17 +20,26 @@ async function getNextSequence(name: string) {
 
 export async function POST(request: Request) {
   connectDB();
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
   try {
-    const { user_id } = decoded as { user_id: string };
     const { bank_name, card_number } = await request.json();
     // Lấy number_id tiếp theo
     const number_id = await getNextSequence("credit_card_id");
-    console.log(number_id);
 
     // Kiểm tra xem số number_id có bị trùng không
     const existingCard = await CreditCard.findOne({ number_id });
@@ -73,7 +62,7 @@ export async function POST(request: Request) {
       bank_name,
       card_number,
       number_id,
-      user_id,
+      user_id: user_id,
     });
     await newCard.save();
 
@@ -90,16 +79,26 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-
-  const { user_id } = decoded as { user_id: string };
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     // Find all credit cards associated with the user_id
-    const creditCards = await CreditCard.find({ user_id });
+    const creditCards = await CreditCard.find({ user_id: user_id });
 
     return NextResponse.json({ creditCards }, { status: 200 });
   } catch (error: any) {
@@ -115,12 +114,22 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-
-  const { user_id } = decoded as { user_id: string };
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     const { card_id, bank_name, card_number } = await request.json();
@@ -156,12 +165,22 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   connectDB();
 
-  const { decoded, error, status } = await verifyToken(request);
-  if (error) {
-    return NextResponse.json({ message: error }, { status });
+  const decoded = await verifyToken(request);
+  if (!decoded) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
-
-  const { user_id } = decoded as { user_id: string };
+  // Check if decoded is a JwtPayload and contains an id
+  let user_id: string;
+  if (typeof decoded === "string") {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  } else if ("id" in decoded) {
+    user_id = decoded.id;
+  } else {
+    return NextResponse.json(
+      { message: "Invalid token structure" },
+      { status: 401 }
+    );
+  }
 
   try {
     const { card_id } = await request.json();

@@ -1,106 +1,116 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Tabs, Form, Input, Button, } from 'antd';
-import React from 'react';
-import TabPane from 'antd/es/tabs/TabPane';
-import { EnvironmentOutlined, HeartOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { getUser } from './service/setting-service';
+import { Form, Input, Button, Spin, Select } from 'antd';
+import { EnvironmentOutlined, HeartOutlined, MailOutlined, ManOutlined, PhoneOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
+import { getUser, updateUser } from './service/setting-service';
 
+const { Option } = Select;
 
-const ProfileForm = () => {
+const SettingForm = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(true);
-
-  // Mock data, replace with actual API call
-  const [profileData, setProfileData] = useState({
-    fullName: 'Tanzir Rahman',
-    email: 'tanzir.rahman@email.com',
-    phoneNumber: '+880 | 51547 58868',
-    addressUser: 'Bien Hoa - Dong Nai',
-    genderUser: 'Nam'
-  });
-
-  const handleUpdateProfile = (values: any) => {
-    console.log('Updated Profile Values:', values);
-    // Here, send the updated values to your API
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchUserProfile = async () => {
     try {
       setIsLoading(true);
       const response = await getUser();
+      const { user } = response;
 
-      if (response && response.transactions) {
-
-      }
+      form.setFieldsValue({
+        fullName: user.username, // Ví dụ nếu trường là username
+        email: user.email,
+        phoneNumber: user.phone_number || '', // Đảm bảo rằng các trường không null
+        addressUser: user.address ? `${user.address.street}, ${user.address.city}` : '', // Định dạng địa chỉ
+        genderUser: user.gender === 'male' ? 'Nam' : 'Nữ', // Đảm bảo giá trị chọn trùng khớp
+      });
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error('Error fetching user profile:', error);
+      toast.error('Có lỗi xảy ra khi lấy thông tin người dùng.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
+
+  const handleUpdateProfile = async (values: any) => {
+    setIsSubmitting(true);
+    const payload = {
+      fullName: values.fullName,
+      email: values.email,
+      phoneNumber: values.phoneNumber || null,
+      addressUser: values.addressUser || null,
+      genderUser: values.genderUser === 'Nam' ? 'male' : 'female',
+    };
+
+    try {
+      await updateUser(
+        payload.fullName,
+        payload.email,
+        payload.phoneNumber,
+        payload.addressUser,
+        payload.genderUser
+      );
+      toast.success('Thông tin đã được cập nhật thành công!');
+    } catch (error) {
+      console.error('Error updating:', error);
+      toast.error('Có lỗi xảy ra khi cập nhật thông tin.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   useEffect(() => {
     fetchUserProfile();
   }, []);
 
   return (
-    <Tabs defaultActiveKey="1">
-      <TabPane tab="Account" key="1">
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={profileData}
-          onFinish={handleUpdateProfile}
-          className="max-w-2xl m-auto"
-        >
-          <Form.Item label="Full name" name="fullName" className="mb-4" >
-            <Input
-              prefix={<UserOutlined />}
-              value={profileData.fullName}
-            />
-          </Form.Item>
+    <Spin spinning={isLoading}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleUpdateProfile}
+        className="max-w-2xl m-auto"
+      >
+        <Form.Item label="Full Name" name="fullName" className="mb-4">
+          <Input prefix={<UserOutlined />} />
+        </Form.Item>
 
-          <Form.Item label="Email" name="email" className="mb-4">
-            <Input
-              prefix={<MailOutlined />}
-              value={profileData.email}
-            />
-          </Form.Item>
+        <Form.Item label="Email" name="email" className="mb-4">
+          <Input prefix={<MailOutlined />} />
+        </Form.Item>
 
-          <Form.Item label="Phone Number" name="phoneNumber" className="mb-4">
-            <Input
-              prefix={<PhoneOutlined />}
-              value={profileData.phoneNumber}
-            />
-          </Form.Item>
+        <Form.Item label="Phone Number" name="phoneNumber" className="mb-4">
+          <Input prefix={<PhoneOutlined />} />
+        </Form.Item>
 
-          <Form.Item label="Address" name="addressUser" className="mb-4">
-            <Input
-              prefix={<EnvironmentOutlined />}
-              value={profileData.addressUser}
-            />
-          </Form.Item>
+        <Form.Item label="Address" name="addressUser" className="mb-4">
+          <Input prefix={<EnvironmentOutlined />} />
+        </Form.Item>
 
-          <Form.Item label="Gender" name="genderUser" className="mb-4">
-            <Input
-              prefix={<HeartOutlined />}
-              value={profileData.genderUser}
-            />
-          </Form.Item>
+        <Form.Item label="Gender" name="genderUser" className="mb-4">
 
-          <Form.Item >
-            <Button type="primary" htmlType="submit" >
-              Update Profile
-            </Button>
-          </Form.Item>
-        </Form>
-      </TabPane>
+          <Select placeholder="Chọn giới tính" className='flex items-center'>
+            <Option value="Nam" className='flex items-center'>
+              <ManOutlined className='mr-2' />
+              <span className='ml-2'>Nam</span>
+            </Option>
+            <Option value="Nữ" prefix='' className='flex items-center'>
+              <WomanOutlined className='mr-2' />
+              <span className='mr-2'>Nữ</span>
+            </Option>
+          </Select>
+        </Form.Item>
 
-      <TabPane tab="Security" key="2" className="mt-4">
-        <div>Security settings go here...</div>
-      </TabPane>
-    </Tabs>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={isSubmitting}>
+            Update Profile
+          </Button>
+        </Form.Item>
+      </Form>
+    </Spin>
   );
 };
 
-export default ProfileForm;
+export default SettingForm;
