@@ -52,7 +52,7 @@
         "invalidPassword": "Mật khẩu không hợp lệ!",
         "emailExists": "Email đã tồn tại!",
         "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!",
-        "username": "Tên đăng nhập",
+        "username": "Họ và tên",
         "nameRequired": "Vui lòng nhập tên đăng nhập",
         "continueWithGoogle": "Tiếp tục với Google",
         "orSignUpWith": "Hoặc",

@@ -52,7 +52,7 @@
         "invalidPassword": "Password is invalid!",
         "emailExists": "Email already exists!",
         "errorOccurred": "Error, please try again!",
-        "username": "username",
+        "username": "Full name",
         "nameRequired": "Name is required!",
         "continueWithGoogle": "Continue with Google",
         "orSignUpWith": "Or sign up with",
