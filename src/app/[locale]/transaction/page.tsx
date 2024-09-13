@@ -61,7 +61,7 @@ const TransactionPage = () => {
     setCurrentPage(page);
   };
 
-  const handlePageSizeChange = (current: number, size: number) => {
+  const handlePageSizeChange = (size: number) => {
     setPageSize(size);
     setCurrentPage(1); // Reset trang khi thay đổi kích thước trang
   };

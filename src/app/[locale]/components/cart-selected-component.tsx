@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { Form, Select } from 'antd';
 import * as cardService from '../credit-card/service/credit-card-service';
+import { useTranslations } from 'next-intl';
+
 const { Option } = Select;
 
 interface Card {
@@ -14,6 +16,7 @@ interface Card {
 
 const CartSelectedComponent = () => {
     const [cards, setCards] = useState<Card[]>([]);
+    const t = useTranslations('Transaction');
 
     const handleSearchCreditCards = async () => {
         try {
@@ -21,7 +24,7 @@ const CartSelectedComponent = () => {
             setCards(creditCards);
         } catch (error) {
             console.error('Error during call:', error);
-            toast.error('fetch error');
+            toast.error(t('fetchError'));
         }
     };
 
@@ -33,9 +36,9 @@ const CartSelectedComponent = () => {
         <div>
             <Form.Item
                 name="bankCard"
-                label="Ngân hàng"
+                label={t('bank')}
             >
-                <Select placeholder="Chọn thẻ ngân hàng">
+                <Select placeholder={t('selectBankCard')}>
                     {cards.map((card) => (
                         <Option key={card._id} value={card.card_number}>
                             {`${card.bank_name} - ${card.card_number}`}

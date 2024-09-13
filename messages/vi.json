@@ -1,4 +1,19 @@
 {
+    "CommonLanguage": {
+        "loading": "Đang tải dữ liệu...",
+        "error": "Đã xảy ra lỗi",
+        "updateInforSuccess": "Thông tin đã được cập nhật thành công!",
+        "cancel": "Hủy",
+        "yes": "Đồng ý",
+        "no": "Không",
+        "ok": "Đồng ý",
+        "add": "Thêm",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "save": "Lưu",
+        "search": "Tìm kiếm",
+        "filter": "Lọc"
+    },
     "Home": {
         "welcomeMessage": "Chào mừng đến với MyFinanceManager",
         "goToLogin": "Đi đến Đăng nhập"
@@ -10,7 +25,8 @@
         "logOut": "Đăng xuất",
         "logoutConfirmationMessage": "Bạn có chắc chắn muốn đăng xuất?",
         "cancel": "Huỷ",
-        "yes": "Đồng ý"
+        "yes": "Đồng ý",
+        "setting": "Cài đặt"
     },
     "Login": {
         "login": "Đăng nhập",
@@ -36,7 +52,7 @@
         "invalidPassword": "Mật khẩu không hợp lệ!",
         "emailExists": "Email đã tồn tại!",
         "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!",
-        "username": "Tên đăng nhập",
+        "username": "Họ và tên",
         "nameRequired": "Vui lòng nhập tên đăng nhập",
         "continueWithGoogle": "Tiếp tục với Google",
         "orSignUpWith": "Hoặc",
@@ -90,6 +106,39 @@
         "add": "Thêm",
         "cancel": "Huỷ",
         "remove": "Xoá",
-        "edit": "Chỉnh sửa"
+        "edit": "Chỉnh sửa",
+        "addNewTransaction": "Thêm Giao Dịch Mới",
+        "expense": "Tiền Chi",
+        "income": "Tiền Thu",
+        "transactionDate": "Ngày giao dịch",
+        "expenseAmount": "Số tiền chi",
+        "incomeAmount": "Số tiền thu",
+        "enterExpenseAmount": "Nhập số tiền chi",
+        "enterIncomeAmount": "Nhập số tiền thu",
+        "expenseCategory": "Loại chi tiêu",
+        "incomeCategory": "Loại thu nhập",
+        "selectExpenseCategory": "Chọn loại chi tiêu",
+        "selectIncomeCategory": "Chọn loại thu nhập",
+        "food": "Ăn uống",
+        "clothes": "Quần áo",
+        "shopping": "Mua sắm",
+        "interest": "Trả lãi",
+        "investment": "Đầu tư",
+        "salary": "Lương",
+        "allowance": "Tiền Phụ Cấp",
+        "bonus": "Tiền Thưởng",
+        "note": "Ghi chú",
+        "addOptionalNote": "Thêm ghi chú (tùy chọn)",
+        "transactionAddedSuccess": "Giao dịch đã được thêm thành công!",
+        "transactionAddError": "Có lỗi xảy ra khi thêm giao dịch.",
+        "bank": "Ngân hàng",
+        "selectBankCard": "Chọn thẻ ngân hàng",
+        "fetchError": "Lỗi khi tải dữ liệu"
+    },
+    "Setting": {
+        "fullName": "Họ và tên",
+        "phoneNumber": "Số điện thoại",
+        "address": "Địa chỉ",
+        "gender": "Giới tính"
     }
 }
