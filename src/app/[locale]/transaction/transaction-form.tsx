@@ -7,12 +7,14 @@ import TabPane from 'antd/es/tabs/TabPane';
 import { createTransaction } from './service/transaction-service';
 import { toast } from 'react-toastify';
 import CartSelectedComponent from '../components/cart-selected-component';
+import { useTranslations } from 'next-intl';
 
 const { Option } = Select;
 
 const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean, onCancel: () => void, onSearch: () => void }) => {
     const [form] = Form.useForm();
     const [activeTab, setActiveTab] = useState('expense');
+    const t = useTranslations('Transaction');
 
     const handleTabChange = (key: string) => {
         setActiveTab(key);
@@ -24,32 +26,32 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
             description: values.note || '',
             category_name: values.expenseCategory || '',
             card_id: values.bankCard,
-            type: activeTab, // 'income' hoặc 'expense' dựa trên tab đang active
+            type: activeTab,
             status: 'pending',
         };
 
         try {
             await createTransaction(payload);
-            toast.success('Giao dịch đã được thêm thành công!');
-            form.resetFields(); // Reset form sau khi thêm thành công
-            onCancel(); // Đóng modal sau khi gửi thành công
+            toast.success(t('transactionAddedSuccess'));
+            form.resetFields();
+            onCancel();
             onSearch();
         } catch (error) {
             console.error('Error creating transaction:', error);
-            toast.error('Có lỗi xảy ra khi thêm giao dịch.');
+            toast.error(t('transactionAddError'));
         }
     };
 
     return (
         <Modal
-            title="Thêm Giao Dịch Mới"
+            title={t('addNewTransaction')}
             open={isVisible}
             onCancel={onCancel}
             footer={null}
-            width={600} // Điều chỉnh kích thước modal
+            width={600}
         >
             <Tabs activeKey={activeTab} onChange={handleTabChange}>
-                <TabPane tab="Tiền Chi" key="expense">
+                <TabPane tab={t('expense')} key="expense">
                     <Form
                         form={form}
                         layout="vertical"
@@ -57,51 +59,51 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                     >
                         <Form.Item
                             name="date"
-                            label="Ngày giao dịch"
-                            rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                            label={t('transactionDate')}
+                            rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
                             <DatePicker className="w-full" />
                         </Form.Item>
 
                         <Form.Item
                             name="amount"
-                            label="Số tiền chi"
-                            rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}
+                            label={t('expenseAmount')}
+                            rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <Input placeholder="Nhập số tiền chi" />
+                            <Input placeholder={t('enterExpenseAmount')} />
                         </Form.Item>
 
                         <CartSelectedComponent />
 
                         <Form.Item
                             name="expenseCategory"
-                            label="Loại chi tiêu"
+                            label={t('expenseCategory')}
                         >
-                            <Select placeholder="Chọn loại chi tiêu">
-                                <Option value="Ăn uống">Ăn uống</Option>
-                                <Option value="Quần áo">Quần áo</Option>
-                                <Option value="Mua sắm">Mua sắm</Option>
-                                <Option value="Trả lãi">Trả lãi</Option>
-                                <Option value="Đầu tư">Đầu tư</Option>
+                            <Select placeholder={t('selectExpenseCategory')}>
+                                <Option value="Ăn uống">{t('food')}</Option>
+                                <Option value="Quần áo">{t('clothes')}</Option>
+                                <Option value="Mua sắm">{t('shopping')}</Option>
+                                <Option value="Trả lãi">{t('interest')}</Option>
+                                <Option value="Đầu tư">{t('investment')}</Option>
                             </Select>
                         </Form.Item>
 
                         <Form.Item
                             name="note"
-                            label="Ghi chú"
+                            label={t('note')}
                         >
-                            <Input.TextArea placeholder="Thêm ghi chú (tùy chọn)" />
+                            <Input.TextArea placeholder={t('addOptionalNote')} />
                         </Form.Item>
 
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="w-full">
-                                Thêm Giao Dịch
+                                {t('addTransaction')}
                             </Button>
                         </Form.Item>
                     </Form>
                 </TabPane>
 
-                <TabPane tab="Tiền Thu" key="income">
+                <TabPane tab={t('income')} key="income">
                     <Form
                         form={form}
                         layout="vertical"
@@ -109,43 +111,43 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                     >
                         <Form.Item
                             name="date"
-                            label="Ngày giao dịch"
-                            rules={[{ required: true, message: 'Vui lòng chọn ngày!' }]}
+                            label={t('transactionDate')}
+                            rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
                             <DatePicker className="w-full" />
                         </Form.Item>
 
                         <Form.Item
                             name="amount"
-                            label="Số tiền thu"
-                            rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}
+                            label={t('incomeAmount')}
+                            rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <Input placeholder="Nhập số tiền thu" />
+                            <Input placeholder={t('enterIncomeAmount')} />
                         </Form.Item>
 
                         <CartSelectedComponent />
 
                         <Form.Item
                             name="expenseCategory"
-                            label="Loại thu nhập"
+                            label={t('incomeCategory')}
                         >
-                            <Select placeholder="Chọn loại thu nhập">
-                                <Option value="Lương">Lương</Option>
-                                <Option value="Tiền Phụ Cấp">Tiền Phụ Cấp</Option>
-                                <Option value="Tiền Thưởng">Tiền Thưởng</Option>
+                            <Select placeholder={t('selectIncomeCategory')}>
+                                <Option value="Lương">{t('salary')}</Option>
+                                <Option value="Tiền Phụ Cấp">{t('allowance')}</Option>
+                                <Option value="Tiền Thưởng">{t('bonus')}</Option>
                             </Select>
                         </Form.Item>
 
                         <Form.Item
                             name="note"
-                            label="Ghi chú"
+                            label={t('note')}
                         >
-                            <Input.TextArea placeholder="Thêm ghi chú (tùy chọn)" />
+                            <Input.TextArea placeholder={t('addOptionalNote')} />
                         </Form.Item>
 
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="w-full">
-                                Thêm Giao Dịch
+                                {t('addTransaction')}
                             </Button>
                         </Form.Item>
                     </Form>
