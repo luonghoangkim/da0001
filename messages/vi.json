@@ -139,6 +139,9 @@
         "fullName": "Họ và tên",
         "phoneNumber": "Số điện thoại",
         "address": "Địa chỉ",
-        "gender": "Giới tính"
+        "gender": "Giới tính",
+        "male": "Nam",
+        "female": "Nữ",
+        "dob": "Ngày sinh"
     }
 }
