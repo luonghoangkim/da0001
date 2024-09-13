@@ -5,14 +5,15 @@ import { GoogleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { signUp } from './service/sigup-service';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import { toast } from 'react-toastify'; 
+import { Link, useRouter } from '@/i18n/routing';
+import { toast } from 'react-toastify';
 
 
 const { Title, Text } = Typography;
 
 const RegisterForm = () => {
   const t = useTranslations('Register');
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -25,12 +26,12 @@ const RegisterForm = () => {
     const { username, email, password } = values;
 
     if (!isValidEmail(email)) {
-      toast.error(t('invalidEmail'));  
+      toast.error(t('invalidEmail'));
       return;
     }
 
     if (!password) {
-      toast.error(t('invalidPassword'));  
+      toast.error(t('invalidPassword'));
       return;
     }
     setIsLoading(true);
@@ -40,12 +41,13 @@ const RegisterForm = () => {
       const res = await signUp(username, email, password);
 
       if (res.status === 400) {
-        toast.error(t('emailExists')); 
+        toast.error(t('emailExists'));
       } else if (res.status === 200) {
-        toast.success(t('registerSuccess')); 
+        toast.success(t('registerSuccess'));
+        router.push('/login');
       }
     } catch (error) {
-      toast.error(t('errorOccurred')); 
+      toast.error(t('errorOccurred'));
     }
     setIsLoading(false);
   };
@@ -87,8 +89,8 @@ const RegisterForm = () => {
       </Form>
       <Divider>{t('orSignUpWith')}</Divider>
       <Button icon={<GoogleOutlined />} block >
-          {t('continueWithGoogle')}
-        </Button>
+        {t('continueWithGoogle')}
+      </Button>
       <Text style={{ marginTop: '20px', display: 'block' }}>
         {t('alreadyHaveAccount')} <Link href="/login">{t('signInHere')}</Link>
       </Text>

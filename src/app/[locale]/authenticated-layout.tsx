@@ -3,6 +3,7 @@ import AppSideMenu from './components/app-side-menu';
 import { Layout } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content } from 'antd/es/layout/layout';
+import HeaderComponent from './components/header-component';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -24,6 +25,7 @@ const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
         <AppSideMenu />
       </Sider>
       <Layout style={{ marginLeft: "250px" }}>
+        <HeaderComponent />
         <Content style={{ padding: "16px", minHeight: "calc(100vh" }}>
           {children}
         </Content>
