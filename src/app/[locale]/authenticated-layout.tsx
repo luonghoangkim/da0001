@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer } from 'antd/es/layout/layout';
 import HeaderComponent from './components/header-component';
+import FooterComponent from './components/footer-component';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;
@@ -29,9 +30,7 @@ const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
         <Content style={{ padding: "16px", minHeight: "calc(100vh" }}>
           {children}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Create by team LTLTNQ - Version 1.0.0
-        </Footer>
+        <FooterComponent />
       </Layout>
     </Layout>
   );
