@@ -56,7 +56,7 @@ function AppSideMenu() {
     {
       key: "/settings",
       icon: <SettingOutlined />,
-      label: <Link href="/settings">Settings</Link>,
+      label: <Link href="/settings">{t("setting")}</Link>,
     },
   ];
 
