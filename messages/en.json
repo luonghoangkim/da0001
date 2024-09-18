@@ -60,7 +60,11 @@
         "signInHere": "Sign in here",
         "passwordRequired": "Password is required",
         "emailRequired": "Email is required",
-        "registerSuccess": "Register successfully"
+        "registerSuccess": "Register successfully",
+        "passwordInvalid": "Password is invalid!",
+        "amount": "Amount",
+        "pleaseEnterAmount": "Please enter an amount!",
+        "usernameInvalid": "Username is invalid!"
     },
     "CreditCard": {
         "addCard": "Add new card",

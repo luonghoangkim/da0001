@@ -18,6 +18,10 @@ const cardSchema = new Schema(
       type: Number,
       require: true,
     },
+    total_amount: {
+      type: Number,
+      require: true,
+    },
     user_id: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
