@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const { bank_name, card_number } = await request.json();
+    const { bank_name, card_number, total_amount } = await request.json();
     // Lấy number_id tiếp theo
     const number_id = await getNextSequence("credit_card_id");
 
@@ -62,6 +62,7 @@ export async function POST(request: Request) {
       bank_name,
       card_number,
       number_id,
+      total_amount,
       user_id: user_id,
     });
     await newCard.save();

@@ -1,7 +1,7 @@
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const createCreditCard = async (bank_name: string, card_number: number,) => {
+export const createCreditCard = async (bank_name: string, card_number: number, total_amount: number) => {
     const token = localStorage.getItem('authToken');
     try {
         const res = await fetch(`${API_URL}/api/card`, {
@@ -10,7 +10,7 @@ export const createCreditCard = async (bank_name: string, card_number: number,) 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ bank_name, card_number }),
+            body: JSON.stringify({ bank_name, card_number, total_amount }),
         });
 
         if (res.ok) {

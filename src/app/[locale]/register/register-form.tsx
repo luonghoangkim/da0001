@@ -7,6 +7,7 @@ import { signUp } from './service/sigup-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
+import { REGEX } from '@/utils/app-constan';
 
 
 const { Title, Text } = Typography;
@@ -60,7 +61,13 @@ const RegisterForm = () => {
         <Form.Item
           label={t('username')}
           name="username"
-          rules={[{ required: true, message: t('nameRequired') }]}
+          rules={[
+            { required: true, message: t('nameRequired') },
+            {
+              pattern: REGEX.USERNAME,
+              message: t('usernameInvalid')
+            }
+          ]}
         >
           <Input placeholder="abcxyz" />
         </Form.Item>
@@ -74,7 +81,13 @@ const RegisterForm = () => {
         <Form.Item
           label={t('password')}
           name="password"
-          rules={[{ required: true, message: t('passwordRequired') }]}
+          rules={[
+            { required: true, message: t('passwordRequired') },
+            {
+              pattern: REGEX.PASSWORD,
+              message: t('passwordInvalid')
+            }
+          ]}
         >
           <Input.Password />
         </Form.Item>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Tabs, Form, Input, Button, DatePicker, Select, Modal } from 'antd';
+import { Tabs, Form, Input, Button, DatePicker, Select, Modal, InputNumber } from 'antd';
 import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
 import { createTransaction } from './service/transaction-service';
@@ -70,7 +70,7 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                             label={t('expenseAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <Input placeholder={t('enterExpenseAmount')} />
+                            <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterExpenseAmount')} />
                         </Form.Item>
 
                         <CartSelectedComponent />
@@ -122,7 +122,7 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                             label={t('incomeAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <Input placeholder={t('enterIncomeAmount')} />
+                            <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
                         </Form.Item>
 
                         <CartSelectedComponent />
