@@ -38,8 +38,7 @@ const LoginForm = () => {
 
     try {
       const res = await loginService(email, password);
-      const data = await res.json();
-      console.log({ res });
+      const data = res.data;
       if (res.status === 404) {
         toast.error(t('emailExists'));
       } else if (res.status === 401) {
