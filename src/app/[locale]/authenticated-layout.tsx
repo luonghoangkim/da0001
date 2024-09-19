@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import AppSideMenu from './components/app-side-menu';
+import AppSideMenu from '../../components/app-layout/app-side-menu';
 import { Layout } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer } from 'antd/es/layout/layout';
-import HeaderComponent from './components/header-component';
-import FooterComponent from './components/footer-component';
+import HeaderComponent from '../../components/app-layout/header-component';
+import FooterComponent from '../../components/app-layout/footer-component';
 
 interface AuthenticatedLayoutProps {
   children: ReactNode;

@@ -26,7 +26,9 @@
         "logoutConfirmationMessage": "Log out?",
         "cancel": "Cancel",
         "yes": "Yes",
-        "setting": "Setting"
+        "setting": "Setting",
+        "goats": "Goats",
+        "transactionCategory": "Transaction category"
     },
     "Login": {
         "login": "Login",

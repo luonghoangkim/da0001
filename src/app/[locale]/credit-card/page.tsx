@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
 import AuthenticatedLayout from "../authenticated-layout";
-import CreditCardPage from "./credit-card-page";
+import CreditCardPage from "../../../components/credit-card/credit-card-page";
 
 
 const CreditCard = () => {
-
-
     return (
         <AuthenticatedLayout>
             <CreditCardPage />

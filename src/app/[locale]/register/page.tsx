@@ -1,6 +1,6 @@
 'use client'
 
-import RegisterForm from "./register-form"
+import RegisterForm from "../../../components/register/register-form"
 
 
 

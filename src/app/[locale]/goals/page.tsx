@@ -6,7 +6,7 @@ const IncomePage = () => {
   return (
     <AuthenticatedLayout>
       <div className='flex justify-center'>
-        This is income
+        This is goals
       </div>
     </AuthenticatedLayout>
   )

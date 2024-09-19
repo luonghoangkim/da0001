@@ -1,6 +1,6 @@
 'use client'
 
-import LoginForm from "./login-form"
+import LoginForm from "../../../components/login/login-form"
 
 
 

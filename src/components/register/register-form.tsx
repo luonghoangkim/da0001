@@ -3,19 +3,20 @@
 import { Form, Input, Button, Typography, Divider } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import { loginService } from './service/login-service';
+import { signUp } from '../../service/register/sigup-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
-import Image from 'next/image'
+import { REGEX } from '@/utils/app-constan';
 
 
 const { Title, Text } = Typography;
 
-const LoginForm = () => {
-  const t = useTranslations('Login');
-  const [isLoading, setIsLoading] = useState(false);
+const RegisterForm = () => {
+  const t = useTranslations('Register');
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const isValidEmail = (email: string) => {
     const emailRgx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -23,7 +24,7 @@ const LoginForm = () => {
   };
 
   const onFinish = async (values: any) => {
-    const { email, password } = values;
+    const { username, email, password } = values;
 
     if (!isValidEmail(email)) {
       toast.error(t('invalidEmail'));
@@ -36,34 +37,40 @@ const LoginForm = () => {
     }
     setIsLoading(true);
 
+
     try {
-      const res = await loginService(email, password);
-      const data = await res.json();
-      console.log({ res });
-      if (res.status === 404) {
+      const res = await signUp(username, email, password);
+
+      if (res.status === 400) {
         toast.error(t('emailExists'));
-      } else if (res.status === 401) {
-        toast.error(t('wrongPassword'));
       } else if (res.status === 200) {
-        const { token } = data;
-        localStorage.setItem('authToken', token);
-        toast.success(t('loginSuccess'));
-        router.push('/dashboard');
-      } else {
-        toast.error(t('loginErr'));
+        toast.success(t('registerSuccess'));
+        router.push('/login');
       }
     } catch (error) {
       toast.error(t('errorOccurred'));
-      console.log(error);
     }
     setIsLoading(false);
   };
 
   return (
-    <div style={{ width: '370px', padding: '50px 20px', textAlign: 'center', backgroundColor: 'white', borderRadius: '8px', }}>
+    <div style={{ width: '370px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
       <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
-      <Title level={4}>{t('login')}</Title>
+      <Title level={4}>{t('signUp')}</Title>
       <Form layout="vertical" onFinish={onFinish}>
+        <Form.Item
+          label={t('username')}
+          name="username"
+          rules={[
+            { required: true, message: t('nameRequired') },
+            {
+              pattern: REGEX.USERNAME,
+              message: t('usernameInvalid')
+            }
+          ]}
+        >
+          <Input placeholder="abcxyz" />
+        </Form.Item>
         <Form.Item
           label={t('email')}
           name="email"
@@ -74,13 +81,22 @@ const LoginForm = () => {
         <Form.Item
           label={t('password')}
           name="password"
-          rules={[{ required: true, message: t('passwordRequired') }]}
+          rules={[
+            { required: true, message: t('passwordRequired') },
+            {
+              pattern: REGEX.PASSWORD,
+              message: t('passwordInvalid')
+            }
+          ]}
         >
           <Input.Password />
         </Form.Item>
+        {/* <Text style={{ display: 'block', marginBottom: '20px' }}>
+          {t('agreeTerms')} <Link href="/terms">{t('termsOfService')}</Link>.
+        </Text> */}
         <Form.Item>
           <Button type="primary" htmlType="submit" block style={{ backgroundColor: '#37B29E' }} loading={isLoading}>
-            {t('login')}
+            {t('signUp')}
           </Button>
         </Form.Item>
       </Form>
@@ -89,10 +105,10 @@ const LoginForm = () => {
         {t('continueWithGoogle')}
       </Button>
       <Text style={{ marginTop: '20px', display: 'block' }}>
-        {t('notHaveAccount')} <Link href="/register">{t('signUp')}</Link>
+        {t('alreadyHaveAccount')} <Link href="/login">{t('signInHere')}</Link>
       </Text>
     </div>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

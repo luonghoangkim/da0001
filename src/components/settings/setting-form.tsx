@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Form, Input, Button, Spin, Select } from 'antd';
 import { EnvironmentOutlined, MailOutlined, ManOutlined, PhoneOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
-import { getUser, updateUser } from './service/setting-service';
+import { getUser, updateUser } from '../../service/settings/settings-service';
 import { useTranslations } from 'next-intl';
 
 
@@ -72,50 +72,54 @@ const SettingForm = () => {
   }, []);
 
   return (
-    <Spin spinning={isLoading}>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleUpdateProfile}
-        className="max-w-2xl m-auto"
-      >
-        <Form.Item label={t('fullName')} name="fullName" className="mb-4">
-          <Input prefix={<UserOutlined />} />
-        </Form.Item>
+    <div className="p-4 bg-white rounded-md shadow-md h-auto w-10/12">
+      <div className="flex justify-between items-center mb-4 ml-10">
+        <Spin spinning={isLoading}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleUpdateProfile}
+            className="max-w-2xl m-auto"
+          >
+            <Form.Item label={t('fullName')} name="fullName" className="mb-4">
+              <Input prefix={<UserOutlined />} />
+            </Form.Item>
 
-        <Form.Item label="Email" name="email" className="mb-4">
-          <Input prefix={<MailOutlined />} />
-        </Form.Item>
+            <Form.Item label="Email" name="email" className="mb-4">
+              <Input prefix={<MailOutlined />} />
+            </Form.Item>
 
-        <Form.Item label={t('phoneNumber')} name="phoneNumber" className="mb-4">
-          <Input prefix={<PhoneOutlined />} />
-        </Form.Item>
+            <Form.Item label={t('phoneNumber')} name="phoneNumber" className="mb-4">
+              <Input prefix={<PhoneOutlined />} />
+            </Form.Item>
 
-        <Form.Item label={t('address')} name="addressUser" className="mb-4">
-          <Input prefix={<EnvironmentOutlined />} />
-        </Form.Item>
+            <Form.Item label={t('address')} name="addressUser" className="mb-4">
+              <Input prefix={<EnvironmentOutlined />} />
+            </Form.Item>
 
-        <Form.Item label={t('gender')} name="genderUser" className="mb-4">
+            <Form.Item label={t('gender')} name="genderUser" className="mb-4">
 
-          <Select placeholder="Chọn giới tính" className='flex items-center'>
-            <Option value="Nam" className='flex items-center'>
-              <ManOutlined className='mr-2' />
-              <span className='ml-2'>{t('male')}</span>
-            </Option>
-            <Option value="Nữ" prefix='' className='flex items-center'>
-              <WomanOutlined className='mr-2' />
-              <span className='mr-2'>{t('female')}</span>
-            </Option>
-          </Select>
-        </Form.Item>
+              <Select placeholder="Chọn giới tính" className='flex items-center'>
+                <Option value="Nam" className='flex items-center'>
+                  <ManOutlined className='mr-2' />
+                  <span className='ml-2'>{t('male')}</span>
+                </Option>
+                <Option value="Nữ" prefix='' className='flex items-center'>
+                  <WomanOutlined className='mr-2' />
+                  <span className='mr-2'>{t('female')}</span>
+                </Option>
+              </Select>
+            </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isSubmitting}>
-            Update Profile
-          </Button>
-        </Form.Item>
-      </Form>
-    </Spin>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                Update Profile
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
+      </div>
+    </div>
   );
 };
 

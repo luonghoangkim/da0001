@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Input, Form, InputNumber, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify';
-import * as cardService from './service/credit-card-service';
+import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
-import { CreditCardComponent } from "../components/credit-card-component";
-import { SP } from "next/dist/shared/lib/utils";
+import { CreditCardComponent } from "./credit-card-component";
 
 interface Card {
     _id: string;
