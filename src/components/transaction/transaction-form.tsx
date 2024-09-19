@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Tabs, Form, Input, Button, DatePicker, Select, Modal, InputNumber } from 'antd';
 import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
-import { createTransaction } from './service/transaction-service';
+import { createTransaction } from '../../service/transaction/transaction-service';
 import { toast } from 'react-toastify';
 import CartSelectedComponent from './card-selected-component';
 import { useTranslations } from 'next-intl';

@@ -3,7 +3,7 @@
 import { Form, Input, Button, Typography, Divider } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import { loginService } from './service/login-service';
+import { loginService } from '../../service/login/login-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';

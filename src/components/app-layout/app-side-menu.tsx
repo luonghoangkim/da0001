@@ -12,7 +12,7 @@ import {
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
-import { getUser } from "../../app/[locale]/settings/service/setting-service";
+import { getUser } from "../../service/settings/settings-service";
 
 const { Sider } = Layout;
 

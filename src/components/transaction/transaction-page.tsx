@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Transaction } from 'mongodb';
 import { formatDate, formatCurrency, formatCardNumber } from "@/utils";
 import { useTranslations } from 'next-intl';
-import { getTransaction } from './service/transaction-service';
+import { getTransaction } from '../../service/transaction/transaction-service';
 import TransactionForm from './transaction-form';
 
 const { TabPane } = Tabs;

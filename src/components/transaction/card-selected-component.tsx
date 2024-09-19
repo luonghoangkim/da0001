@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { Form, Select } from 'antd';
-import * as cardService from '../credit-card/service/credit-card-service';
+import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
 
 const { Option } = Select;
