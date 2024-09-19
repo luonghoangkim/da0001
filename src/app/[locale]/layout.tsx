@@ -4,7 +4,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import "@/app/[locale]/globals.css"
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
-import GlobalToastContainer from "./components/global-toast-container";
+import GlobalToastContainer from "../../components/app-layout/global-toast-container";
 
 const inter = Inter({ subsets: ["latin"] });
 

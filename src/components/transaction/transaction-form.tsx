@@ -6,7 +6,7 @@ import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
 import { createTransaction } from './service/transaction-service';
 import { toast } from 'react-toastify';
-import CartSelectedComponent from '../components/cart-selected-component';
+import CartSelectedComponent from './card-selected-component';
 import { useTranslations } from 'next-intl';
 
 const { Option } = Select;

@@ -26,7 +26,9 @@
         "logoutConfirmationMessage": "Bạn có chắc chắn muốn đăng xuất?",
         "cancel": "Huỷ",
         "yes": "Đồng ý",
-        "setting": "Cài đặt"
+        "setting": "Cài đặt",
+        "goats": "Tiết kiệm",
+        "transactionCategory": "Danh mục"
     },
     "Login": {
         "login": "Đăng nhập",

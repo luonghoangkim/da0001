@@ -2,16 +2,17 @@ import { Link, useRouter, usePathname } from "@/i18n/routing";
 import { Menu, Layout, Avatar, Tooltip, Modal } from "antd";
 import {
   DashboardOutlined,
-  WalletOutlined,
   SwapOutlined,
   SettingOutlined,
   LogoutOutlined,
   CreditCardOutlined,
+  DollarOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
-import { getUser } from "../settings/service/setting-service";
+import { getUser } from "../../app/[locale]/settings/service/setting-service";
 
 const { Sider } = Layout;
 
@@ -52,6 +53,16 @@ function AppSideMenu() {
       key: "/credit-card",
       icon: <CreditCardOutlined />,
       label: <Link href="/credit-card">{t("creditCard")}</Link>,
+    },
+    {
+      key: "/goals",
+      icon: <DollarOutlined />,
+      label: <Link href="/goals">{t("goats")}</Link>,  // Tiết kiệm
+    },
+    {
+      key: "/transaction-category",
+      icon: <AppstoreOutlined />,
+      label: <Link href="/transaction-category">{t("transactionCategory")}</Link>,  // Loại giao dịch
     },
     {
       key: "/settings",
