@@ -7,7 +7,7 @@ import { signUp } from '../../service/register/sigup-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
-import { REGEX } from '@/utils/app-constan';
+import { REGEX } from '@/utils/app-constant';
 
 
 const { Title, Text } = Typography;

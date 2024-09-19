@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
 import { CreditCardComponent } from "./credit-card-component";
+import { REGEX } from "@/utils/app-constant";
 
 interface Card {
     _id: string;
@@ -165,9 +166,15 @@ const CreditCardPage = () => {
                         <Form.Item
                             name="cardNumber"
                             label={t('cardNumber')}
-                            rules={[{ required: true, message: t('pleaseEnterCardNumber') }]}
+                            rules={[
+                                { required: true, message: t('pleaseEnterCardNumber') },
+                                {
+                                    pattern: REGEX.CARDNUMBER,
+                                    message: t('cardNumberInvalid') // Ràng buộc nhập đúng 16 số
+                                }
+                            ]}
                         >
-                            <InputNumber style={{ width: '100%' }} />
+                            <Input style={{ width: '100%' }} maxLength={16} />
                         </Form.Item>
                         <Form.Item
                             name="totalAmount"
