@@ -89,7 +89,8 @@
         "editSuccess": "Card information updated successfully!",
         "editError": "Error updating card!",
         "save": "Save",
-        "editCard": "Edit card"
+        "editCard": "Edit card",
+        "cardNumberInvalid": "Invalid card number!"
     },
     "Transaction": {
         "addTransaction": "Add transaction",

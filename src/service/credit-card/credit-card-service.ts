@@ -1,95 +1,78 @@
-
+import axios from 'axios';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const createCreditCard = async (bank_name: string, card_number: number, total_amount: number) => {
     const token = localStorage.getItem('authToken');
     try {
-        const res = await fetch(`${API_URL}/api/card`, {
-            method: 'POST',
+        const res = await axios.post(`${API_URL}/api/card`, {
+            bank_name,
+            card_number,
+            total_amount
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ bank_name, card_number, total_amount }),
+            }
         });
 
-        if (res.ok) {
-            const data = await res.json();
-            return data.creditCards;
-        } else {
-            const errorData = await res.json();
-            throw new Error(errorData.message);
-        }
-    } catch (error) {
-        console.error('Error during call:', error);
-        throw error;
+        return res.data.creditCards;
+    } catch (error: any) {
+        console.error('Error during call:', error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };
 
 export const getCreditCards = async () => {
     const token = localStorage.getItem('authToken');
     try {
-        const res = await fetch(`${API_URL}/api/card`, {
-            method: 'GET',
+        const res = await axios.get(`${API_URL}/api/card`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        if (res.ok) {
-            const data = await res.json();
-            return data.creditCards;
-        } else {
-            const errorData = await res.json();
-            throw new Error(errorData.message);
-        }
-    } catch (error) {
-        console.error('Error during GET call:', error);
-        throw error;
+
+        return res.data.creditCards;
+    } catch (error: any) {
+        console.error('Error during GET call:', error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };
 
 export const deleteCreditCards = async (card_id: string) => {
     const token = localStorage.getItem('authToken');
     try {
-        const res = await fetch(`${API_URL}/api/card`, {
-            method: 'DELETE',
+        const res = await axios.delete(`${API_URL}/api/card`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ card_id }),
+            data: { card_id }
         });
-        if (res.ok) {
-            const data = await res.json();
-            return data.creditCards;
-        } else {
-            const errorData = await res.json();
-            throw new Error(errorData.message);
-        }
-    } catch (error) {
-        console.error('Error during GET call:', error);
-        throw error;
+
+        return res.data.creditCards;
+    } catch (error: any) {
+        console.error('Error during DELETE call:', error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };
 
 export const updateCreditCards = async (card_id: string, bank_name: string, card_number: string) => {
     const token = localStorage.getItem('authToken');
     try {
-        const res = await fetch(`${API_URL}/api/card`, {
-            method: 'PATCH',
+        const res = await axios.patch(`${API_URL}/api/card`, {
+            card_id,
+            bank_name,
+            card_number
+        }, {
             headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ card_id: card_id, bank_name: bank_name, card_number: card_number }),
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
-        if (res.ok) {
-            const data = await res.json();
-            return data.creditCards;
-        } else {
-            const errorData = await res.json();
-            throw new Error(errorData.message);
-        }
-    } catch (error) {
-        console.error('Error during GET call:', error);
-        throw error;
+
+        return res.data.creditCards;
+    } catch (error: any) {
+        console.error('Error during PATCH call:', error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || error.message);
     }
 };

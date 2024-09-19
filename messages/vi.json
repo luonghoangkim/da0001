@@ -89,7 +89,8 @@
         "save": "Lưu",
         "editCard": "Chỉnh sửa thẻ",
         "amount": "Số tiền",
-        "pleaseEnterAmount": "Vui lòng nhập số tiền!"
+        "pleaseEnterAmount": "Vui lòng nhập số tiền!",
+        "cardNumberInvalid": "Vui lòng nhập đủ 16 số!"
     },
     "Transaction": {
         "addTransaction": "Thêm giao dịch",
