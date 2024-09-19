@@ -90,7 +90,9 @@
         "editError": "Error updating card!",
         "save": "Save",
         "editCard": "Edit card",
-        "cardNumberInvalid": "Invalid card number!"
+        "cardNumberInvalid": "Invalid card number!",
+        "usernameRequired": "Username required",
+        "errorOccurred": "Error, please try again!"
     },
     "Transaction": {
         "addTransaction": "Add transaction",

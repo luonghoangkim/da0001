@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
 import Image from 'next/image'
+import { LoginPayload } from '@/models/auth-modal/user.modal';
 
 
 const { Title, Text } = Typography;
@@ -23,12 +24,7 @@ const LoginForm = () => {
   };
 
   const onFinish = async (values: any) => {
-    const { email, password } = values;
-
-    if (!isValidEmail(email)) {
-      toast.error(t('invalidEmail'));
-      return;
-    }
+    const { username, password } = values;
 
     if (!password) {
       toast.error(t('invalidPassword'));
@@ -37,13 +33,14 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const res = await loginService(email, password);
+      const payload: LoginPayload = { username, password };
+      const res = await loginService(payload);
       const data = res.data;
       if (res.status === 404) {
         toast.error(t('emailExists'));
       } else if (res.status === 401) {
         toast.error(t('wrongPassword'));
-      } else if (res.status === 200) {
+      } else if (res.status === 201) {
         const { token } = data;
         localStorage.setItem('authToken', token);
         toast.success(t('loginSuccess'));
@@ -64,11 +61,11 @@ const LoginForm = () => {
       <Title level={4}>{t('login')}</Title>
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item
-          label={t('email')}
-          name="email"
-          rules={[{ required: true, message: t('emailRequired') }]}
+          label={t('username')}
+          name="username"
+          rules={[{ required: true, message: t('usernameRequired') }]}
         >
-          <Input placeholder="hello@example.com" />
+          <Input />
         </Form.Item>
         <Form.Item
           label={t('password')}
