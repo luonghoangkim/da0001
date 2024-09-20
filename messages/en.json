@@ -28,7 +28,9 @@
         "yes": "Yes",
         "setting": "Setting",
         "goats": "Goats",
-        "transactionCategory": "Transaction category"
+        "transactionCategory": "Transaction category",
+        "manageUsers": "Manage users",
+        "backup": "Backup"
     },
     "Login": {
         "login": "Login",

@@ -8,8 +8,10 @@ import {
   CreditCardOutlined,
   DollarOutlined,
   AppstoreOutlined,
+  UserOutlined,
+  DatabaseOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 import { getUser } from "../../service/settings/settings-service";
@@ -20,9 +22,10 @@ function AppSideMenu() {
   const pathname = usePathname();
   const router = useRouter();
   const [username, setUsername] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
   const t = useTranslations("MenuApp");
-  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
   const fetchUserProfile = async () => {
     try {
@@ -30,15 +33,18 @@ function AppSideMenu() {
       const { user } = response;
 
       setUsername(user.username);
+      setIsAdmin(user.isAdmin || false);
     } catch (error) {
       console.error('Error fetching user profile:', error);
       toast.error('Có lỗi xảy ra khi lấy thông tin người dùng.');
-    } finally {
-      console.log("error");
     }
   };
 
-  const menuItems = [
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const userMenuItems = [
     {
       key: "/dashboard",
       icon: <DashboardOutlined />,
@@ -57,12 +63,12 @@ function AppSideMenu() {
     {
       key: "/goals",
       icon: <DollarOutlined />,
-      label: <Link href="/goals">{t("goats")}</Link>,  // Tiết kiệm
+      label: <Link href="/goals">{t("goats")}</Link>,
     },
     {
       key: "/transaction-category",
       icon: <AppstoreOutlined />,
-      label: <Link href="/transaction-category">{t("transactionCategory")}</Link>,  // Loại giao dịch
+      label: <Link href="/transaction-category">{t("transactionCategory")}</Link>,
     },
     {
       key: "/settings",
@@ -71,20 +77,30 @@ function AppSideMenu() {
     },
   ];
 
+  const adminMenuItems = [
+    {
+      key: "/manage-users",
+      icon: <UserOutlined />,
+      label: <Link href="/manage-users">{t("manageUsers")}</Link>,
+    },
+    {
+      key: "/backup",
+      icon: <DatabaseOutlined />,
+      label: <Link href="/backup">{t("backup")}</Link>,
+    },
+  ];
+
+  const menuItems = isAdmin ? adminMenuItems : userMenuItems;
+
   const showLogoutModal = () => {
     setIsLogoutModalVisible(true);
   };
 
   const handleLogout = () => {
-    // Xóa authToken khỏi localStorage
     localStorage.removeItem('authToken');
     toast.success(t("logoutSuccess"));
     router.push("/login");
   };
-
-  React.useEffect(() => {
-    fetchUserProfile();
-  }, []);
 
   const logoutMenuItem = [
     {

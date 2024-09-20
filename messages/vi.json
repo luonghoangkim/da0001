@@ -28,7 +28,9 @@
         "yes": "Đồng ý",
         "setting": "Cài đặt",
         "goats": "Tiết kiệm",
-        "transactionCategory": "Danh mục"
+        "transactionCategory": "Danh mục",
+        "manageUsers": "Quản lý người dùng",
+        "backup": "Backup"
     },
     "Login": {
         "login": "Đăng nhập",
