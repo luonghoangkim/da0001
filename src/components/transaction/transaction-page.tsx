@@ -4,7 +4,7 @@ import { Table, Tabs, Button, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { Transaction } from 'mongodb';
-import { formatDate, formatCurrency, formatCardNumber } from "@/utils";
+import { APP_FORMATTERS } from "@/utils";
 import { useTranslations } from 'next-intl';
 import { getTransaction } from '../../service/transaction/transaction-service';
 import TransactionForm from './transaction-form';
@@ -75,7 +75,7 @@ const TransactionPage = () => {
             title: `${t('date')}`,
             dataIndex: 'date',
             key: 'date',
-            render: (text: string) => <span className="justify-center items-center font-bold">{formatDate(text)}</span>,
+            render: (text: string) => <span className="justify-center items-center font-bold">{APP_FORMATTERS.formatDate(text)}</span>,
         },
         {
             title: `${t('type')}`,
@@ -86,13 +86,13 @@ const TransactionPage = () => {
             title: `${t('amount')}`,
             dataIndex: 'amount',
             key: 'amount',
-            render: (text: string) => <span className="font-bold">{formatCurrency(Number(text))}</span>,
+            render: (text: string) => <span className="font-bold">{APP_FORMATTERS.formatCurrency(Number(text))}</span>,
         },
         {
             title: `${t('cardId')}`,
             dataIndex: 'card_id',
             key: 'card_id',
-            render: (text: number) => <span className="justify-center items-center">{formatCardNumber(text)}</span>,
+            render: (text: number) => <span className="justify-center items-center">{APP_FORMATTERS.formatCardNumber(text)}</span>,
         },
         {
             title: `${t('decription')}`,
