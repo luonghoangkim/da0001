@@ -152,5 +152,29 @@
         "dob": "Date of birth",
         "save": "Save",
         "cancel": "Cancel"
+    },
+    "Goals": {
+        "addCard": "Add new card",
+        "addSuccess": "Card added successfully",
+        "addError": "Error adding data",
+        "bankName": "Bank name",
+        "pleaseEnterBankName": "Please enter the bank name!",
+        "cardNumber": "Card number",
+        "pleaseEnterCardNumber": "Please enter the card number!",
+        "add": "Add",
+        "cancel": "Cancel",
+        "remove": "Remove",
+        "edit": "Edit",
+        "totalAmount": "Total amount",
+        "removeSuccess": "Card removed successfully!",
+        "removeError": "Failed to remove card!",
+        "confirmDeleteMessage": "Are you sure you want to delete the card?",
+        "confirmDelete": "Confirm card deletion",
+        "fetchError": "Error fetching data!",
+        "editSuccess": "Card information updated successfully!",
+        "editError": "Error updating card!",
+        "save": "Save",
+        "editCard": "Edit card",
+        "cardNumberInvalid": "Invalid card number!"
     }
 }

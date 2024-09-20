@@ -1,15 +1,14 @@
 'use client'
 
+import GoalsPage from '@/components/goals/goals-page';
 import AuthenticatedLayout from '../authenticated-layout';
 
-const IncomePage = () => {
+const Goals = () => {
   return (
     <AuthenticatedLayout>
-      <div className='flex justify-center'>
-        This is goals
-      </div>
+      <GoalsPage />
     </AuthenticatedLayout>
   )
 }
 
-export default IncomePage;
+export default Goals;

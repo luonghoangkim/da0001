@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, Button, Modal, Spin } from "antd";
+import { Button, Card, Modal, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify';
-import * as cardService from '../../service/credit-card/credit-card-service';
+import * as goalsService from '../../service/goals/goals-service';
 import { useTranslations } from 'next-intl';
-import { CreditCardComponent } from "./credit-card-component";
-import CreditCardAdd from "./credit-card-add";
-import CreditCardEdit from "./credit-card-edit";
+import { GoalsCard } from "./goals-card";
+import GoalsAdd from "./goals-add";
+import GoalsEdit from "./goals-edit";
 
 interface Card {
     _id: string;
@@ -16,7 +16,7 @@ interface Card {
     total_amount: number;
 }
 
-const CreditCardPage = () => {
+const GoalsPage = () => {
     const [cards, setCards] = useState<Card[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -24,12 +24,12 @@ const CreditCardPage = () => {
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-    const t = useTranslations('CreditCard');
+    const t = useTranslations('Goals');
 
     const handleSearchCreditCards = async () => {
         setIsLoadingSearch(true);
         try {
-            const creditCards = await cardService.getCreditCards();
+            const creditCards = await goalsService.getCreditCards();
             setCards(creditCards);
         } catch (error) {
             console.error('Error during call:', error);
@@ -55,7 +55,7 @@ const CreditCardPage = () => {
     const handleDeleteCreditCard = async () => {
         if (!selectedCardId) return;
         try {
-            await cardService.deleteCreditCards(selectedCardId);
+            await goalsService.deleteCreditCards(selectedCardId);
             toast.success(t('removeSuccess'));
             handleSearchCreditCards();
         } catch (error) {
@@ -72,7 +72,7 @@ const CreditCardPage = () => {
             <Spin spinning={isLoadingSearch}>
                 <div className="flex flex-wrap bg-gray-100 justify-start gap-4">
                     {cards.map(card => (
-                        <CreditCardComponent
+                        <GoalsCard
                             key={card._id}
                             bankName={card.bank_name}
                             accountNumber={card.card_number}
@@ -97,13 +97,13 @@ const CreditCardPage = () => {
                     </Card>
                 </div>
 
-                <CreditCardAdd
+                <GoalsAdd
                     isVisible={isAddModalVisible}
                     onClose={() => setIsAddModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
                 />
 
-                <CreditCardEdit
+                <GoalsEdit
                     isVisible={isEditModalVisible}
                     onClose={() => setIsEditModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
@@ -136,4 +136,4 @@ const CreditCardPage = () => {
     );
 };
 
-export default CreditCardPage;
+export default GoalsPage;

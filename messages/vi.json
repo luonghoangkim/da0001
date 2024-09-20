@@ -150,5 +150,31 @@
         "male": "Nam",
         "female": "Nữ",
         "dob": "Ngày sinh"
+    },
+    "Goals": {
+        "addCard": "Thêm mới thẻ",
+        "addSuccess": "Thêm thẻ thành công",
+        "addError": "Lỗi thêm dữ liệu",
+        "bankName": "Tên ngân hàng",
+        "pleaseEnterBankName": "Vui lòng nhập tên ngân hàng!",
+        "cardNumber": "Số thẻ",
+        "pleaseEnterCardNumber": "Vui lòng nhập số thẻ!",
+        "add": "Thêm",
+        "cancel": "Huỷ",
+        "remove": "Xoá",
+        "edit": "Chỉnh sửa",
+        "totalAmount": "Tổng tiền",
+        "removeSuccess": "Xoá thẻ thành công!",
+        "removeError": "Xoá thẻ thất bại!",
+        "confirmDeleteMessage": "Bạn có chắc chắn muốn xoá thẻ?",
+        "confirmDelete": "Xác nhận xoá thẻ",
+        "fetchError": "Lỗi gọi dữ liệu!",
+        "editSuccess": "Chỉnh sửa thông tin thẻ thành công!",
+        "editError": "Lỗi chỉnh sửa!",
+        "save": "Lưu",
+        "editCard": "Chỉnh sửa thẻ",
+        "amount": "Số tiền",
+        "pleaseEnterAmount": "Vui lòng nhập số tiền!",
+        "cardNumberInvalid": "Vui lòng nhập đủ 16 số!"
     }
 }
