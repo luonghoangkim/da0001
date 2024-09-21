@@ -9,7 +9,7 @@ export interface RegisterPayload {
   password: string;
 }
 
-export interface VerifyPayload {
+export type VerifyPayload = {
   email: string;
   codeId: number;
 }
