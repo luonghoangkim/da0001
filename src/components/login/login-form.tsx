@@ -9,7 +9,6 @@ import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
 import { LoginPayload } from '@/models/auth-modal/user.modal';
 
-
 const { Title, Text } = Typography;
 
 const LoginForm = () => {
@@ -54,37 +53,49 @@ const LoginForm = () => {
   };
 
   return (
-    <div style={{ width: '370px', padding: '50px 20px', textAlign: 'center', backgroundColor: 'white', borderRadius: '8px', }}>
-      <Title level={3} style={{ color: '#37B29E', marginBottom: '40px' }}>MyFinanceManager.com</Title>
-      <Title level={4}>{t('login')}</Title>
-      <Form layout="vertical" onFinish={onFinish}>
-        <Form.Item
-          label={t('username')}
-          name="account_name"
-          rules={[{ required: true, message: t('usernameRequired') }]}
+    <div className="flex w-full items-center justify-center min-h-screen bg-gradient-to-r from-white via-blue-200 to-blue-500">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-center text-2xl font-bold text-[#37B29E] mb-6">MyFinanceManager.com</h1>
+        <h1 className="text-center text-xl font-semibold mb-4">{t('login')}</h1>
+        <Form layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            label={t('username')}
+            name="account_name"
+            rules={[{ required: true, message: t('usernameRequired') }]}
+          >
+            <Input className="border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500" />
+          </Form.Item>
+          <Form.Item
+            label={t('password')}
+            name="password"
+            rules={[{ required: true, message: t('passwordRequired') }]}
+          >
+            <Input.Password className="border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500" />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              loading={isLoading}
+              style={{ backgroundColor: '#37B29E' }}
+            >
+              {t('login')}
+            </Button>
+          </Form.Item>
+        </Form>
+        <Divider>{t('orSignUpWith')}</Divider>
+        <Button
+          icon={<GoogleOutlined />}
+          block
+          className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md"
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={t('password')}
-          name="password"
-          rules={[{ required: true, message: t('passwordRequired') }]}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block style={{ backgroundColor: '#37B29E' }} loading={isLoading}>
-            {t('login')}
-          </Button>
-        </Form.Item>
-      </Form>
-      <Divider>{t('orSignUpWith')}</Divider>
-      <Button icon={<GoogleOutlined />} block >
-        {t('continueWithGoogle')}
-      </Button>
-      <Text style={{ marginTop: '20px', display: 'block' }}>
-        {t('notHaveAccount')} <Link href="/register">{t('signUp')}</Link>
-      </Text>
+          {t('continueWithGoogle')}
+        </Button>
+        <Text className="mt-4 block text-center">
+          {t('notHaveAccount')} <Link href="/register" className="text-teal-500 hover:underline">{t('signUp')}</Link>
+        </Text>
+      </div>
     </div>
   );
 };

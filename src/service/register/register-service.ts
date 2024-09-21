@@ -22,8 +22,12 @@ const register = async (payload: RegisterPayload) => {
 
 const verify = async (payload: VerifyPayload) => {
   try {
+    const modifiedPayload = {
+      ...payload,
+      codeId: Number(payload.codeId)
+    };
     const res = await axios.post(`${API_URL}/api/v2/auths/verify`, {
-      payload,
+      payload: modifiedPayload
     }, {
       headers: {
         'Content-Type': 'application/json',
