@@ -8,6 +8,8 @@ import {
   List,
   Divider,
   Table,
+  ProgressProps,
+  Typography,
 } from "antd";
 import {
   LineChart,
@@ -19,6 +21,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import AuthenticatedLayout from "../authenticated-layout";
+
+const { Paragraph } = Typography;
+
+const twoColors: ProgressProps['strokeColor'] = {
+  '0%': '#108ee9',
+  '100%': '#87d068',
+};
 
 const DashboardPage = () => {
   const data = [
@@ -79,13 +88,11 @@ const DashboardPage = () => {
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Card title="Goals" bordered={false}>
-              <Statistic title="Target Achieved" value={12500} precision={2} />
-              <Progress percent={60} />
-              <Statistic
-                title="This month Target"
-                value={20000}
-                precision={2}
-              />
+              <Progress type="dashboard" percent={90} strokeColor={twoColors} />
+              <Paragraph
+              >
+                {'20000000'}
+              </Paragraph>
             </Card>
           </Col>
           <Col xs={24} sm={12} md={8}>

@@ -12,9 +12,9 @@ import {
   DatabaseOutlined,
 } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
-import { getUser } from "../../service/settings/settings-service";
 
 const { Sider } = Layout;
 
@@ -27,21 +27,28 @@ function AppSideMenu() {
 
   const t = useTranslations("MenuApp");
 
-  const fetchUserProfile = async () => {
+  const fetchUserFromToken = () => {
     try {
-      const response = await getUser();
-      const { user } = response;
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const decodedToken = jwt.decode(token) as JwtPayload | null;
+        if (decodedToken && typeof decodedToken !== 'string') {
+          const { username, isAdmin } = decodedToken as { username: string, isAdmin: boolean };
 
-      setUsername(user.username);
-      setIsAdmin(user.isAdmin || false);
+          setUsername(username);
+          setIsAdmin(isAdmin || false);
+        }
+        setUsername(username);
+        setIsAdmin(isAdmin || false);
+      }
     } catch (error) {
-      console.error('Error fetching user profile:', error);
-      toast.error('Có lỗi xảy ra khi lấy thông tin người dùng.');
+      console.error('Error decoding token:', error);
+      toast.error('Có lỗi xảy ra khi giải mã token.');
     }
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    fetchUserFromToken();
   }, []);
 
   const userMenuItems = [
@@ -90,7 +97,7 @@ function AppSideMenu() {
     },
   ];
 
-  const menuItems = isAdmin ? adminMenuItems : userMenuItems;
+  const menuItems = isAdmin ? [...userMenuItems, ...adminMenuItems] : userMenuItems;
 
   const showLogoutModal = () => {
     setIsLogoutModalVisible(true);

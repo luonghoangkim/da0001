@@ -1,56 +1,64 @@
-
-import { APP_FORMATTERS } from "@/utils";
-import { CreditCardOutlined, BankOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Card, Typography, Button, Space } from "antd";
+import React from 'react';
 import { useTranslations } from 'next-intl';
+import { APP_FORMATTERS } from '@/utils';
+import { Progress, ProgressProps } from 'antd';
+import { DeleteOutlined, DollarOutlined, EditOutlined, HomeOutlined, ScheduleOutlined } from '@ant-design/icons';
 
-
-
-const { Text, Title } = Typography;
-
-interface GoalsProps {
-    bankName: string;
-    accountNumber: string;
-    totalAmount: number;
+interface HousingExpenseProps {
+    amount: number;
+    goals: number;
+    categories: string;
+    onAdjust: () => void;
     onRemove: () => void;
-    onEdit: () => void;
 }
-
-export const GoalsCard: React.FC<GoalsProps> = ({ bankName, accountNumber, totalAmount, onRemove, onEdit }) => {
+const twoColors: ProgressProps['strokeColor'] = {
+    '0%': '#108ee9',
+    '100%': '#87d068',
+};
+export const GoalsCard: React.FC<HousingExpenseProps> = ({ amount, goals, categories, onAdjust, onRemove }) => {
     const t = useTranslations('Goals');
 
-    return (
-        <Card style={{ width: 350, marginBottom: 10, height: 260 }} >
-            <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                <Space
-                    align="baseline"
-                    style={{ width: "100%", justifyContent: "space-between" }}
-                >
-                    <BankOutlined style={{ fontSize: '22px' }} />
-                    <Text strong>{bankName}</Text>
-                </Space>
-                <Text type="secondary"> {t('cardNumber')}</Text>
-                <Title level={4} style={{ margin: 0 }}>
-                    <CreditCardOutlined style={{ paddingRight: "10px" }} /> {APP_FORMATTERS.formatCardNumber(Number(accountNumber))}
-                </Title>
-                <Text type="secondary"> {t('totalAmount')}</Text>
-                <Title level={3} style={{ color: '#33CC33' }}>
-                    {APP_FORMATTERS.formatCurrency(totalAmount)} VND
-                </Title>
-                <Space
-                    style={{ width: "100%", justifyContent: "flex-end" }}
-                >
-                    <Button type="text" style={{ padding: 0, color: "#0099FF" }} onClick={onEdit}>
-                        <EditOutlined />
-                        {t('edit')}
-                    </Button>
+    const percent = Math.round(Math.min((amount / goals) * 100, 100));
 
-                    <Button type="text" style={{ padding: 0, color: "#CC0033" }} onClick={onRemove}>
-                        <DeleteOutlined />
-                        {t('remove')}
-                    </Button>
-                </Space>
-            </Space>
-        </Card>
+    return (
+        <div className="bg-white shadow-lg rounded-lg p-6 mb-4 w-80">
+            <div className="flex justify-between items-center">
+                <ScheduleOutlined style={{ fontSize: '24px', color: '#e13511' }} />
+                <h4 className="text-lg font-semibold ml-2">{categories}</h4>
+            </div>
+            <h3 className="text-xl font-bold mb-1">
+                {APP_FORMATTERS.formatCurrency(amount)} VND
+            </h3>
+            <div className="relative">
+                <Progress
+                    percent={percent}
+                    strokeColor={twoColors}
+                    showInfo={true}
+                />
+            </div>
+            <h3 className="text-2xl font-bold text-green-600">
+                {APP_FORMATTERS.formatCurrency(goals)} VND
+            </h3>
+            <div className="flex mt-2 justify-end">
+                <button
+                    onClick={onAdjust}
+                    className="text-yellow-500 border border-yellow-500 px-2 py-1 rounded-md flex items-center"
+                >
+                    <DollarOutlined />
+                </button>
+                <button
+                    onClick={onAdjust}
+                    className="text-blue-500 border ml-2 border-blue-500 px-2 py-1 rounded-md flex items-center"
+                >
+                    <EditOutlined />
+                </button>
+                <button
+                    onClick={onRemove}
+                    className="text-red-500 border ml-2 border-red-500 px-2 py-1 rounded-md flex items-center"
+                >
+                    <DeleteOutlined />
+                </button>
+            </div>
+        </div>
     );
 };
