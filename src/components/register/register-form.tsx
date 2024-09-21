@@ -183,13 +183,13 @@ const RegisterForm = () => {
                 </Button>
               </Form.Item>
             </Form>
-            <div className="text-center text-sm font-normal text-blue-500">
+            {/* <div className="text-center text-sm font-normal text-blue-500">
               <button onClick={() => {
                 message.info(t('resendCode'));
               }} >
                 {t('resendCode')}
               </button>
-            </div>
+            </div> */}
           </>
         )}
       </div>
