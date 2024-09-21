@@ -46,7 +46,9 @@
         "loginErr": "Lỗi đăng nhập",
         "passwordRequired": "Vui lòng nhập mật khẩu",
         "emailRequired": "Vui lòng nhập email",
-        "loginSuccess": "Đăng nhập thành công"
+        "loginSuccess": "Đăng nhập thành công",
+        "usernameRequired": "Vui lòng nhập tên đăng nhập!",
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
     },
     "Register": {
         "signUp": "Đăng ký",

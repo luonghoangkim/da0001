@@ -46,7 +46,9 @@
         "loginErr": "Login Error",
         "passwordRequired": "Password is required",
         "emailRequired": "Email is required",
-        "loginSuccess": "Login success"
+        "loginSuccess": "Login success",
+        "usernameRequired": "Username required",
+        "errorOccurred": "Error, please try again!"
     },
     "Register": {
         "signUp": "Sign Up",
