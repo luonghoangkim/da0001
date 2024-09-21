@@ -48,7 +48,8 @@
         "emailRequired": "Email is required",
         "loginSuccess": "Login success",
         "usernameRequired": "Username required",
-        "errorOccurred": "Error, please try again!"
+        "errorOccurred": "Error, please try again!",
+        "accountExists": "Account already exists"
     },
     "Register": {
         "signUp": "Sign Up",
@@ -70,7 +71,18 @@
         "passwordInvalid": "Password is invalid!",
         "amount": "Amount",
         "pleaseEnterAmount": "Please enter an amount!",
-        "usernameInvalid": "Username is invalid!"
+        "usernameInvalid": "Username is invalid!",
+        "verifyEmail": "Verify Email",
+        "verifyEmailDescription": "We have sent a verification code to your email: {email}. Please enter the code to complete your registration.",
+        "verificationCode": "Verification Code",
+        "codeRequired": "Verification code is required",
+        "codeLength": "Verification code must be 6 digits",
+        "codeNumeric": "Verification code must be numeric",
+        "verify": "Verify",
+        "resendCode": "Resend Code",
+        "verifySuccess": "Verification successful! You can now log in.",
+        "invalidCode": "Invalid verification code",
+        "codeResent": "Verification code has been resent."
     },
     "CreditCard": {
         "addCard": "Add new card",

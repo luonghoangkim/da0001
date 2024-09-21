@@ -48,7 +48,8 @@
         "emailRequired": "Vui lòng nhập email",
         "loginSuccess": "Đăng nhập thành công",
         "usernameRequired": "Vui lòng nhập tên đăng nhập!",
-        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!",
+        "accountExists": "Sai tên đăng nhập hoặc mật khẩu"
     },
     "Register": {
         "signUp": "Đăng ký",
@@ -68,7 +69,18 @@
         "emailRequired": "Vui lòng nhập email",
         "registerSuccess": "Đăng ký thành công!",
         "passwordInvalid": "Vui lòng nhập mật khẩu có ít nhất 8 ký tự, có ít nhất 1 chữ in Hoa và 1 ký tư đặc biệt",
-        "usernameInvalid": "Tên đăng nhập viết liền không dấu"
+        "usernameInvalid": "Tên đăng nhập viết liền không dấu",
+        "verifyEmail": "Xác minh Email",
+        "verifyEmailDescription": "Chúng tôi đã gửi mã xác minh đến email của bạn: {email}. Vui lòng nhập mã để hoàn tất đăng ký.",
+        "verificationCode": "Mã xác minh",
+        "codeRequired": "Mã xác minh là bắt buộc",
+        "codeLength": "Mã xác minh phải có 6 chữ số",
+        "codeNumeric": "Mã xác minh chỉ chứa số",
+        "verify": "Xác minh",
+        "resendCode": "Gửi lại mã",
+        "verifySuccess": "Xác minh thành công! Bạn có thể đăng nhập ngay bây giờ.",
+        "invalidCode": "Mã xác minh không hợp lệ",
+        "codeResent": "Mã xác minh đã được gửi lại."
     },
     "CreditCard": {
         "addCard": "Thêm mới thẻ",

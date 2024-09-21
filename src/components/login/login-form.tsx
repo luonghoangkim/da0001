@@ -7,7 +7,6 @@ import { loginService } from '../../service/login/login-service';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { toast } from 'react-toastify';
-import Image from 'next/image'
 import { LoginPayload } from '@/models/auth-modal/user.modal';
 
 
@@ -17,11 +16,6 @@ const LoginForm = () => {
   const t = useTranslations('Login');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-  const isValidEmail = (email: string) => {
-    const emailRgx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
-    return emailRgx.test(email);
-  };
 
   const onFinish = async (values: any) => {
     const { account_name, password } = values;
@@ -36,11 +30,7 @@ const LoginForm = () => {
       const payload: LoginPayload = { account_name, password };
       const res = await loginService(payload);
       const data = res.data;
-      if (res.status === 404) {
-        toast.error(t('emailExists'));
-      } else if (res.status === 401) {
-        toast.error(t('wrongPassword'));
-      } else if (res.status === 201) {
+      if (res.status === 201) {
         const { token } = data;
         localStorage.setItem('authToken', token);
         toast.success(t('loginSuccess'));
@@ -48,9 +38,17 @@ const LoginForm = () => {
       } else {
         toast.error(t('loginErr'));
       }
-    } catch (error) {
-      toast.error(t('errorOccurred'));
-      console.log(error);
+    } catch (error: any) {
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 400) {
+          toast.error(t('accountExists'));
+        } else {
+          toast.error(t('errorOccurred'));
+        }
+      } else {
+        toast.error(t('errorOccurred'));
+      }
     }
     setIsLoading(false);
   };
