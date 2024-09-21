@@ -74,27 +74,19 @@ const GoalsPage = () => {
                     {cards.map(card => (
                         <GoalsCard
                             key={card._id}
-                            bankName={card.bank_name}
-                            accountNumber={card.card_number}
-                            totalAmount={card.total_amount}
+                            categories={card.bank_name}
+                            goals={30000000}
+                            amount={card.total_amount}
                             onRemove={() => showDeleteModal(card._id)}
-                            onEdit={() => showEditCardModal(card)}
+                            onAdjust={() => showEditCardModal(card)}
                         />
                     ))}
-                    <Card
-                        style={{
-                            width: 350,
-                            height: 260,
-                            marginBottom: 16,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            cursor: 'pointer'
-                        }}
+                    <div
+                        className="w-80 h-48 mb-4 flex justify-center items-center cursor-pointer bg-white shadow-lg rounded-lg"
                         onClick={showAddCardModal}
                     >
                         <PlusOutlined style={{ fontSize: 24 }} />
-                    </Card>
+                    </div>
                 </div>
 
                 <GoalsAdd
