@@ -17,8 +17,12 @@ import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 
 const { Sider } = Layout;
+interface AppSideMenuProps {
+  collapsed: boolean;
+  onCollapse: (collapsed: boolean) => void;
+}
 
-function AppSideMenu() {
+function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [username, setUsername] = useState('');
@@ -120,9 +124,22 @@ function AppSideMenu() {
 
   return (
     <>
-      <Sider width={250} theme="dark" style={{ height: "100vh" }}>
-        <div style={{ padding: "16px", color: "white" }}>
-          <h2 style={{ color: "white" }}>MyFinanceManager</h2>
+      <Sider
+        width={250}
+        theme="dark"
+        collapsible
+        collapsed={collapsed}
+        onCollapse={onCollapse}
+        style={{
+          position: "fixed",
+          height: "100vh",
+          left: 0,
+          top: 0,
+          bottom: 0,
+        }}
+      >
+        <div style={{ padding: "16px", color: "white", textAlign: "center" }}>
+          {collapsed ? <h2>MFM</h2> : <h2>MyFinanceManager</h2>}
         </div>
         <Menu
           theme="dark"
@@ -138,18 +155,23 @@ function AppSideMenu() {
             padding: "16px",
           }}
         >
-          <Menu theme="dark" mode="inline" items={logoutMenuItem} />
-          <div
-            style={{ display: "flex", alignItems: "center", marginTop: "16px" }}
-          >
-            <Avatar src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
-            <div style={{ marginLeft: "8px", color: "white" }}>
-              <div>{username}</div>
-              <Tooltip title="View profile">
-                <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
-              </Tooltip>
-            </div>
-          </div>
+
+          {!collapsed && (
+            <>
+              <Menu theme="dark" mode="inline" items={logoutMenuItem} />
+              <div
+                style={{ display: "flex", alignItems: "center", marginTop: "16px", marginBottom: "60px" }}
+              >
+                <Avatar src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                <div style={{ marginLeft: "8px", color: "white" }}>
+                  <div>{username}</div>
+                  <Tooltip title="View profile">
+                    <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
+                  </Tooltip>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </Sider>
       <Modal
