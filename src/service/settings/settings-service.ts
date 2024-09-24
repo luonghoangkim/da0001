@@ -1,25 +1,23 @@
+import axios from "axios";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getUser = async () => {
-  const token = localStorage.getItem("authToken");
 
+
+const getUser = async () => {
+  const token = localStorage.getItem("authToken");
   try {
-    const res = await fetch(`${API_URL}/api/user`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      console.log(data);
-      return data;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+    const res = await axios.get(`${API_URL}/api/v2/users/get-user`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+    return res;
   } catch (error) {
-    console.error("Error during GET call:", error);
+    console.error('Error during login:', error);
     throw error;
   }
 };
@@ -61,3 +59,8 @@ export const updateUser = async (
     throw error;
   }
 };
+
+
+export const SETTING_SERVICE = {
+  getUser
+}
