@@ -73,9 +73,9 @@ function AppSideMenu() {
       label: <Link href="/goals">{t("goats")}</Link>,
     },
     {
-      key: "/transaction-category",
+      key: "/transaction-categories",
       icon: <AppstoreOutlined />,
-      label: <Link href="/transaction-category">{t("transactionCategory")}</Link>,
+      label: <Link href="/transaction-categories">{t("transactionCategory")}</Link>,
     },
     {
       key: "/settings",
