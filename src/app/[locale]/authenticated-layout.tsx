@@ -1,8 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import AppSideMenu from '../../components/app-layout/app-side-menu';
 import { Layout } from 'antd';
-import Sider from 'antd/es/layout/Sider';
-import { Content, Footer } from 'antd/es/layout/layout';
+import { Content } from 'antd/es/layout/layout';
 import HeaderComponent from '../../components/app-layout/header-component';
 import FooterComponent from '../../components/app-layout/footer-component';
 
@@ -11,23 +10,18 @@ interface AuthenticatedLayoutProps {
 }
 
 const AuthenticatedLayout = ({ children }: AuthenticatedLayoutProps) => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const handleCollapse = (isCollapsed: boolean) => {
+    setCollapsed(isCollapsed);
+  };
+
   return (
-    <Layout>
-      <Sider
-        theme="light"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          borderRight: "1px solid #f1f1f1",
-          height: "calc(100vh)",
-        }}
-      >
-        <AppSideMenu />
-      </Sider>
-      <Layout style={{ marginLeft: "250px" }}>
+    <Layout style={{ minHeight: '100vh' }}>
+      <AppSideMenu collapsed={collapsed} onCollapse={handleCollapse} />
+      <Layout style={{ marginLeft: collapsed ? '80px' : '250px', transition: 'all 0.2s' }}>
         <HeaderComponent />
-        <Content style={{ padding: "16px", minHeight: "calc(100vh" }}>
+        <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px - 69px)' }}>
           {children}
         </Content>
         <FooterComponent />
