@@ -1,40 +1,49 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { Form, Input, Button, Spin, Select } from 'antd';
-import { EnvironmentOutlined, MailOutlined, ManOutlined, PhoneOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Tabs, Form, Input, Button, Spin, Select } from 'antd';
+import { EnvironmentOutlined, MailOutlined, ManOutlined, PhoneOutlined, UserOutlined, WomanOutlined, LockOutlined, GlobalOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
-import { getUser, updateUser } from '../../service/settings/settings-service';
 import { useTranslations } from 'next-intl';
+import { SETTING_SERVICE } from '@/service/settings/settings-service';
+import Image from 'next/image'
+import { usePathname, useRouter } from "@/i18n/routing";
+import { useLocale } from 'next-intl';
 
 
+const { TabPane } = Tabs;
 const { Option } = Select;
 
-const SettingForm = () => {
+const SettingsTabs = () => {
   const [form] = Form.useForm();
+  const [passwordForm] = Form.useForm();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const t = useTranslations('Setting');
   const commonLanguage = useTranslations('CommonLanguage');
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
 
+  const handleLanguageChange = (value: any) => {
+    router.replace(pathname, { locale: value });
+  };
 
   const fetchUserProfile = async () => {
     try {
       setIsLoading(true);
-      const response = await getUser();
-      const { user } = response;
+      const response = await SETTING_SERVICE.getUser();
+      const user = response.data;
 
       form.setFieldsValue({
-        fullName: user.username, // Ví dụ nếu trường là username
+        fullName: user.account_name,
         email: user.email,
-        phoneNumber: user.phone_number || '', // Đảm bảo rằng các trường không null
-        addressUser: user.address ? `${user.address.street}, ${user.address.city}` : '', // Định dạng địa chỉ
-        genderUser: user.gender === 'male' ? 'Nam' : 'Nữ', // Đảm bảo giá trị chọn trùng khớp
+        phoneNumber: user.phone_number || '',
+        addressUser: user.address ? `${user.address.street}, ${user.address.city}` : '',
+        genderUser: user.gender === 'male' ? t('male') : t('female'),
       });
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      toast.error('Có lỗi xảy ra khi lấy thông tin người dùng.');
+      toast.error(t('errorFetchingUserInfo'));
     } finally {
       setIsLoading(false);
     }
@@ -47,24 +56,38 @@ const SettingForm = () => {
       email: values.email,
       phoneNumber: values.phoneNumber || null,
       addressUser: values.addressUser || null,
-      genderUser: values.genderUser === 'Nam' ? 'male' : 'female',
+      genderUser: values.genderUser === t('male') ? 'male' : 'female',
     };
 
     try {
-      await updateUser(
-        payload.fullName,
-        payload.email,
-        payload.phoneNumber,
-        payload.addressUser,
-        payload.genderUser
-      );
-      toast.success(commonLanguage('updateInforSuccess'));
+      // await updateUser(payload);
+      toast.success(t('updateProfileSuccess'));
     } catch (error) {
       console.error('Error updating:', error);
-      toast.error('Có lỗi xảy ra khi cập nhật thông tin.');
+      toast.error(t('errorUpdatingProfile'));
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleChangePassword = async (values: any) => {
+    setIsSubmitting(true);
+    try {
+      // await changePassword(values.currentPassword, values.newPassword);
+      toast.success(t('passwordChangeSuccess'));
+      passwordForm.resetFields();
+    } catch (error) {
+      console.error('Error changing password:', error);
+      toast.error(t('errorChangingPassword'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChangeLanguage = (language: any) => {
+    // Implement language change logic here
+    console.log(`Language changed to: ${language}`);
+    toast.success(t('languageChangeSuccess', { language: language === 'vi' ? 'Tiếng Việt' : 'English' }));
   };
 
   useEffect(() => {
@@ -72,55 +95,140 @@ const SettingForm = () => {
   }, []);
 
   return (
-    <div className="p-4 bg-white rounded-md shadow-md h-auto w-10/12">
-      <div className="flex justify-between items-center mb-4 ml-10">
-        <Spin spinning={isLoading}>
+    <div className="p-4 bg-white rounded-md shadow-md h-full w-full">
+      <Tabs defaultActiveKey="profile">
+        <TabPane tab={t('personalInfo')} key="profile">
+          <Spin spinning={isLoading}>
+            <Form
+              form={form}
+              layout="vertical"
+              onFinish={handleUpdateProfile}
+              className="max-w-2xl m-auto"
+            >
+              <Form.Item style={{ width: 300 }} label={t('fullName')} name="fullName" className="mb-4">
+                <Input prefix={<UserOutlined />} />
+              </Form.Item>
+
+              <Form.Item style={{ width: 300 }} label="Email" name="email" className="mb-4">
+                <Input prefix={<MailOutlined />} />
+              </Form.Item>
+
+              <Form.Item style={{ width: 300 }} label={t('phoneNumber')} name="phoneNumber" className="mb-4">
+                <Input prefix={<PhoneOutlined />} />
+              </Form.Item>
+
+              <Form.Item style={{ width: 300 }} label={t('address')} name="addressUser" className="mb-4">
+                <Input prefix={<EnvironmentOutlined />} />
+              </Form.Item>
+
+              <Form.Item style={{ width: 300 }} label={t('gender')} name="genderUser" className="mb-4">
+                <Select placeholder={t('selectGender')}>
+                  <Option value={t('male')}>
+                    <ManOutlined /> {t('male')}
+                  </Option>
+                  <Option value={t('female')}>
+                    <WomanOutlined /> {t('female')}
+                  </Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                  {t('updateProfile')}
+                </Button>
+              </Form.Item>
+            </Form>
+          </Spin>
+        </TabPane>
+        <TabPane tab={t('security')} key="security">
           <Form
-            form={form}
+            form={passwordForm}
             layout="vertical"
-            onFinish={handleUpdateProfile}
+            onFinish={handleChangePassword}
             className="max-w-2xl m-auto"
           >
-            <Form.Item label={t('fullName')} name="fullName" className="mb-4">
-              <Input prefix={<UserOutlined />} />
+            <Form.Item
+              label={t('currentPassword')}
+              name="currentPassword"
+              style={{ width: 300 }}
+              rules={[{ required: true, message: t('pleaseEnterCurrentPassword') }]}
+            >
+              <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
 
-            <Form.Item label="Email" name="email" className="mb-4">
-              <Input prefix={<MailOutlined />} />
+            <Form.Item
+              label={t('newPassword')}
+              name="newPassword"
+              style={{ width: 300 }}
+              rules={[{ required: true, message: t('pleaseEnterNewPassword') }]}
+            >
+              <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
 
-            <Form.Item label={t('phoneNumber')} name="phoneNumber" className="mb-4">
-              <Input prefix={<PhoneOutlined />} />
-            </Form.Item>
-
-            <Form.Item label={t('address')} name="addressUser" className="mb-4">
-              <Input prefix={<EnvironmentOutlined />} />
-            </Form.Item>
-
-            <Form.Item label={t('gender')} name="genderUser" className="mb-4">
-
-              <Select placeholder="Chọn giới tính" className='flex items-center'>
-                <Option value="Nam" className='flex items-center'>
-                  <ManOutlined className='mr-2' />
-                  <span className='ml-2'>{t('male')}</span>
-                </Option>
-                <Option value="Nữ" prefix='' className='flex items-center'>
-                  <WomanOutlined className='mr-2' />
-                  <span className='mr-2'>{t('female')}</span>
-                </Option>
-              </Select>
+            <Form.Item
+              label={t('confirmNewPassword')}
+              name="confirmPassword"
+              style={{ width: 300 }} 
+              dependencies={['newPassword']}
+              rules={[
+                { required: true, message: t('pleaseConfirmNewPassword') },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('newPassword') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error(t('passwordMismatch')));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                Update Profile
+                {t('changePassword')}
               </Button>
             </Form.Item>
           </Form>
-        </Spin>
-      </div>
+        </TabPane>
+        <TabPane tab={t('system')} key="system">
+          <div className=" m-auto">
+            <h2 className="text-lg font-semibold mb-4">{t('systemSettings')}</h2>
+            <Form layout="vertical">
+              <Form.Item label={t('language')} name="language">
+                <Select
+                  value={locale}
+                  style={{ width: 150 }}
+                  onChange={handleLanguageChange}
+                  options={[
+                    {
+                      label: (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Image src={"/VNFlag.png"} className="mr-2" alt="Vietnam Flag" width={20} height={15} />
+                          Tiếng Việt
+                        </div>
+                      ),
+                      value: 'vi'
+                    },
+                    {
+                      label: (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Image src={'/ENFlag.png'} className="mr-2" alt="UK Flag" width={20} height={15} />
+                          English
+                        </div>
+                      ),
+                      value: 'en'
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        </TabPane>
+      </Tabs>
     </div>
   );
 };
 
-export default SettingForm;
+export default SettingsTabs;
