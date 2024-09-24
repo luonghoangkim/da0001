@@ -1,5 +1,5 @@
 import connectDB from "@/lib/connectDb";
-import Category from "@/models/categories-modal/categories.modal";
+import Category from "@/models/transaction-categories-modal/transaction-categories.modal";
 import Transactions from "@/models/trans-modal/trans.modal";
 import { verifyToken } from "@/utils/auth-token";
 import { NextResponse } from "next/server";

@@ -1,5 +1,5 @@
 import connectDB from "@/lib/connectDb";
-import Category from "@/models/categories-modal/categories.modal";
+import Category from "@/models/transaction-categories-modal/transaction-categories.modal";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {

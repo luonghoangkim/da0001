@@ -1,25 +1,25 @@
-'use client';
-
-import { Table, Tabs, Button, Pagination } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import { Transaction } from 'mongodb';
-import { APP_FORMATTERS } from "@/utils";
+"use client";
+import React, { useState, useEffect } from "react";
+import { Button, Pagination, Spin, Table, Tabs } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { useTranslations } from 'next-intl';
+import TabPane from "antd/es/tabs/TabPane";
+import TransactionCategoriesForm from "./transaction-categories-form";
 import { getTransaction } from '../../service/transaction/transaction-service';
-import TransactionForm from '../transaction-categories/transaction-categories-form';
+import { APP_FORMATTERS } from "@/utils";
+import { TransactionCategories } from "@/models/transaction-categories-modal/transaction-categories.modal";
 
-const { TabPane } = Tabs;
 
-const TransactionPage = () => {
+
+const CategoriesPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState<Transaction[]>([]);
+    const [data, setData] = useState<TransactionCategories[]>([]);
     const [total, setTotal] = useState(0); // Tổng số bản ghi
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
     const [pageSize, setPageSize] = useState(10); // Số lượng bản ghi mỗi trang
     const [activeTab, setActiveTab] = useState('1'); // Tab hiện tại
-    const t = useTranslations('Transaction');
+    const t = useTranslations('Categories');
 
 
     const showModal = () => {
@@ -67,32 +67,15 @@ const TransactionPage = () => {
 
     const columns = [
         {
-            title: `${t('category')}`,
+            title: `${t('categoryName')}`,
             dataIndex: 'category_name',
             key: 'category_name',
         },
         {
-            title: `${t('date')}`,
+            title: `${t('createdDate')}`,
             dataIndex: 'date',
             key: 'date',
             render: (text: string) => <span className="justify-center items-center font-bold">{APP_FORMATTERS.formatDate(text)}</span>,
-        },
-        {
-            title: `${t('type')}`,
-            dataIndex: 'type',
-            key: 'type',
-        },
-        {
-            title: `${t('amount')}`,
-            dataIndex: 'amount',
-            key: 'amount',
-            render: (text: string) => <span className="font-bold">{APP_FORMATTERS.formatCurrency(Number(text))}</span>,
-        },
-        {
-            title: `${t('cardId')}`,
-            dataIndex: 'card_id',
-            key: 'card_id',
-            render: (text: number) => <span className="justify-center items-center">{APP_FORMATTERS.formatCardNumber(text)}</span>,
         },
         {
             title: `${t('decription')}`,
@@ -104,9 +87,9 @@ const TransactionPage = () => {
     return (
         <div className="p-4 bg-white rounded-md shadow-md">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">{t('recentTransaction')}</h2>
+                <h2 className="text-lg font-semibold">{t('categoriesManagement')}</h2>
                 <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
-                    {t('addTransaction')}
+                    {t('addCategories')}
                 </Button>
             </div>
             <Tabs defaultActiveKey="1" onChange={(key) => setActiveTab(key)}>
@@ -161,12 +144,29 @@ const TransactionPage = () => {
                         pageSizeOptions={['10', '20', '50']}
                     />
                 </TabPane>
+                <TabPane tab={t('goals')} key="4">
+                    <Table
+                        columns={columns}
+                        dataSource={data}
+                        pagination={false}
+                        loading={isLoading}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={total}
+                        onChange={handlePageChange}
+                        showSizeChanger
+                        onShowSizeChange={handlePageSizeChange}
+                        pageSizeOptions={['10', '20', '50']}
+                    />
+                </TabPane>
             </Tabs>
 
             {/* Gọi modal form và truyền props */}
-            <TransactionForm isVisible={isModalVisible} onCancel={handleCancel} onSearch={() => fetchTransactions(currentPage, pageSize, activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined)} />
+            <TransactionCategoriesForm isVisible={isModalVisible} onCancel={handleCancel} onSearch={() => fetchTransactions(currentPage, pageSize, activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined)} />
         </div>
     );
 };
 
-export default TransactionPage;
+export default CategoriesPage;
