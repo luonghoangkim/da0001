@@ -4,9 +4,10 @@ import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const token = localStorage.getItem('authToken');
 
 const create = async (payload: TransactionCategories) => {
+  const token = localStorage.getItem('authToken');
+
   try {
     const res = await axios.post(`${API_URL}/api/v2/categories/create-category`, {
       payload,

@@ -80,7 +80,8 @@
         "resendCode": "Gửi lại mã",
         "verifySuccess": "Xác minh thành công! Bạn có thể đăng nhập ngay bây giờ.",
         "invalidCode": "Mã xác minh không hợp lệ",
-        "codeResent": "Mã xác minh đã được gửi lại."
+        "codeResent": "Mã xác minh đã được gửi lại.",
+        "emailInvalid": "Email không đúng định dạng"
     },
     "CreditCard": {
         "addCard": "Thêm mới thẻ",
@@ -187,7 +188,10 @@
         "pleaseEnterCurrentPassword": "Vui lòng nhập mật khẩu hiện tại",
         "pleaseEnterNewPassword": "Vui lòng nhập mật khẩu mới",
         "pleaseConfirmNewPassword": "Vui lòng xác nhận mật khẩu mới",
-        "passwordMismatch": "Mật khẩu xác nhận không khớp"
+        "passwordMismatch": "Mật khẩu xác nhận không khớp",
+        "emailInvalid": "Email không đúng định dạng",
+        "emailRequired": "Vui lòng nhập email",
+        "nameRequired": "Vui lòng nhập họ tên"
     },
     "Goals": {
         "addCard": "Thêm mới thẻ",

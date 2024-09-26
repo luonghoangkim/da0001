@@ -1,8 +1,7 @@
+import { UpdateUserPayload } from "@/models/auth-modal/user.modal";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-
 
 const getUser = async () => {
   const token = localStorage.getItem("authToken");
@@ -22,45 +21,31 @@ const getUser = async () => {
   }
 };
 
-export const updateUser = async (
-  fullName: string,
-  email: string,
-  phoneNumber: string | null,
-  addressUser: string | null,
-  genderUser: string | null
-) => {
+export const updateUser = async (payload: UpdateUserPayload) => {
   const token = localStorage.getItem("authToken");
 
   try {
-    const res = await fetch(`${API_URL}/api/user`, {
-      method: "PATCH",
+    const modifiedPayload = {
+      ...payload,
+      phone: Number(payload.phone)
+    };
+    const res = await axios.patch(`${API_URL}/api/v2/users/update-user`, {
+      payload: modifiedPayload,
+    }, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        fullName,
-        email,
-        phoneNumber,
-        addressUser,
-        genderUser,
-      }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      return data;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+    return res;
   } catch (error) {
-    console.error("Error during update:", error);
+    console.error('Error during login:', error);
     throw error;
   }
 };
 
-
 export const SETTING_SERVICE = {
-  getUser
+  getUser,
+  updateUser
 }

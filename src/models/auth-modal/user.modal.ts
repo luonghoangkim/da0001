@@ -9,7 +9,16 @@ export interface RegisterPayload {
   password: string;
 }
 
-export type VerifyPayload = {
+export interface VerifyPayload {
   email: string;
   codeId: number;
+}
+
+export interface UpdateUserPayload {
+  email: string;
+  image: string;
+  address: string;
+  phone: number;
+  name: string;
+  gender: boolean;
 }
