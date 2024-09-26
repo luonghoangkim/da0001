@@ -82,7 +82,8 @@
         "resendCode": "Resend Code",
         "verifySuccess": "Verification successful! You can now log in.",
         "invalidCode": "Invalid verification code",
-        "codeResent": "Verification code has been resent."
+        "codeResent": "Verification code has been resent.",
+        "emailInvalid": "Email invalid"
     },
     "CreditCard": {
         "addCard": "Add new card",
@@ -187,7 +188,10 @@
         "pleaseEnterCurrentPassword": "Please enter your current password",
         "pleaseEnterNewPassword": "Please enter your new password",
         "pleaseConfirmNewPassword": "Please confirm your new password",
-        "passwordMismatch": "The passwords do not match"
+        "passwordMismatch": "The passwords do not match",
+        "emailInvalid": "Email invalid",
+        "emailRequired": "Email is required",
+        "nameRequired": "Name is required!"
     },
     "Goals": {
         "addCard": "Add new card",

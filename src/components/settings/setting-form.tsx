@@ -7,6 +7,8 @@ import { SETTING_SERVICE } from '@/service/settings/settings-service';
 import Image from 'next/image'
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from 'next-intl';
+import { UpdateUserPayload } from '@/models/auth-modal/user.modal';
+import { REGEX } from '@/utils/app-constant';
 
 
 const { TabPane } = Tabs;
@@ -35,11 +37,11 @@ const SettingsTabs = () => {
       const user = response.data;
 
       form.setFieldsValue({
-        fullName: user.account_name,
+        name: user.name,
         email: user.email,
-        phoneNumber: user.phone_number || '',
-        addressUser: user.address ? `${user.address.street}, ${user.address.city}` : '',
-        genderUser: user.gender === 'male' ? t('male') : t('female'),
+        phone: user.phone,
+        address: user.address,
+        gender: user.gender,
       });
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -49,18 +51,12 @@ const SettingsTabs = () => {
     }
   };
 
-  const handleUpdateProfile = async (values: any) => {
+  const handleUpdateProfile = async (values: UpdateUserPayload) => {
     setIsSubmitting(true);
-    const payload = {
-      fullName: values.fullName,
-      email: values.email,
-      phoneNumber: values.phoneNumber || null,
-      addressUser: values.addressUser || null,
-      genderUser: values.genderUser === t('male') ? 'male' : 'female',
-    };
 
     try {
-      // await updateUser(payload);
+      const payload: UpdateUserPayload = values;
+      await SETTING_SERVICE.updateUser(payload);
       toast.success(t('updateProfileSuccess'));
     } catch (error) {
       console.error('Error updating:', error);
@@ -105,28 +101,42 @@ const SettingsTabs = () => {
               onFinish={handleUpdateProfile}
               className="max-w-2xl m-auto"
             >
-              <Form.Item style={{ width: 300 }} label={t('fullName')} name="fullName" className="mb-4">
+              <Form.Item style={{ width: 300 }} label={t('fullName')} name="name" className="mb-4"
+                rules={[
+                  { required: true, message: t('nameRequired') },
+                ]}>
                 <Input prefix={<UserOutlined />} />
               </Form.Item>
 
-              <Form.Item style={{ width: 300 }} label="Email" name="email" className="mb-4">
+              <Form.Item
+                style={{ width: 300 }}
+                label={t('email')}
+                name="email"
+                rules={[
+                  { required: true, message: t('emailRequired') },
+                  {
+                    type: 'email',
+                    message: t('emailInvalid')
+                  },
+                ]}
+              >
                 <Input prefix={<MailOutlined />} />
               </Form.Item>
 
-              <Form.Item style={{ width: 300 }} label={t('phoneNumber')} name="phoneNumber" className="mb-4">
+              <Form.Item style={{ width: 300 }} label={t('phoneNumber')} name="phone" className="mb-4">
                 <Input prefix={<PhoneOutlined />} />
               </Form.Item>
 
-              <Form.Item style={{ width: 300 }} label={t('address')} name="addressUser" className="mb-4">
+              <Form.Item style={{ width: 300 }} label={t('address')} name="address" className="mb-4">
                 <Input prefix={<EnvironmentOutlined />} />
               </Form.Item>
 
-              <Form.Item style={{ width: 300 }} label={t('gender')} name="genderUser" className="mb-4">
+              <Form.Item style={{ width: 300 }} label={t('gender')} name="gender" className="mb-4">
                 <Select placeholder={t('selectGender')}>
-                  <Option value={t('male')}>
+                  <Option value={true}>
                     <ManOutlined /> {t('male')}
                   </Option>
-                  <Option value={t('female')}>
+                  <Option value={false}>
                     <WomanOutlined /> {t('female')}
                   </Option>
                 </Select>
@@ -168,7 +178,7 @@ const SettingsTabs = () => {
             <Form.Item
               label={t('confirmNewPassword')}
               name="confirmPassword"
-              style={{ width: 300 }} 
+              style={{ width: 300 }}
               dependencies={['newPassword']}
               rules={[
                 { required: true, message: t('pleaseConfirmNewPassword') },

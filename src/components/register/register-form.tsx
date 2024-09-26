@@ -125,7 +125,13 @@ const RegisterForm = () => {
               <Form.Item
                 label={t('email')}
                 name="email"
-                rules={[{ required: true, message: t('emailRequired') }]}
+                rules={[
+                  {
+                    required: true, message: t('emailRequired')
+                  }, {
+                    type: 'email',
+                    message: t('emailInvalid')
+                  },]}
               >
                 <Input placeholder="hello@example.com" />
               </Form.Item>
