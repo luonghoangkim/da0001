@@ -12,7 +12,8 @@
         "delete": "Delete",
         "save": "Save",
         "search": "Search",
-        "filter": "Filter"
+        "filter": "Filter",
+        "errorOccurred": "Error, please try again!"
     },
     "Home": {
         "welcomeMessage": "Welcome to the MyFinanceManager",
@@ -236,7 +237,7 @@
         "pleaseEnterName": "Please enter name",
         "pleaseSelectCate": "Please select a category",
         "enterNameCate": "Enter categories name",
-        "decription": "Description",
+        "description": "Description",
         "addError": "Error adding data",
         "date": "Date",
         "type": "Type",
@@ -274,6 +275,16 @@
         "transactionAddError": "An error occurred while adding the transaction.",
         "bank": "Bank",
         "selectBankCard": "Select bank card",
-        "fetchError": "Error fetching data"
+        "fetchError": "Error fetching data",
+        "editCategory": "Edit Category",
+        "deleteConfirmation": "Are you sure you want to delete this category?",
+        "yes": "Yes",
+        "no": "No",
+        "actions": "Actions",
+        "updateCategory": "Update Category",
+        "transactionUpdatedSuccess": "Category updated successfully",
+        "transactionUpdateError": "Error updating category",
+        "deleteSuccess": "Category deleted successfully",
+        "deleteFailed": "Failed to delete category"
     }
 }
