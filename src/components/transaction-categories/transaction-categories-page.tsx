@@ -111,6 +111,7 @@ const CategoriesPage = () => {
         {
             title: t('actions'),
             key: 'actions',
+            width: 150,
             render: (_: any, record: TransactionCategories) => (
                 <span>
                     <Button
