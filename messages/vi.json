@@ -12,7 +12,8 @@
         "delete": "Xóa",
         "save": "Lưu",
         "search": "Tìm kiếm",
-        "filter": "Lọc"
+        "filter": "Lọc",
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
     },
     "Home": {
         "welcomeMessage": "Chào mừng đến với MyFinanceManager",
@@ -243,7 +244,7 @@
         "amount": "Số tiền",
         "category": "Danh mục",
         "cardId": "Số thẻ",
-        "decription": "Ghi chú",
+        "description": "Ghi chú",
         "pleaseSelectDate": "Vui lòng chọn ngày!",
         "pleaseSelectType": "Vui lòng chọn loại!",
         "pleaseEnterAmount": "Vui lòng nhập số tiền!",
@@ -276,6 +277,16 @@
         "transactionAddError": "Có lỗi xảy ra khi thêm giao dịch.",
         "bank": "Ngân hàng",
         "selectBankCard": "Chọn thẻ ngân hàng",
-        "fetchError": "Lỗi khi tải dữ liệu"
+        "fetchError": "Lỗi khi tải dữ liệu",
+        "editCategory": "Chỉnh sửa danh mục",
+        "deleteConfirmation": "Bạn có chắc chắn muốn xóa danh mục này?",
+        "yes": "Có",
+        "no": "Không",
+        "actions": "Hành động",
+        "updateCategory": "Cập nhật danh mục",
+        "transactionUpdatedSuccess": "Cập nhật danh mục thành công",
+        "deleteSuccess": "Xóa danh mục thành công",
+        "deleteFailed": "Xóa danh mục thất bại",
+        "transactionUpdateError": "Chỉnh sửa danh mục không thành công"
     }
 }

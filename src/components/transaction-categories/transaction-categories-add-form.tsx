@@ -9,23 +9,38 @@ import { TRANSACTION_CATEGORIES_SERVICE } from '@/service/transaction-categories
 
 const { Option } = Select;
 
-const TransactionCategoriesForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean, onCancel: () => void, onSearch: () => void }) => {
+interface AddCategoryFormProps {
+    isVisible: boolean;
+    onCancel: () => void;
+    onSearch: () => void;
+}
+
+const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
+    isVisible,
+    onCancel,
+    onSearch
+}) => {
     const [form] = Form.useForm();
     const t = useTranslations('Categories');
 
     const handleSubmit = async (values: any) => {
-
         const { cate_name, cate_type, cate_note } = values;
 
         try {
-            const payload: TransactionCategories = { cate_name, cate_type, cate_note };
-            const res = await TRANSACTION_CATEGORIES_SERVICE.create(payload);
+            const payload: TransactionCategories = {
+                cate_name,
+                cate_type,
+                cate_note
+            };
+
+            await TRANSACTION_CATEGORIES_SERVICE.create(payload);
             toast.success(t('transactionAddedSuccess'));
+
             form.resetFields();
             onCancel();
             onSearch();
         } catch (error) {
-            console.error('Error creating transaction:', error);
+            console.error('Error adding category:', error);
             toast.error(t('transactionAddError'));
         }
     };
@@ -43,7 +58,6 @@ const TransactionCategoriesForm = ({ isVisible, onCancel, onSearch }: { isVisibl
                 layout="vertical"
                 onFinish={handleSubmit}
             >
-
                 <Form.Item
                     name="cate_name"
                     label={t('categoryName')}
@@ -81,4 +95,4 @@ const TransactionCategoriesForm = ({ isVisible, onCancel, onSearch }: { isVisibl
     );
 };
 
-export default TransactionCategoriesForm;
+export default AddCategoryForm;

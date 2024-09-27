@@ -7,7 +7,7 @@ import { Transaction } from 'mongodb';
 import { APP_FORMATTERS } from "@/utils";
 import { useTranslations } from 'next-intl';
 import { getTransaction } from '../../service/transaction/transaction-service';
-import TransactionForm from '../transaction-categories/transaction-categories-form';
+import TransactionForm from '../transaction-categories/transaction-categories-add-form';
 
 const { TabPane } = Tabs;
 
