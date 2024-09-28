@@ -1,4 +1,3 @@
-import { RegisterPayload, VerifyPayload } from '@/models/auth-modal/user.modal';
 import { SearchCategories, TransactionCategories, UpdateCategories } from '@/models/transaction-categories-modal/transaction-categories.modal';
 import axios from 'axios';
 

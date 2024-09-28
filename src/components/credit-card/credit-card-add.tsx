@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Modal, Form, Input, InputNumber, Button } from "antd";
 import { toast } from 'react-toastify';
-import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
-import { REGEX } from "@/utils/app-constant";
+import BankSelectedComponent from "./bank-selected-component";
+import { CardModel } from "@/models/card-modal/credit-card.modal";
+import { CREDIT_CARD_SERVICE } from "@/service/credit-card/credit-card-service";
 
 interface CreditCardAddProps {
     isVisible: boolean;
@@ -16,12 +17,12 @@ const CreditCardAdd: React.FC<CreditCardAddProps> = ({ isVisible, onClose, onSuc
     const [isLoading, setIsLoading] = useState(false);
     const t = useTranslations('CreditCard');
 
-    const handleAddCard = async (values: any) => {
-        const { bankName, cardNumber, totalAmount } = values;
+    const handleAddCard = async (values: CardModel) => {
         setIsLoading(true);
 
         try {
-            await cardService.createCreditCard(bankName, cardNumber, totalAmount);
+            const payload = values;
+            await CREDIT_CARD_SERVICE.create(payload);
             onClose();
             form.resetFields();
             toast.success(t('addSuccess'));
@@ -41,28 +42,18 @@ const CreditCardAdd: React.FC<CreditCardAddProps> = ({ isVisible, onClose, onSuc
             footer={null}
         >
             <Form form={form} layout="vertical" onFinish={handleAddCard}>
+                <BankSelectedComponent />
                 <Form.Item
-                    name="bankName"
-                    label={t('bankName')}
-                    rules={[{ required: true, message: t('pleaseEnterBankName') }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="cardNumber"
+                    name="card_number"
                     label={t('cardNumber')}
                     rules={[
                         { required: true, message: t('pleaseEnterCardNumber') },
-                        {
-                            pattern: REGEX.CARDNUMBER,
-                            message: t('cardNumberInvalid')
-                        }
                     ]}
                 >
-                    <Input style={{ width: '100%' }} maxLength={16} />
+                    <InputNumber style={{ width: '100%' }} min={16} />
                 </Form.Item>
                 <Form.Item
-                    name="totalAmount"
+                    name="card_amount"
                     label={t('amount')}
                     rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                 >

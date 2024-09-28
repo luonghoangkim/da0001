@@ -10,7 +10,7 @@ const { Text, Title } = Typography;
 
 interface CreditCardProps {
     bankName: string;
-    accountNumber: string;
+    accountNumber: number;
     totalAmount: number;
     onRemove: () => void;
     onEdit: () => void;
@@ -40,15 +40,20 @@ export const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accou
                 <Space
                     style={{ width: "100%", justifyContent: "flex-end" }}
                 >
-                    <Button type="text" style={{ padding: 0, color: "#0099FF" }} onClick={onEdit}>
-                        <EditOutlined />
+                    {/* <button
+                        onClick={onEdit}
+                        className="text-blue-500 border ml-2 border-blue-500 px-2 py-1 rounded-md flex items-center"
+                    >
+                        <EditOutlined style={{ paddingRight: 5 }} />
                         {t('edit')}
-                    </Button>
-
-                    <Button type="text" style={{ padding: 0, color: "#CC0033" }} onClick={onRemove}>
-                        <DeleteOutlined />
+                    </button> */}
+                    <button
+                        onClick={onRemove}
+                        className="text-red-500 border ml-2 border-red-500 px-2 py-1 rounded-md flex items-center"
+                    >
+                        <DeleteOutlined style={{ paddingRight: 5 }} />
                         {t('remove')}
-                    </Button>
+                    </button>
                 </Space>
             </Space>
         </Card>
