@@ -3,33 +3,28 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify';
-import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
 import { CreditCardComponent } from "./credit-card-component";
 import CreditCardAdd from "./credit-card-add";
 import CreditCardEdit from "./credit-card-edit";
-
-interface Card {
-    _id: string;
-    bank_name: string;
-    card_number: string;
-    total_amount: number;
-}
+import { CREDIT_CARD_SERVICE } from "@/service/credit-card/credit-card-service";
+import { CardModel } from "@/models/card-modal/credit-card.modal";
 
 const CreditCardPage = () => {
-    const [cards, setCards] = useState<Card[]>([]);
+    const [cards, setCards] = useState<CardModel[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-    const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+    const [selectedCard, setSelectedCard] = useState<CardModel | null>(null);
     const [isLoadingSearch, setIsLoadingSearch] = useState(false);
     const t = useTranslations('CreditCard');
 
     const handleSearchCreditCards = async () => {
         setIsLoadingSearch(true);
         try {
-            const creditCards = await cardService.getCreditCards();
+            const response = await CREDIT_CARD_SERVICE.searchData();
+            const creditCards = response.data;
             setCards(creditCards);
         } catch (error) {
             console.error('Error during call:', error);
@@ -43,7 +38,7 @@ const CreditCardPage = () => {
     }, []);
 
     const showAddCardModal = () => setIsAddModalVisible(true);
-    const showEditCardModal = (card: Card) => {
+    const showEditCardModal = (card: CardModel) => {
         setSelectedCard(card);
         setIsEditModalVisible(true);
     };
@@ -55,7 +50,7 @@ const CreditCardPage = () => {
     const handleDeleteCreditCard = async () => {
         if (!selectedCardId) return;
         try {
-            await cardService.deleteCreditCards(selectedCardId);
+            await CREDIT_CARD_SERVICE.deleteItem(selectedCardId);
             toast.success(t('removeSuccess'));
             handleSearchCreditCards();
         } catch (error) {
@@ -74,10 +69,10 @@ const CreditCardPage = () => {
                     {cards.map(card => (
                         <CreditCardComponent
                             key={card._id}
-                            bankName={card.bank_name}
+                            bankName={card.card_short_name ?? ""}
                             accountNumber={card.card_number}
-                            totalAmount={card.total_amount}
-                            onRemove={() => showDeleteModal(card._id)}
+                            totalAmount={card.card_amount}
+                            onRemove={() => showDeleteModal(card._id ?? "")}
                             onEdit={() => showEditCardModal(card)}
                         />
                     ))}

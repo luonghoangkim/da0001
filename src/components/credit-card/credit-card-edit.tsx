@@ -1,22 +1,17 @@
 
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, InputNumber } from "antd";
 import { toast } from 'react-toastify';
-import * as cardService from '../../service/credit-card/credit-card-service';
 import { useTranslations } from 'next-intl';
-
-interface Card {
-    _id: string;
-    bank_name: string;
-    card_number: string;
-    total_amount: number;
-}
+import { CardModel } from "@/models/card-modal/credit-card.modal";
+import BankSelectedComponent from "./bank-selected-component";
+import { CREDIT_CARD_SERVICE } from "@/service/credit-card/credit-card-service";
 
 interface CreditCardEditProps {
     isVisible: boolean;
     onClose: () => void;
     onSuccess: () => void;
-    card: Card | null;
+    card: CardModel | null;
 }
 
 const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onSuccess, card }) => {
@@ -27,21 +22,20 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
     useEffect(() => {
         if (card) {
             form.setFieldsValue({
-                bankName: card.bank_name,
-                cardNumber: card.card_number,
-                totalAmount: card.total_amount,
+                card_code: card.card_code,
+                card_number: card.card_number,
+                card_amount: card.card_amount,
             });
         }
     }, [card, form]);
 
     const handleEditCard = async (values: any) => {
         if (!card) return;
-
-        const { bankName, cardNumber } = values;
         setIsLoading(true);
 
         try {
-            await cardService.updateCreditCards(card._id, bankName, cardNumber);
+            const payload: CardModel = values;
+            await CREDIT_CARD_SERVICE.updateItem(card._id ?? '', payload);
             onClose();
             form.resetFields();
             toast.success(t('editSuccess'));
@@ -52,7 +46,7 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
         }
         setIsLoading(false);
     };
-
+    console.log({card: card?.card_short_name})
     return (
         <Modal
             title={t('editCard')}
@@ -61,26 +55,22 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
             footer={null}
         >
             <Form form={form} layout="vertical" onFinish={handleEditCard}>
+                <BankSelectedComponent initialCardCode={card?.card_short_name} />
                 <Form.Item
-                    name="bankName"
-                    label={t('bankName')}
-                    rules={[{ required: true, message: t('pleaseEnterBankName') }]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    name="cardNumber"
+                    name="card_number"
                     label={t('cardNumber')}
-                    rules={[{ required: true, message: t('pleaseEnterCardNumber') }]}
+                    rules={[
+                        { required: true, message: t('pleaseEnterCardNumber') },
+                    ]}
                 >
-                    <Input />
+                    <InputNumber style={{ width: '100%' }} min={16} />
                 </Form.Item>
                 <Form.Item
-                    name="totalAmount"
+                    name="card_amount"
                     label={t('amount')}
                     rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                 >
-                    <Input disabled />
+                    <InputNumber min={0} style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
