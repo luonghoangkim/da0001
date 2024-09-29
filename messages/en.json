@@ -13,7 +13,12 @@
         "save": "Save",
         "search": "Search",
         "filter": "Filter",
-        "errorOccurred": "Error, please try again!"
+        "errorOccurred": "Error, please try again!",
+        "deleteConfirmation": "Are you sure you want to delete?",
+        "updateSucces": "Update success",
+        "createSucces": "Create success",
+        "updateError": "Update error",
+        "createError": "Create error"
     },
     "Home": {
         "welcomeMessage": "Welcome to the MyFinanceManager",
@@ -118,7 +123,7 @@
         "revenue": "Revenue",
         "expenses": "Expenses",
         "cardId": "Card number",
-        "decription": "Description",
+        "description": "Description",
         "addError": "Error adding data",
         "date": "Date",
         "type": "Type",
@@ -158,7 +163,12 @@
         "transactionAddError": "An error occurred while adding the transaction.",
         "bank": "Bank",
         "selectBankCard": "Select bank card",
-        "fetchError": "Error fetching data"
+        "fetchError": "Error fetching data",
+        "actions": "Actions",
+        "editTransaction": "Edit transaction",
+        "pleaseEnterCategory": "Please enter a category",
+        "pleaseEnterBankCard ": "Please enter a bank card",
+        "insufficientBalance": "Insufficient balance"
     },
     "Setting": {
         "personalInfo": "Personal Information",

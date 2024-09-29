@@ -1,119 +1,89 @@
+import { SearchTransaction, Transaction } from '@/models/trans-modal/trans.modal';
+import { SearchCategories, TransactionCategories, UpdateCategories } from '@/models/transaction-categories-modal/transaction-categories.modal';
+import axios from 'axios';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const createTransaction = async (payload: {
-  amount: number;
-  description: string;
-  category_name: string;
-  type: string;
-  status: string;
-}) => {
-  const token = localStorage.getItem("authToken");
+const create = async (payload: Transaction) => {
+  const token = localStorage.getItem('authToken');
+
   try {
-    const res = await fetch(`${API_URL}/api/transaction`, {
-      method: "POST",
+    const res = await axios.post(`${API_URL}/api/v2/transactions/create-transaction`, {
+      payload,
+    }, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ payload }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      return data.transaction;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+    return res;
   } catch (error) {
-    console.error("Error during call:", error);
+    console.error('Error during category creation:', error);
     throw error;
   }
 };
 
-export const getTransaction = async (
-  page: number,
-  limit: number,
-  type?: string
-) => {
-  const token = localStorage.getItem("authToken");
-  const url = new URL(`${API_URL}/api/transaction`);
-  url.searchParams.append("page", page.toString());
-  url.searchParams.append("limit", limit.toString());
-  if (type) {
-    url.searchParams.append("type", type);
-  }
-
+const searchData = async (payload: SearchTransaction) => {
+  const token = localStorage.getItem('authToken');
   try {
-    const res = await fetch(url.toString(), {
-      method: "GET",
+    const res = await axios.post(`${API_URL}/api/v2/transactions/get-transaction-type`, {
+      payload
+    }, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
     });
-    if (res.ok) {
-      const data = await res.json();
-      return data;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+
+    return res;
   } catch (error) {
-    console.error("Error during GET call:", error);
+    console.error('Error during category search:', error);
     throw error;
   }
 };
 
-export const deleteTransaction = async (card_id: string) => {
-  const token = localStorage.getItem("authToken");
+const updateItem = async (id: string, payload: UpdateCategories) => {
+  const token = localStorage.getItem('authToken');
+
   try {
-    const res = await fetch(`${API_URL}/api/transaction`, {
-      method: "DELETE",
+    const res = await axios.patch(`${API_URL}/api/v2/transactions/update-transaction/${id}`, {
+      payload
+    }, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ card_id }),
     });
-    if (res.ok) {
-      const data = await res.json();
-      return data.transaction;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+
+    return res;
   } catch (error) {
-    console.error("Error during GET call:", error);
+    console.error('Error during category update:', error);
     throw error;
   }
 };
 
-export const updateTransaction = async (
-  card_id: string,
-  bank_name: string,
-  card_number: string
-) => {
-  const token = localStorage.getItem("authToken");
+const deleteItem = async (id: string) => {
+  const token = localStorage.getItem('authToken');
+
   try {
-    const res = await fetch(`${API_URL}/api/transaction`, {
-      method: "PATCH",
+    const res = await axios.delete(`${API_URL}/api/v2/transactions/delete-transaction/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        card_id: card_id,
-        bank_name: bank_name,
-        card_number: card_number,
-      }),
     });
-    if (res.ok) {
-      const data = await res.json();
-      return data.transaction;
-    } else {
-      const errorData = await res.json();
-      throw new Error(errorData.message);
-    }
+
+    return res;
   } catch (error) {
-    console.error("Error during GET call:", error);
+    console.error('Error during category deletion:', error);
     throw error;
   }
 };
+
+export const TRANSACTION_SERVICE = {
+  create,
+  searchData,
+  updateItem,
+  deleteItem
+}

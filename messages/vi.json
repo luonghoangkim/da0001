@@ -13,7 +13,12 @@
         "save": "Lưu",
         "search": "Tìm kiếm",
         "filter": "Lọc",
-        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!"
+        "errorOccurred": "Có lỗi xảy ra, vui lòng thử lại!",
+        "deleteConfirmation": "Xác nhận xoá ?",
+        "updateSucces": "Cập nhật thành công!",
+        "createSucces": "Thêm mới thành công!",
+        "updateError": "Cập nhật thất bại!",
+        "createError": "Thêm mới thất bại!"
     },
     "Home": {
         "welcomeMessage": "Chào mừng đến với MyFinanceManager",
@@ -123,7 +128,7 @@
         "amount": "Số tiền",
         "category": "Danh mục",
         "cardId": "Số thẻ",
-        "decription": "Ghi chú",
+        "description": "Ghi chú",
         "pleaseSelectDate": "Vui lòng chọn ngày!",
         "pleaseSelectType": "Vui lòng chọn loại!",
         "pleaseEnterAmount": "Vui lòng nhập số tiền!",
@@ -158,7 +163,12 @@
         "transactionAddError": "Có lỗi xảy ra khi thêm giao dịch.",
         "bank": "Ngân hàng",
         "selectBankCard": "Chọn thẻ ngân hàng",
-        "fetchError": "Lỗi khi tải dữ liệu"
+        "fetchError": "Lỗi khi tải dữ liệu",
+        "actions": "Actions",
+        "editTransaction": "Chỉnh sửa giao dịch",
+        "pleaseEnterCategory": "Vui lòng chọn danh mục",
+        "pleaseEnterBankCard": "Vui lòng chọn thẻ ngân hàng",
+        "insufficientBalance": "Số dư của thẻ không đủ!"
     },
     "Setting": {
         "personalInfo": "Thông tin cá nhân",

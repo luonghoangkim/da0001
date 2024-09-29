@@ -1,64 +1,87 @@
-'use client';
-
-import { useState } from 'react';
-import { Tabs, Form, Input, Button, DatePicker, Select, Modal, InputNumber } from 'antd';
-import React from 'react';
-import TabPane from 'antd/es/tabs/TabPane';
-import { createTransaction } from '../../service/transaction/transaction-service';
-import { toast } from 'react-toastify';
-import CartSelectedComponent from './card-selected-component';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, DatePicker, Modal, InputNumber, Tabs } from 'antd';
 import { useTranslations } from 'next-intl';
+import { toast } from 'react-toastify';
+import moment from 'moment';
+import TabPane from 'antd/es/tabs/TabPane';
+import CardSelectedComponent from './card-selected-component';
+import CategoriesSelectedComponent from './categories-selected-component';
+import { TRANSACTION_SERVICE } from '@/service/transaction/transaction-service';
+import { Transaction, TransactionData } from '@/models/trans-modal/trans.modal';
 
-const { Option } = Select;
+interface UpdateTransactionFormProps {
+    isVisible: boolean;
+    onCancel: () => void;
+    onSearch: () => void;
+    editingItem: TransactionData;
+}
 
-const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean, onCancel: () => void, onSearch: () => void }) => {
+const UpdateTransactionForm: React.FC<UpdateTransactionFormProps> = ({
+    isVisible,
+    onCancel,
+    onSearch,
+    editingItem
+}) => {
     const [form] = Form.useForm();
     const [activeTab, setActiveTab] = useState('expense');
     const t = useTranslations('Transaction');
+    const commonLanguage = useTranslations('CommonLanguage');
 
-    const handleTabChange = (key: string) => {
-        setActiveTab(key);
-    };
+    useEffect(() => {
+        if (editingItem) {
+            form.setFieldsValue({
+                trans_date: moment(editingItem.trans_date),
+                trans_amount: editingItem.trans_amount,
+                category_id: editingItem.category_id._id ?? "",
+                card_id: editingItem.card_id._id ?? "",
+                trans_note: editingItem.trans_note,
+            });
+            setActiveTab(editingItem.trans_type === 'TT001' ? 'expense' : 'income');
+        }
+    }, [editingItem, form]);
 
     const handleSubmit = async (values: any) => {
-        const payload = {
-            amount: values.amount,
-            description: values.note || '',
-            category_name: values.expenseCategory || '',
-            card_id: values.bankCard,
-            type: activeTab,
-            status: 'pending',
-        };
-
         try {
-            await createTransaction(payload);
-            toast.success(t('transactionAddedSuccess'));
+            const payload: Transaction = {
+                ...values,
+                trans_type: activeTab === 'expense' ? 'TT001' : 'TT002'
+            };
+
+            await TRANSACTION_SERVICE.updateItem(editingItem._id ?? '', payload);
+            toast.success(commonLanguage('updateSucces'));
             form.resetFields();
             onCancel();
             onSearch();
         } catch (error) {
-            console.error('Error creating transaction:', error);
-            toast.error(t('transactionAddError'));
+            console.error('Error updating transaction:', error);
+            toast.error(commonLanguage('updateError'));
         }
     };
 
     return (
         <Modal
-            title={t('addNewTransaction')}
+            title={t('editTransaction')}
             open={isVisible}
             onCancel={onCancel}
             footer={null}
             width={600}
         >
-            <Tabs activeKey={activeTab} onChange={handleTabChange}>
-                <TabPane tab={t('expense')} key="expense">
+            <Tabs
+                activeKey={activeTab}
+                onChange={(key) => setActiveTab(key)}
+            >
+                <TabPane
+                    tab={t('expense')}
+                    key="expense"
+                    disabled={editingItem?.trans_type !== 'TT001'}
+                >
                     <Form
                         form={form}
                         layout="vertical"
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="date"
+                            name="trans_date"
                             label={t('transactionDate')}
                             rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
@@ -66,30 +89,19 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                         </Form.Item>
 
                         <Form.Item
-                            name="amount"
+                            name="trans_amount"
                             label={t('expenseAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
                             <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterExpenseAmount')} />
                         </Form.Item>
 
-                        <CartSelectedComponent />
+                        <CardSelectedComponent />
+
+                        <CategoriesSelectedComponent cate_type="DM001" />
 
                         <Form.Item
-                            name="expenseCategory"
-                            label={t('expenseCategory')}
-                        >
-                            <Select placeholder={t('selectExpenseCategory')}>
-                                <Option value="Ăn uống">{t('food')}</Option>
-                                <Option value="Quần áo">{t('clothes')}</Option>
-                                <Option value="Mua sắm">{t('shopping')}</Option>
-                                <Option value="Trả lãi">{t('interest')}</Option>
-                                <Option value="Đầu tư">{t('investment')}</Option>
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name="note"
+                            name="trans_note"
                             label={t('note')}
                         >
                             <Input.TextArea placeholder={t('addOptionalNote')} />
@@ -97,20 +109,24 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
 
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="w-full">
-                                {t('addTransaction')}
+                                {commonLanguage('save')}
                             </Button>
                         </Form.Item>
                     </Form>
                 </TabPane>
 
-                <TabPane tab={t('income')} key="income">
+                <TabPane
+                    tab={t('income')}
+                    key="income"
+                    disabled={editingItem?.trans_type !== 'TT002'}
+                >
                     <Form
                         form={form}
                         layout="vertical"
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="date"
+                            name="trans_date"
                             label={t('transactionDate')}
                             rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
@@ -118,28 +134,19 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                         </Form.Item>
 
                         <Form.Item
-                            name="amount"
+                            name="trans_amount"
                             label={t('incomeAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
                             <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
                         </Form.Item>
 
-                        <CartSelectedComponent />
+                        <CardSelectedComponent />
+
+                        <CategoriesSelectedComponent cate_type="DM002" />
 
                         <Form.Item
-                            name="expenseCategory"
-                            label={t('incomeCategory')}
-                        >
-                            <Select placeholder={t('selectIncomeCategory')}>
-                                <Option value="Lương">{t('salary')}</Option>
-                                <Option value="Tiền Phụ Cấp">{t('allowance')}</Option>
-                                <Option value="Tiền Thưởng">{t('bonus')}</Option>
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name="note"
+                            name="trans_note"
                             label={t('note')}
                         >
                             <Input.TextArea placeholder={t('addOptionalNote')} />
@@ -147,7 +154,7 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
 
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="w-full">
-                                {t('addTransaction')}
+                                {commonLanguage('save')}
                             </Button>
                         </Form.Item>
                     </Form>
@@ -157,4 +164,4 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
     );
 };
 
-export default TransactionForm;
+export default UpdateTransactionForm;
