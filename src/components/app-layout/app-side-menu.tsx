@@ -1,5 +1,5 @@
 import { Link, useRouter, usePathname } from "@/i18n/routing";
-import { Menu, Layout, Avatar, Tooltip, Modal } from "antd";
+import { Menu, Layout, Modal } from "antd";
 import {
   DashboardOutlined,
   SwapOutlined,
@@ -25,7 +25,6 @@ interface AppSideMenuProps {
 function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [username, setUsername] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
@@ -37,17 +36,11 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
       if (token) {
         const decodedToken = jwt.decode(token) as JwtPayload | null;
         if (decodedToken && typeof decodedToken !== 'string') {
-          const { username, isAdmin } = decodedToken as { username: string, isAdmin: boolean };
-
-          setUsername(username);
-          setIsAdmin(isAdmin || false);
+          setIsAdmin(decodedToken.isAdmin || false);
         }
-        setUsername(username);
-        setIsAdmin(isAdmin || false);
       }
     } catch (error) {
       console.error('Error decoding token:', error);
-      toast.error('Có lỗi xảy ra khi giải mã token.');
     }
   };
 
@@ -79,7 +72,7 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
     {
       key: "/transaction-categories",
       icon: <AppstoreOutlined />,
-      label: <Link href="/transaction-categories">{t("transactionCategory")}</Link>,
+      label: <Link href="/transaction-categories">{t("categoriesManagement")}</Link>,
     },
     {
       key: "/settings",
@@ -154,26 +147,12 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
             width: "100%",
             padding: "16px",
           }}
-        > <div
-          style={{ display: "flex", alignItems: "center", marginTop: "16px", marginBottom: "50px" }}
         >
-            <Menu theme="dark" mode="inline" items={logoutMenuItem} /> </div>
-          {/* {!collapsed && (
-            <>
-              <Menu theme="dark" mode="inline" items={logoutMenuItem} />
-              <div
-                style={{ display: "flex", alignItems: "center", marginTop: "16px", marginBottom: "60px" }}
-              >
-                <Avatar src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
-                <div style={{ marginLeft: "8px", color: "white" }}>
-                  <div>{username}</div>
-                  <Tooltip title="View profile">
-                    <a style={{ color: "rgba(255,255,255,0.65)" }}>View profile</a>
-                  </Tooltip>
-                </div>
-              </div>
-            </>
-          )} */}
+          <Menu theme="dark" mode="inline" items={logoutMenuItem} />
+          <div
+            style={{ display: "flex", alignItems: "center", marginTop: "16px", marginBottom: "40px" }}
+          >
+          </div>
         </div>
       </Sider>
       <Modal

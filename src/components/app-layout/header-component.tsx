@@ -1,16 +1,38 @@
 "use client";
-import React from "react";
-import { Select } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Avatar, Select, Tooltip } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { usePathname, useRouter } from "@/i18n/routing";
-import { useLocale } from 'next-intl';
-import Image from 'next/image'
-
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 const HeaderComponent = () => {
     const router = useRouter();
     const pathname = usePathname();
     const locale = useLocale();
+    const [username, setUsername] = useState('');
+    const commonLanguage = useTranslations('CommonLanguage');
+
+
+    const fetchUserFromToken = () => {
+        try {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                const decodedToken = jwt.decode(token) as JwtPayload | null;
+                if (decodedToken && typeof decodedToken !== 'string') {
+                    // console.log({decodedToken})
+                    setUsername(decodedToken.account_name);
+                }
+            }
+        } catch (error) {
+            console.error('Error decoding token:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserFromToken();
+    }, []);
 
     const handleLanguageChange = (value: any) => {
         router.replace(pathname, { locale: value });
@@ -23,11 +45,20 @@ const HeaderComponent = () => {
                     backgroundColor: '#fff',
                     padding: '0 16px',
                     display: 'flex',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                     borderBottom: '1px solid #f1f1f1',
                 }}
             >
+                {/* Left Side - User Info */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Avatar src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                    <div style={{ marginLeft: "8px", color: "black" }}>
+                        <div>{commonLanguage("hello")} {username}</div>
+                    </div>
+                </div>
+
+                {/* Right Side - Language Selector */}
                 <Select
                     value={locale}
                     style={{ width: 150 }}

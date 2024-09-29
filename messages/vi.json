@@ -18,7 +18,8 @@
         "updateSucces": "Cập nhật thành công!",
         "createSucces": "Thêm mới thành công!",
         "updateError": "Cập nhật thất bại!",
-        "createError": "Thêm mới thất bại!"
+        "createError": "Thêm mới thất bại!",
+        "hello": "Xin chào: "
     },
     "Home": {
         "welcomeMessage": "Chào mừng đến với MyFinanceManager",
@@ -36,7 +37,8 @@
         "goats": "Tiết kiệm",
         "transactionCategory": "Danh mục",
         "manageUsers": "Quản lý người dùng",
-        "backup": "Backup"
+        "backup": "Backup",
+        "categoriesManagement": "Quản lý danh mục"
     },
     "Login": {
         "login": "Đăng nhập",

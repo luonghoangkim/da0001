@@ -18,7 +18,8 @@
         "updateSucces": "Update success",
         "createSucces": "Create success",
         "updateError": "Update error",
-        "createError": "Create error"
+        "createError": "Create error",
+        "hello": "Hello: "
     },
     "Home": {
         "welcomeMessage": "Welcome to the MyFinanceManager",
@@ -36,7 +37,8 @@
         "goats": "Goats",
         "transactionCategory": "Transaction category",
         "manageUsers": "Manage users",
-        "backup": "Backup"
+        "backup": "Backup",
+        "categoriesManagement": "Categories"
     },
     "Login": {
         "login": "Login",
