@@ -8,8 +8,8 @@ export const APP_FORMATTERS = {
         }).format(amount);
     },
 
-    formatDate(date: string): string {
-        return moment(date).format('HH:mm DD/MM/YYYY');
+    formatDate(date: string, format: string = 'HH:mm DD/MM/YYYY'): string {
+        return moment(date).format(format);
     },
 
     formatCardNumber(cardNumber: number): string {

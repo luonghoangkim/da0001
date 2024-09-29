@@ -1,58 +1,79 @@
 'use client';
 
-import { Table, Tabs, Button, Pagination } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import { Transaction } from 'mongodb';
-import { APP_FORMATTERS } from "@/utils";
+import React, { useState, useEffect } from 'react';
+import { Table, Tabs, Button, Pagination, Popconfirm } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
-import { getTransaction } from '../../service/transaction/transaction-service';
-import TransactionForm from '../transaction-categories/transaction-categories-add-form';
-
-const { TabPane } = Tabs;
+import TabPane from 'antd/es/tabs/TabPane';
+import { APP_FORMATTERS } from "@/utils";
+import TransactionForm from '../transaction/transaction-add-form';
+import UpdateTransactionForm from '../transaction/transaction-edit-form';
+import { TRANSACTION_SERVICE } from '@/service/transaction/transaction-service';
+import { SearchTransaction, Transaction, TransactionData } from '@/models/trans-modal/trans.modal';
+import { toast } from 'react-toastify';
 
 const TransactionPage = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
     const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState<Transaction[]>([]);
-    const [total, setTotal] = useState(0); // Tổng số bản ghi
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [pageSize, setPageSize] = useState(10); // Số lượng bản ghi mỗi trang
-    const [activeTab, setActiveTab] = useState('1'); // Tab hiện tại
+    const [data, setData] = useState<TransactionData[]>([]);
+    const [total, setTotal] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [activeTab, setActiveTab] = useState('1');
+    const [editingItem, setEditingItem] = useState<TransactionData | null>(null);
     const t = useTranslations('Transaction');
+    const commonLanguage = useTranslations('CommonLanguage');
 
-
-    const showModal = () => {
-        setIsModalVisible(true);
+    const showAddModal = () => {
+        setIsAddModalVisible(true);
     };
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
+    const showUpdateModal = (item: TransactionData) => {
+        setEditingItem(item);
+        setIsUpdateModalVisible(true);
     };
 
-    const fetchTransactions = async (page: number, size: number, type?: string) => {
+    const handleAddCancel = () => {
+        setIsAddModalVisible(false);
+    };
+
+    const handleUpdateCancel = () => {
+        setIsUpdateModalVisible(false);
+        setEditingItem(null);
+    };
+
+    const fetchTransactions = async (page: number, limit: number, trans_type?: string) => {
         try {
             setLoading(true);
-            const response = await getTransaction(page, size, type);
-            console.log('Fetched data:', response);
+            setData([]);
+            const payload: SearchTransaction = {
+                page,
+                limit,
+                trans_type
+            };
+            const response = await TRANSACTION_SERVICE.searchData(payload);
 
-            if (response && response.transactions) {
-                setData(response.transactions);
-                setTotal(response.total); // Cập nhật tổng số bản ghi
+            if (response && response.data) {
+                setData(response.data);
+                setTotal(response.data.total);
             } else {
                 console.error('Data format is not as expected:', response);
                 setData([]);
             }
             setLoading(false);
-        } catch (error) {
+        } catch (error: any) {
+            const status = error.response?.status;
+            if (status === 500) {
+                toast.error(commonLanguage('errorOccurred'));
+            }
             console.error('Error fetching transactions:', error);
             setLoading(false);
         }
     };
 
-    // Gọi API khi component được render lần đầu hoặc khi trang hoặc kích thước trang thay đổi
     useEffect(() => {
-        const type = activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined;
+        const type = getTransTypeFromTab(activeTab);
         fetchTransactions(currentPage, pageSize, type);
     }, [currentPage, pageSize, activeTab]);
 
@@ -60,44 +81,80 @@ const TransactionPage = () => {
         setCurrentPage(page);
     };
 
-    const handlePageSizeChange = (size: number) => {
-        setPageSize(size);
-        setCurrentPage(1); // Reset trang khi thay đổi kích thước trang
+    const handlePageSizeChange = (current: number, limit: number) => {
+        setPageSize(limit);
+        setCurrentPage(1);
+    };
+
+    const handleDelete = async (_id: string) => {
+        try {
+            await TRANSACTION_SERVICE.deleteItem(_id ?? "");
+            toast.success(t('deleteSuccess'));
+            fetchTransactions(currentPage, pageSize, getTransTypeFromTab(activeTab));
+        } catch (error) {
+            toast.error(t('deleteFailed'));
+            console.error('Error deleting transaction:', error);
+        }
+    };
+
+    const getTransTypeFromTab = (tab: string) => {
+        switch (tab) {
+            case '2': return 'TT002';
+            case '3': return 'TT001';
+            default: return undefined;
+        }
     };
 
     const columns = [
         {
-            title: `${t('category')}`,
-            dataIndex: 'category_name',
+            title: t('actions'),
+            key: 'actions',
+            width: 150,
+            render: (_: any, record: TransactionData) => (
+                <span>
+                    <Button
+                        icon={<EditOutlined />}
+                        onClick={() => showUpdateModal(record)}
+                        style={{ marginRight: 8 }}
+                    />
+                    <Popconfirm
+                        title={commonLanguage('deleteConfirmation')}
+                        onConfirm={() => handleDelete(record._id ?? "")}
+                        okText={commonLanguage('yes')}
+                        cancelText={commonLanguage('no')}
+                    >
+                        <Button icon={<DeleteOutlined />} danger />
+                    </Popconfirm>
+                </span>
+            ),
+        },
+        {
+            title: t('category'),
+            dataIndex: ['category_id', 'cate_name'],
             key: 'category_name',
         },
         {
-            title: `${t('date')}`,
-            dataIndex: 'date',
-            key: 'date',
-            render: (text: string) => <span className="justify-center items-center font-bold">{APP_FORMATTERS.formatDate(text)}</span>,
+            title: t('date'),
+            dataIndex: 'trans_date',
+            key: 'trans_date',
+            render: (text: string) => <span className="justify-center items-center font-bold">{APP_FORMATTERS.formatDate(text, "DD/MM/YYYY")}</span>,
         },
         {
-            title: `${t('type')}`,
-            dataIndex: 'type',
-            key: 'type',
-        },
-        {
-            title: `${t('amount')}`,
-            dataIndex: 'amount',
-            key: 'amount',
+            title: t('amount'),
+            dataIndex: 'trans_amount',
+            key: 'trans_amount',
             render: (text: string) => <span className="font-bold">{APP_FORMATTERS.formatCurrency(Number(text))}</span>,
         },
         {
-            title: `${t('cardId')}`,
-            dataIndex: 'card_id',
+            title: t('cardId'),
+            dataIndex: ['card_id', 'card_number'],
             key: 'card_id',
             render: (text: number) => <span className="justify-center items-center">{APP_FORMATTERS.formatCardNumber(text)}</span>,
         },
         {
-            title: `${t('decription')}`,
-            dataIndex: 'description',
-            key: 'description',
+            title: t('description'),
+            dataIndex: 'trans_note',
+            key: 'trans_note',
         },
     ];
 
@@ -105,7 +162,7 @@ const TransactionPage = () => {
         <div className="p-4 bg-white rounded-md shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">{t('recentTransaction')}</h2>
-                <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+                <Button type="primary" icon={<PlusOutlined />} onClick={showAddModal}>
                     {t('addTransaction')}
                 </Button>
             </div>
@@ -116,15 +173,7 @@ const TransactionPage = () => {
                         dataSource={data}
                         pagination={false}
                         loading={isLoading}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        pageSize={pageSize}
-                        total={total}
-                        onChange={handlePageChange}
-                        showSizeChanger
-                        onShowSizeChange={handlePageSizeChange}
-                        pageSizeOptions={['10', '20', '50']}
+                        rowKey="_id"
                     />
                 </TabPane>
                 <TabPane tab={t('expenses')} key="3">
@@ -133,15 +182,7 @@ const TransactionPage = () => {
                         dataSource={data}
                         pagination={false}
                         loading={isLoading}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        pageSize={pageSize}
-                        total={total}
-                        onChange={handlePageChange}
-                        showSizeChanger
-                        onShowSizeChange={handlePageSizeChange}
-                        pageSizeOptions={['10', '20', '50']}
+                        rowKey="_id"
                     />
                 </TabPane>
                 <TabPane tab={t('revenue')} key="2">
@@ -150,21 +191,34 @@ const TransactionPage = () => {
                         dataSource={data}
                         pagination={false}
                         loading={isLoading}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        pageSize={pageSize}
-                        total={total}
-                        onChange={handlePageChange}
-                        showSizeChanger
-                        onShowSizeChange={handlePageSizeChange}
-                        pageSizeOptions={['10', '20', '50']}
+                        rowKey="_id"
                     />
                 </TabPane>
             </Tabs>
+            {/* <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={total}
+                onChange={handlePageChange}
+                onShowSizeChange={handlePageSizeChange}
+                showSizeChanger
+                pageSizeOptions={['10', '20', '50']}
+            /> */}
 
-            {/* Gọi modal form và truyền props */}
-            <TransactionForm isVisible={isModalVisible} onCancel={handleCancel} onSearch={() => fetchTransactions(currentPage, pageSize, activeTab === '2' ? 'income' : activeTab === '3' ? 'expense' : undefined)} />
+            <TransactionForm
+                isVisible={isAddModalVisible}
+                onCancel={handleAddCancel}
+                onSearch={() => fetchTransactions(currentPage, pageSize, getTransTypeFromTab(activeTab))}
+            />
+
+            {editingItem && (
+                <UpdateTransactionForm
+                    isVisible={isUpdateModalVisible}
+                    onCancel={handleUpdateCancel}
+                    onSearch={() => fetchTransactions(currentPage, pageSize, getTransTypeFromTab(activeTab))}
+                    editingItem={editingItem}
+                />
+            )}
         </div>
     );
 };

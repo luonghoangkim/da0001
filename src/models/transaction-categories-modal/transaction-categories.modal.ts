@@ -6,8 +6,8 @@ export interface TransactionCategories {
 }
 
 export interface SearchCategories {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
   cate_type?: string;
 }
 

@@ -1,44 +1,65 @@
 'use client';
 
 import { useState } from 'react';
-import { Tabs, Form, Input, Button, DatePicker, Select, Modal, InputNumber } from 'antd';
+import { Tabs, Form, Input, Button, DatePicker, Modal, InputNumber } from 'antd';
 import React from 'react';
 import TabPane from 'antd/es/tabs/TabPane';
-import { createTransaction } from '../../service/transaction/transaction-service';
 import { toast } from 'react-toastify';
-import CartSelectedComponent from './card-selected-component';
+import CardSelectedComponent from './card-selected-component';
 import { useTranslations } from 'next-intl';
+import CategoriesSelectedComponent from './categories-selected-component';
+import { TRANSACTION_SERVICE } from '@/service/transaction/transaction-service';
+import { Transaction } from '@/models/trans-modal/trans.modal';
 
-const { Option } = Select;
+interface TransactionFormProps {
+    isVisible: boolean;
+    onCancel: () => void;
+    onSearch: () => void;
+}
 
-const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean, onCancel: () => void, onSearch: () => void }) => {
-    const [form] = Form.useForm();
+const TransactionForm: React.FC<TransactionFormProps> = ({ isVisible, onCancel, onSearch }) => {
+    const [expenseForm] = Form.useForm();
+    const [incomeForm] = Form.useForm();
     const [activeTab, setActiveTab] = useState('expense');
     const t = useTranslations('Transaction');
+    const commonLanguage = useTranslations('CommonLanguage');
 
-    const handleTabChange = (key: string) => {
+
+    const handleTabChange = (key: any) => {
         setActiveTab(key);
+        if (key === 'expense') {
+            incomeForm.resetFields();
+        } else {
+            expenseForm.resetFields();
+        }
     };
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: Transaction) => {
         const payload = {
-            amount: values.amount,
-            description: values.note || '',
-            category_name: values.expenseCategory || '',
-            card_id: values.bankCard,
-            type: activeTab,
-            status: 'pending',
+            ...values,
+            trans_type: activeTab === 'expense' ? 'TT001' : 'TT002'
         };
-
         try {
-            await createTransaction(payload);
-            toast.success(t('transactionAddedSuccess'));
-            form.resetFields();
+            await TRANSACTION_SERVICE.create(payload);
+            toast.success(commonLanguage('createSucces'));
+            if (activeTab === 'expense') {
+                expenseForm.resetFields();
+            } else {
+                incomeForm.resetFields();
+            }
             onCancel();
             onSearch();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating transaction:', error);
-            toast.error(t('transactionAddError'));
+            if (error.response) {
+                const status = error.response.status;
+                if (status === 400) {
+                    toast.error(t('insufficientBalance'));
+                } else {
+                    toast.error(commonLanguage('createError'));
+                }
+
+            }
         }
     };
 
@@ -53,12 +74,12 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
             <Tabs activeKey={activeTab} onChange={handleTabChange}>
                 <TabPane tab={t('expense')} key="expense">
                     <Form
-                        form={form}
+                        form={expenseForm}
                         layout="vertical"
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="date"
+                            name="trans_date"
                             label={t('transactionDate')}
                             rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
@@ -66,30 +87,18 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                         </Form.Item>
 
                         <Form.Item
-                            name="amount"
+                            name="trans_amount"
                             label={t('expenseAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
                             <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterExpenseAmount')} />
                         </Form.Item>
 
-                        <CartSelectedComponent />
+                        <CardSelectedComponent />
 
+                        <CategoriesSelectedComponent cate_type={"DM001"} />
                         <Form.Item
-                            name="expenseCategory"
-                            label={t('expenseCategory')}
-                        >
-                            <Select placeholder={t('selectExpenseCategory')}>
-                                <Option value="Ăn uống">{t('food')}</Option>
-                                <Option value="Quần áo">{t('clothes')}</Option>
-                                <Option value="Mua sắm">{t('shopping')}</Option>
-                                <Option value="Trả lãi">{t('interest')}</Option>
-                                <Option value="Đầu tư">{t('investment')}</Option>
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name="note"
+                            name="trans_note"
                             label={t('note')}
                         >
                             <Input.TextArea placeholder={t('addOptionalNote')} />
@@ -105,12 +114,12 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
 
                 <TabPane tab={t('income')} key="income">
                     <Form
-                        form={form}
+                        form={incomeForm}
                         layout="vertical"
                         onFinish={handleSubmit}
                     >
                         <Form.Item
-                            name="date"
+                            name="trans_date"
                             label={t('transactionDate')}
                             rules={[{ required: true, message: t('pleaseSelectDate') }]}
                         >
@@ -118,28 +127,17 @@ const TransactionForm = ({ isVisible, onCancel, onSearch }: { isVisible: boolean
                         </Form.Item>
 
                         <Form.Item
-                            name="amount"
+                            name="trans_amount"
                             label={t('incomeAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
+                            <InputNumber min={1} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
                         </Form.Item>
 
-                        <CartSelectedComponent />
-
+                        <CardSelectedComponent />
+                        <CategoriesSelectedComponent cate_type={"DM002"} />
                         <Form.Item
-                            name="expenseCategory"
-                            label={t('incomeCategory')}
-                        >
-                            <Select placeholder={t('selectIncomeCategory')}>
-                                <Option value="Lương">{t('salary')}</Option>
-                                <Option value="Tiền Phụ Cấp">{t('allowance')}</Option>
-                                <Option value="Tiền Thưởng">{t('bonus')}</Option>
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name="note"
+                            name="trans_note"
                             label={t('note')}
                         >
                             <Input.TextArea placeholder={t('addOptionalNote')} />

@@ -24,12 +24,14 @@ const create = async (payload: TransactionCategories) => {
 };
 
 const searchData = async (payload: SearchCategories) => {
+  const token = localStorage.getItem('authToken');
   try {
     const res = await axios.post(`${API_URL}/api/v2/categories/categories-type`, {
       payload
     }, {
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
     });
 

@@ -1,51 +1,34 @@
-import mongoose, { Schema, model, models } from "mongoose";
+export interface Transaction {
+  _id?: string;
+  card_id: string;
+  trans_date: Date;
+  trans_amount: number;
+  trans_type: string;
+  category_id: string;
+  trans_note?: string;
+}
 
-const transactionSchema = new Schema(
-  {
-    transaction_id: {
-      type: mongoose.Schema.ObjectId,
-      require: true,
-    },
-    user_id: {
-      type: String,
-      ref: "User",
-      require: true,
-    }, //(FK -> Users.user_id)
-    card_id: {
-      type: Number,
-      ref: "CreditCard",
-    },
-    category_name: {
-      type: String,
-    },
-    amount: {
-      type: Number,
-      min: [0, "Amount must be than 0"],
-      required: true,
-    },
-    description: {
-      type: String,
-    },
 
-    date: {
-      type: Date,
-      default: Date.now, // Chỉ lưu trữ ngày hiện tại với giờ, phút, giây là 0
-    },
-    type: {
-      type: String,
-      enum: ["income", "expense"], // "thu nhập" hoặc "chi tiêu"
-    },
-    status: {
-      type: String,
-      enum: ["completed", "pending", "failed"], // Trạng thái giao dịch
-    },
-  },
-  {
-    timestamps: true, // Tự động thêm createdAt và updatedAt
-  }
-);
+export interface SearchTransaction {
+  page?: number;
+  limit?: number;
+  trans_type?: string;
+}
 
-const Transaction =
-  models.Transaction || model("Transaction", transactionSchema);
-
-export default Transaction;
+export interface TransactionData {
+  _id?: string;
+  card_id: {
+    _id: string;
+    card_number: number;
+    // Add other card properties as needed
+  };
+  category_id: {
+    _id: string;
+    cate_name: string;
+    // Add other category properties as needed
+  };
+  trans_date: string | Date;
+  trans_amount: number;
+  trans_type: string;
+  trans_note?: string;
+}
