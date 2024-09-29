@@ -46,7 +46,7 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
         }
         setIsLoading(false);
     };
-    console.log({card: card?.card_short_name})
+    console.log({ card: card?.card_code })
     return (
         <Modal
             title={t('editCard')}
@@ -55,7 +55,7 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
             footer={null}
         >
             <Form form={form} layout="vertical" onFinish={handleEditCard}>
-                <BankSelectedComponent initialCardCode={card?.card_short_name} />
+                <BankSelectedComponent initialCardCode={card?.card_code} />
                 <Form.Item
                     name="card_number"
                     label={t('cardNumber')}
@@ -74,7 +74,7 @@ const CreditCardEdit: React.FC<CreditCardEditProps> = ({ isVisible, onClose, onS
                 </Form.Item>
                 <Form.Item>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                        <Button onClick={onClose}>
+                        <Button style={{ backgroundColor: '#f5222d', color: '#fff' }} onClick={onClose}>
                             {t('cancel')}
                         </Button>
                         <Button type="primary" htmlType="submit" loading={isLoading}>

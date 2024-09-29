@@ -154,9 +154,11 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
             width: "100%",
             padding: "16px",
           }}
+        > <div
+          style={{ display: "flex", alignItems: "center", marginTop: "16px", marginBottom: "50px" }}
         >
-
-          {!collapsed && (
+            <Menu theme="dark" mode="inline" items={logoutMenuItem} /> </div>
+          {/* {!collapsed && (
             <>
               <Menu theme="dark" mode="inline" items={logoutMenuItem} />
               <div
@@ -171,7 +173,7 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
                 </div>
               </div>
             </>
-          )}
+          )} */}
         </div>
       </Sider>
       <Modal

@@ -30,21 +30,23 @@ const create = async (payload: CardModel) => {
 };
 
 const searchData = async () => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     try {
-        const res = await axios.get(`${API_URL}/api/v2/cards/get-card`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        });
+        const res = await axios.post(`${API_URL}/api/v2/cards/get-card`, {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
 
         return res;
     } catch (error) {
-        console.error('Error during category search:', error);
+        console.error('Error during :', error);
         throw error;
     }
 };
+
 
 const updateItem = async (id: string, payload: CardModel) => {
     const token = localStorage.getItem('authToken');
