@@ -131,7 +131,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isVisible, onCancel, 
                             label={t('incomeAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
+                            <InputNumber min={1} style={{ width: '100%' }} placeholder={t('enterIncomeAmount')} />
                         </Form.Item>
 
                         <CardSelectedComponent />

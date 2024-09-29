@@ -93,7 +93,7 @@ const UpdateTransactionForm: React.FC<UpdateTransactionFormProps> = ({
                             label={t('expenseAmount')}
                             rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                         >
-                            <InputNumber min={0} style={{ width: '100%' }} placeholder={t('enterExpenseAmount')} />
+                            <InputNumber min={1} style={{ width: '100%' }} placeholder={t('enterExpenseAmount')} />
                         </Form.Item>
 
                         <CardSelectedComponent />
