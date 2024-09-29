@@ -40,13 +40,13 @@ export const CreditCardComponent: React.FC<CreditCardProps> = ({ bankName, accou
                 <Space
                     style={{ width: "100%", justifyContent: "flex-end" }}
                 >
-                    {/* <button
+                    <button
                         onClick={onEdit}
                         className="text-blue-500 border ml-2 border-blue-500 px-2 py-1 rounded-md flex items-center"
                     >
                         <EditOutlined style={{ paddingRight: 5 }} />
                         {t('edit')}
-                    </button> */}
+                    </button>
                     <button
                         onClick={onRemove}
                         className="text-red-500 border ml-2 border-red-500 px-2 py-1 rounded-md flex items-center"

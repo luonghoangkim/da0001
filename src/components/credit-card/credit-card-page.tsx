@@ -26,9 +26,12 @@ const CreditCardPage = () => {
             const response = await CREDIT_CARD_SERVICE.searchData();
             const creditCards = response.data;
             setCards(creditCards);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error during call:', error);
-            toast.error(t('fetchError'));
+            const status = error.response?.status;
+            if (status == 500 || status == 401) {
+                toast.error(t('fetchError'));
+            }
         }
         setIsLoadingSearch(false);
     };
