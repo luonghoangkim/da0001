@@ -11,7 +11,7 @@ import { CardModel } from "@/models/card-modal/credit-card.modal";
 import { CreditCardComponent } from "../credit-card/credit-card-component";
 import { GoalsCard } from "./goals-card";
 
-const CreditCardPage = () => {
+const GoalsPage = () => {
     const [cards, setCards] = useState<CardModel[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -127,4 +127,4 @@ const CreditCardPage = () => {
     );
 };
 
-export default CreditCardPage;
+export default GoalsPage;
