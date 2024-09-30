@@ -36,7 +36,7 @@ const CreditCardAdd: React.FC<CreditCardAddProps> = ({ isVisible, onClose, onSuc
 
     return (
         <Modal
-            title={t('pleaseEnterBankName')}
+            title={t('addCard')}
             open={isVisible}
             onCancel={onClose}
             footer={null}

@@ -19,7 +19,8 @@
         "createSucces": "Create success",
         "updateError": "Update error",
         "createError": "Create error",
-        "hello": "Hello: "
+        "hello": "Hello: ",
+        "insufficientBalance": "Insufficient balance"
     },
     "Home": {
         "welcomeMessage": "Welcome to the MyFinanceManager",
@@ -207,7 +208,7 @@
         "nameRequired": "Name is required!"
     },
     "Goals": {
-        "addCard": "Add new card",
+        "addGoals": "Add new goals",
         "addSuccess": "Card added successfully",
         "addError": "Error adding data",
         "bankName": "Bank name",

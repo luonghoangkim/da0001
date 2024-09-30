@@ -1,78 +1,113 @@
+import { CardModel } from '@/models/card-modal/credit-card.modal';
+import { CreateGoalsModel } from '@/models/goals-modal/goals.modal';
 import axios from 'axios';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const createCreditCard = async (bank_name: string, card_number: number, total_amount: number) => {
+const create = async (payload: CreateGoalsModel) => {
     const token = localStorage.getItem('authToken');
+
     try {
-        const res = await axios.post(`${API_URL}/api/goals`, {
-            bank_name,
-            card_number,
-            total_amount
+        const modifiedPayload = {
+            ...payload,
+            saving_amount: Number(payload.saving_amount),
+            saving_goal: Number(payload.saving_goal),
+        };
+        const res = await axios.post(`${API_URL}/api/v2/saving/create-saving`, {
+            payload: modifiedPayload,
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        return res.data.creditCards;
-    } catch (error: any) {
-        console.error('Error during call:', error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || error.message);
-    }
-};
-
-export const getCreditCards = async () => {
-    const token = localStorage.getItem('authToken');
-    try {
-        const res = await axios.get(`${API_URL}/api/goals`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        return res.data.creditCards;
-    } catch (error: any) {
-        console.error('Error during GET call:', error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || error.message);
-    }
-};
-
-export const deleteCreditCards = async (card_id: string) => {
-    const token = localStorage.getItem('authToken');
-    try {
-        const res = await axios.delete(`${API_URL}/api/goals`, {
-            headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
-            data: { card_id }
         });
 
-        return res.data.creditCards;
-    } catch (error: any) {
-        console.error('Error during DELETE call:', error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || error.message);
+        return res;
+    } catch (error) {
+        console.error('Error during category creation:', error);
+        throw error;
     }
 };
 
-export const updateCreditCards = async (card_id: string, bank_name: string, card_number: string) => {
-    const token = localStorage.getItem('authToken');
+const searchData = async () => {
+    const token = localStorage.getItem("authToken");
     try {
-        const res = await axios.patch(`${API_URL}/api/goals`, {
-            card_id,
-            bank_name,
-            card_number
+        const res = await axios.post(`${API_URL}/api/v2/cards/get-card`, {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+        return res;
+    } catch (error) {
+        console.error('Error during :', error);
+        throw error;
+    }
+};
+
+
+const updateItem = async (id: string, payload: CardModel) => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+        const res = await axios.patch(`${API_URL}/api/v2/cards/update-card/${id}`, {
+            payload
         }, {
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+            },
         });
 
-        return res.data.creditCards;
-    } catch (error: any) {
-        console.error('Error during PATCH call:', error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || error.message);
+        return res;
+    } catch (error) {
+        console.error('Error during category update:', error);
+        throw error;
     }
 };
+
+const deleteItem = async (id: string) => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+        const res = await axios.delete(`${API_URL}/api/v2/cards/delete-card/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return res;
+    } catch (error) {
+        console.error('Error during category deletion:', error);
+        throw error;
+    }
+};
+
+const getBank = async () => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+        const res = await axios.get(`${API_URL}/api/v2/cards/banks`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return res;
+    } catch (error) {
+        console.error('Error during category deletion:', error);
+        throw error;
+    }
+};
+
+export const GOALS_SERVICE = {
+    create,
+    searchData,
+    updateItem,
+    deleteItem,
+    getBank,
+}
