@@ -1,39 +1,38 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Card, Modal, Spin } from "antd";
+import { Card, Button, Modal, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify';
-import * as goalsService from '../../service/goals/goals-service';
 import { useTranslations } from 'next-intl';
+import CreditCardAdd from "./goals-add-form";
+import CreditCardEdit from "./goals-edit-form";
+import { CREDIT_CARD_SERVICE } from "@/service/credit-card/credit-card-service";
+import { CardModel } from "@/models/card-modal/credit-card.modal";
+import { CreditCardComponent } from "../credit-card/credit-card-component";
 import { GoalsCard } from "./goals-card";
-import GoalsAdd from "./goals-add";
-import GoalsEdit from "./goals-edit";
 
-interface Card {
-    _id: string;
-    bank_name: string;
-    card_number: string;
-    total_amount: number;
-}
-
-const GoalsPage = () => {
-    const [cards, setCards] = useState<Card[]>([]);
+const CreditCardPage = () => {
+    const [cards, setCards] = useState<CardModel[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-    const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+    const [selectedCard, setSelectedCard] = useState<CardModel | null>(null);
     const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-    const t = useTranslations('Goals');
+    const t = useTranslations('CreditCard');
 
     const handleSearchCreditCards = async () => {
         setIsLoadingSearch(true);
         try {
-            const creditCards = await goalsService.getCreditCards();
+            const response = await CREDIT_CARD_SERVICE.searchData();
+            const creditCards = response.data;
             setCards(creditCards);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error during call:', error);
-            toast.error(t('fetchError'));
+            const status = error.response?.status;
+            if (status == 500 || status == 401) {
+                toast.error(t('fetchError'));
+            }
         }
         setIsLoadingSearch(false);
     };
@@ -43,7 +42,7 @@ const GoalsPage = () => {
     }, []);
 
     const showAddCardModal = () => setIsAddModalVisible(true);
-    const showEditCardModal = (card: Card) => {
+    const showEditCardModal = (card: CardModel) => {
         setSelectedCard(card);
         setIsEditModalVisible(true);
     };
@@ -55,7 +54,7 @@ const GoalsPage = () => {
     const handleDeleteCreditCard = async () => {
         if (!selectedCardId) return;
         try {
-            await goalsService.deleteCreditCards(selectedCardId);
+            await CREDIT_CARD_SERVICE.deleteItem(selectedCardId);
             toast.success(t('removeSuccess'));
             handleSearchCreditCards();
         } catch (error) {
@@ -74,10 +73,10 @@ const GoalsPage = () => {
                     {cards.map(card => (
                         <GoalsCard
                             key={card._id}
-                            categories={card.bank_name}
-                            goals={30000000}
-                            amount={card.total_amount}
-                            onRemove={() => showDeleteModal(card._id)}
+                            amount={card.card_number}
+                            goals={card.card_amount}
+                            categories={"ddd"}
+                            onRemove={() => showDeleteModal(card._id ?? "")}
                             onAdjust={() => showEditCardModal(card)}
                         />
                     ))}
@@ -89,13 +88,13 @@ const GoalsPage = () => {
                     </div>
                 </div>
 
-                <GoalsAdd
+                <CreditCardAdd
                     isVisible={isAddModalVisible}
                     onClose={() => setIsAddModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
                 />
 
-                <GoalsEdit
+                <CreditCardEdit
                     isVisible={isEditModalVisible}
                     onClose={() => setIsEditModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
@@ -128,4 +127,4 @@ const GoalsPage = () => {
     );
 };
 
-export default GoalsPage;
+export default CreditCardPage;

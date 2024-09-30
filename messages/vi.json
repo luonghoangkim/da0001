@@ -19,7 +19,8 @@
         "createSucces": "Thêm mới thành công!",
         "updateError": "Cập nhật thất bại!",
         "createError": "Thêm mới thất bại!",
-        "hello": "Xin chào: "
+        "hello": "Xin chào: ",
+        "insufficientBalance": "Số dư của thẻ không đủ!"
     },
     "Home": {
         "welcomeMessage": "Chào mừng đến với MyFinanceManager",
@@ -207,30 +208,11 @@
         "nameRequired": "Vui lòng nhập họ tên"
     },
     "Goals": {
-        "addCard": "Thêm mới thẻ",
-        "addSuccess": "Thêm thẻ thành công",
-        "addError": "Lỗi thêm dữ liệu",
-        "bankName": "Tên ngân hàng",
-        "pleaseEnterBankName": "Vui lòng nhập tên ngân hàng!",
-        "cardNumber": "Số thẻ",
-        "pleaseEnterCardNumber": "Vui lòng nhập số thẻ!",
-        "add": "Thêm",
-        "cancel": "Huỷ",
-        "remove": "Xoá",
-        "edit": "Chỉnh sửa",
-        "totalAmount": "Tổng tiền",
-        "removeSuccess": "Xoá thẻ thành công!",
-        "removeError": "Xoá thẻ thất bại!",
-        "confirmDeleteMessage": "Bạn có chắc chắn muốn xoá thẻ?",
-        "confirmDelete": "Xác nhận xoá thẻ",
-        "fetchError": "Lỗi gọi dữ liệu!",
-        "editSuccess": "Chỉnh sửa thông tin thẻ thành công!",
-        "editError": "Lỗi chỉnh sửa!",
-        "save": "Lưu",
-        "editCard": "Chỉnh sửa thẻ",
-        "amount": "Số tiền",
-        "pleaseEnterAmount": "Vui lòng nhập số tiền!",
-        "cardNumberInvalid": "Vui lòng nhập đủ 16 số!"
+        "addGoals": "Thêm mới tiết kiệm",
+        "savingAmount": "Số tiền tiết kiệm",
+        "savingGoal": "Mục tiêu tiết kiệm",
+        "pleaseEnterAmount": "Vui lòng nhập số tiền",
+        "goalMustBeGreater": "Mục tiêu phải lớn hơn gửi vào"
     },
     "Categories": {
         "addCategories": "Thêm danh mục",
