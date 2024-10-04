@@ -4,27 +4,26 @@ import { Card, Button, Modal, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
-import CreditCardAdd from "./goals-add-form";
-import CreditCardEdit from "./goals-edit-form";
-import { CREDIT_CARD_SERVICE } from "@/service/credit-card/credit-card-service";
-import { CardModel } from "@/models/card-modal/credit-card.modal";
-import { CreditCardComponent } from "../credit-card/credit-card-component";
+import GoalsAdd from "./goals-add-form";
+import GoalsEdit from "./goals-edit-form";
+import { GoalsResponse } from "@/models/goals-modal/goals-response.model";
 import { GoalsCard } from "./goals-card";
+import { GOALS_SERVICE } from "@/service/goals/goals-service";
 
 const GoalsPage = () => {
-    const [cards, setCards] = useState<CardModel[]>([]);
+    const [cards, setCards] = useState<GoalsResponse[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-    const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-    const [selectedCard, setSelectedCard] = useState<CardModel | null>(null);
+    const [selectedGoals, setSelectedGoalId] = useState<string | null>(null);
+    const [selectedCard, setSelectedCard] = useState<GoalsResponse | null>(null);
     const [isLoadingSearch, setIsLoadingSearch] = useState(false);
     const t = useTranslations('CreditCard');
 
     const handleSearchCreditCards = async () => {
         setIsLoadingSearch(true);
         try {
-            const response = await CREDIT_CARD_SERVICE.searchData();
+            const response = await GOALS_SERVICE.searchData();
             const creditCards = response.data;
             setCards(creditCards);
         } catch (error: any) {
@@ -42,19 +41,19 @@ const GoalsPage = () => {
     }, []);
 
     const showAddCardModal = () => setIsAddModalVisible(true);
-    const showEditCardModal = (card: CardModel) => {
-        setSelectedCard(card);
+    const showEditCardModal = (goal: GoalsResponse) => {
+        setSelectedCard(goal);
         setIsEditModalVisible(true);
     };
-    const showDeleteModal = (card_id: string) => {
-        setSelectedCardId(card_id);
+    const showDeleteModal = (goal_id: string) => {
+        setSelectedGoalId(goal_id);
         setIsDeleteModalVisible(true);
     };
 
-    const handleDeleteCreditCard = async () => {
-        if (!selectedCardId) return;
+    const handleDeleteGoals = async () => {
+        if (!selectedGoals) return;
         try {
-            await CREDIT_CARD_SERVICE.deleteItem(selectedCardId);
+            await GOALS_SERVICE.deleteItem(selectedGoals);
             toast.success(t('removeSuccess'));
             handleSearchCreditCards();
         } catch (error) {
@@ -62,22 +61,22 @@ const GoalsPage = () => {
             toast.error(t('removeError'));
         } finally {
             setIsDeleteModalVisible(false);
-            setSelectedCardId(null);
+            setSelectedGoalId(null);
         }
     };
-
+    console.log({cards: cards})
     return (
         <>
             <Spin spinning={isLoadingSearch}>
                 <div className="flex flex-wrap bg-gray-100 justify-start gap-4">
-                    {cards.map(card => (
+                    {cards.map(goal => (
                         <GoalsCard
-                            key={card._id}
-                            amount={card.card_number}
-                            goals={card.card_amount}
-                            categories={"ddd"}
-                            onRemove={() => showDeleteModal(card._id ?? "")}
-                            onAdjust={() => showEditCardModal(card)}
+                            key={goal.saving?._id}
+                            amount={goal.saving?.saving_amount}
+                            goals={goal.saving?.saving_goals_amount}
+                            categories={goal.category?.category_name}
+                            onRemove={() => showDeleteModal(goal.saving._id ?? "")}
+                            onAdjust={() => showEditCardModal(goal)}
                         />
                     ))}
                     <div
@@ -88,17 +87,17 @@ const GoalsPage = () => {
                     </div>
                 </div>
 
-                <CreditCardAdd
+                <GoalsAdd
                     isVisible={isAddModalVisible}
                     onClose={() => setIsAddModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
                 />
 
-                <CreditCardEdit
+                <GoalsEdit
                     isVisible={isEditModalVisible}
                     onClose={() => setIsEditModalVisible(false)}
                     onSuccess={handleSearchCreditCards}
-                    card={selectedCard}
+                    goals={selectedCard}
                 />
 
                 {/* Modal xác nhận xóa */}
@@ -114,7 +113,7 @@ const GoalsPage = () => {
                             key="delete"
                             type="primary"
                             danger
-                            onClick={handleDeleteCreditCard}
+                            onClick={handleDeleteGoals}
                         >
                             {t('remove')}
                         </Button>,

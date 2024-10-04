@@ -36,7 +36,7 @@ function AppSideMenu({ collapsed, onCollapse }: AppSideMenuProps) {
       if (token) {
         const decodedToken = jwt.decode(token) as JwtPayload | null;
         if (decodedToken && typeof decodedToken !== 'string') {
-          setIsAdmin(decodedToken.isAdmin || false);
+          setIsAdmin(decodedToken.account_type === "Admin");
         }
       }
     } catch (error) {

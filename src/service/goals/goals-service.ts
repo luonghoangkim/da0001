@@ -32,7 +32,7 @@ const create = async (payload: CreateGoalsModel) => {
 const searchData = async () => {
     const token = localStorage.getItem("authToken");
     try {
-        const res = await axios.post(`${API_URL}/api/v2/cards/get-card`, {},
+        const res = await axios.get(`${API_URL}/api/v2/saving/get-saving`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const updateItem = async (id: string, payload: CardModel) => {
     const token = localStorage.getItem('authToken');
 
     try {
-        const res = await axios.patch(`${API_URL}/api/v2/cards/update-card/${id}`, {
+        const res = await axios.patch(`${API_URL}/api/v2/saving/update-card/${id}`, {
             payload
         }, {
             headers: {
@@ -72,7 +72,7 @@ const deleteItem = async (id: string) => {
     const token = localStorage.getItem('authToken');
 
     try {
-        const res = await axios.delete(`${API_URL}/api/v2/cards/delete-card/${id}`, {
+        const res = await axios.delete(`${API_URL}/api/v2/saving/delete-saving/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
