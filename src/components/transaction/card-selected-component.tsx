@@ -14,8 +14,11 @@ interface Card {
     card_amount: number;
     card_short_name: string;
 }
+interface BankSelectedComponentProps {
+    initialCardId?: string;
+}
 
-const CardSelectedComponent = () => {
+const CardSelectedComponent: React.FC<BankSelectedComponentProps> = ({ initialCardId }) => {
     const [cards, setCards] = useState<Card[]>([]);
     const t = useTranslations('Transaction');
 

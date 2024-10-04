@@ -46,12 +46,12 @@ export const GoalsCard: React.FC<HousingExpenseProps> = ({ amount, goals, catego
                 >
                     <DollarOutlined />
                 </button>
-                <button
+                {/* <button
                     onClick={onAdjust}
                     className="text-blue-500 border ml-2 border-blue-500 px-2 py-1 rounded-md flex items-center"
                 >
                     <EditOutlined />
-                </button>
+                </button> */}
                 <button
                     onClick={onRemove}
                     className="text-red-500 border ml-2 border-red-500 px-2 py-1 rounded-md flex items-center"

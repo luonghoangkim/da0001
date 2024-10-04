@@ -1,18 +1,21 @@
 interface Category {
     category_name: string;
+    category_id: string;
 }
 
-interface PopulatedSaving {
+interface Saving {
     _id: string;
     saving_goals_amount: number;
     saving_amount: number;
     saving_date: string;
+    createdBy: string;
     createdAt: string;
     updatedAt: string;
     __v: number;
 }
 
-interface GoalsResponse {
+
+export interface GoalsResponse {
     category: Category;
-    populatedSaving: PopulatedSaving;
+    saving: Saving;
 }
