@@ -1,10 +1,16 @@
 interface Category {
-    category_name: string;
-    category_id: string;
+    _id: string;
+    cate_name: string;
+    cate_type: string;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
 }
 
-interface Saving {
+export interface GoalsResponse {
     _id: string;
+    category_id: Category;
     saving_goals_amount: number;
     saving_amount: number;
     saving_date: string;
@@ -15,7 +21,7 @@ interface Saving {
 }
 
 
-export interface GoalsResponse {
-    category: Category;
-    saving: Saving;
+export interface UpdateAmountItem {
+    saving_amount: number;
+    card_id: string;
 }
