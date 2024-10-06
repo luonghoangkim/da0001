@@ -53,7 +53,7 @@ const GoalsEdit: React.FC<GoalsEditProps> = ({ isVisible, onClose, onSuccess, go
 
     return (
         <Modal
-            title={t('editGoals')}
+            title={t('addMoreAmount')}
             open={isVisible}
             onCancel={onClose}
             footer={null}
