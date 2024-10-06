@@ -94,6 +94,17 @@
         "codeResent": "Verification code has been resent.",
         "emailInvalid": "Email invalid"
     },
+    "Dashboard": {
+        "totalBalance": "Total Balance",
+        "allAccounts": "All Accounts",
+        "creditCard": "Credit Card",
+        "fetchError": "Error fetching data",
+        "goals": "Goals",
+        "currentAmount": "Current Amount",
+        "goalAmount": "Goal Amount",
+        "transaction": "Transaction",
+        "tradingCharts": "Chart"
+    },
     "CreditCard": {
         "addCard": "Add new card",
         "addSuccess": "Card added successfully",

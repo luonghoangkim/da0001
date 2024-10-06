@@ -104,6 +104,24 @@ const getBank = async () => {
     }
 };
 
+const totalGoalsAmount = async () => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+        const res = await axios.post(`${API_URL}/api/v2/saving/total-saving`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return res;
+    } catch (error) {
+        console.error('Error during category deletion:', error);
+        throw error;
+    }
+};
+
 export const GOALS_SERVICE = {
     create,
     searchData,
@@ -111,4 +129,5 @@ export const GOALS_SERVICE = {
     deleteItem,
     getBank,
     updateAmountItem,
+    totalGoalsAmount,
 }

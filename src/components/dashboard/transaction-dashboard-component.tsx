@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 
 const TransactionDashboardCard = () => {
     const t = useTranslations('Transaction');
+    const db = useTranslations('Dashboard');
+
     const commonLanguage = useTranslations('CommonLanguage');
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState<TransactionData[]>([]);
@@ -37,11 +39,11 @@ const TransactionDashboardCard = () => {
             key: 'card_id',
             render: (text: number) => <span className="justify-center items-center">{APP_FORMATTERS.formatCardNumber(text)}</span>,
         },
-        {
-            title: t('description'),
-            dataIndex: 'trans_note',
-            key: 'trans_note',
-        },
+        // {
+        //     title: t('description'),
+        //     dataIndex: 'trans_note',
+        //     key: 'trans_note',
+        // },
     ];
 
     const fetchTransactions = async () => {
@@ -77,10 +79,10 @@ const TransactionDashboardCard = () => {
 
     return (
         <Col xs={24} lg={12}>
-            <Card title="Recent Transactions" bordered={false}>
+            <Card title={db('transaction')} bordered={false}>
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={data.slice(0, 5)}
                     pagination={false}
                     loading={isLoading}
                     rowKey="_id"
