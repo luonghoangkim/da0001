@@ -104,10 +104,29 @@ const getBank = async () => {
     }
 };
 
+const totalCardAmount = async () => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+        const res = await axios.post(`${API_URL}/api/v2/cards/total-card-amount`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return res;
+    } catch (error) {
+        console.error('Error during category deletion:', error);
+        throw error;
+    }
+};
+
 export const CREDIT_CARD_SERVICE = {
     create,
     searchData,
     updateItem,
     deleteItem,
     getBank,
+    totalCardAmount,
 }

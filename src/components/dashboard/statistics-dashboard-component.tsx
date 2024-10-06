@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 
 const StaticComponent = () => {
-    const t = useTranslations('Transaction');
+    const t = useTranslations('Dashboard');
     const commonLanguage = useTranslations('CommonLanguage');
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState<TransactionData[]>([]);
@@ -65,7 +65,7 @@ const StaticComponent = () => {
 
     return (
         <Col xs={24} lg={12}>
-            <Card title={t('statistics')}>
+            <Card title={t('tradingCharts')}>
                 {isLoading ? (
                     <div style={{ height: 330, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Spin size="large" />

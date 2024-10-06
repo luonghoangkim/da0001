@@ -25,3 +25,8 @@ export interface UpdateAmountItem {
     saving_amount: number;
     card_id: string;
 }
+
+export interface SavingOverview {
+    totalSavingAmount: number;
+    totalSavingGoal: number;
+}
