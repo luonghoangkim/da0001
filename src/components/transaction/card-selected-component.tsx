@@ -18,7 +18,7 @@ interface BankSelectedComponentProps {
     initialCardId?: string;
 }
 
-const CardSelectedComponent: React.FC<BankSelectedComponentProps> = ({ initialCardId }) => {
+const CardSelectedComponent: React.FC<BankSelectedComponentProps> = ({  }) => {
     const [cards, setCards] = useState<Card[]>([]);
     const t = useTranslations('Transaction');
 
@@ -44,7 +44,7 @@ const CardSelectedComponent: React.FC<BankSelectedComponentProps> = ({ initialCa
                 label={t('selectBankCard')}
                 rules={[{ required: true, message: t('pleaseEnterBankCard') }]}
             >
-                <Select placeholder={t('selectBankCard')}>
+                <Select placeholder={t('selectBankCard')} allowClear>
                     {cards.map((card) => (
                         <Option key={card._id} value={card._id}>
                             {`${card.card_short_name} - ${card.card_number}`}

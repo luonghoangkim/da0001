@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, InputNumber, Button } from "antd";
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
-import { GoalsResponse } from "@/models/goals-modal/goals-response.model";
+import { GoalsResponse, UpdateAmountItem } from "@/models/goals-modal/goals-response.model";
 import { GOALS_SERVICE } from "@/service/goals/goals-service";
 import CardSelectedComponent from "../transaction/card-selected-component";
-import CategoriesSelectedComponent from "../transaction/categories-selected-component";
 
 interface GoalsEditProps {
     isVisible: boolean;
@@ -23,21 +22,18 @@ const GoalsEdit: React.FC<GoalsEditProps> = ({ isVisible, onClose, onSuccess, go
     useEffect(() => {
         if (goals) {
             form.setFieldsValue({
-                saving_amount: goals.saving.saving_amount,
-                saving_goal: goals.saving.saving_goals_amount,
-                card_id: goals.saving._id,
-                category_id: goals.category.category_id,
+                // card_id: goals._id,
             });
         }
     }, [goals, form]);
 
-    const handleEditGoals = async (values: any) => {
+    const handleEditGoals = async (values: UpdateAmountItem) => {
         if (!goals) return;
         setIsLoading(true);
 
         try {
             const payload = values;
-            await GOALS_SERVICE.updateItem(goals.saving._id, payload);
+            await GOALS_SERVICE.updateAmountItem(goals._id, payload);
             onClose();
             form.resetFields();
             toast.success(t('updateSuccess'));
@@ -65,30 +61,12 @@ const GoalsEdit: React.FC<GoalsEditProps> = ({ isVisible, onClose, onSuccess, go
             <Form form={form} layout="vertical" onFinish={handleEditGoals}>
                 <Form.Item
                     name="saving_amount"
-                    label={t('savingAmount')}
+                    label={t('addMoreAmount')}
                     rules={[{ required: true, message: t('pleaseEnterAmount') }]}
                 >
                     <InputNumber min={1} style={{ width: '100%' }} />
                 </Form.Item>
-                <Form.Item
-                    name="saving_goal"
-                    label={t('savingGoal')}
-                    rules={[
-                        { required: true, message: t('pleaseEnterAmount') },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('saving_amount') < value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(new Error(t('goalMustBeGreater')));
-                            },
-                        }),
-                    ]}
-                >
-                    <InputNumber min={1} style={{ width: '100%' }} />
-                </Form.Item>
-                {/* <CardSelectedComponent initialCardId={goals?.saving?._id ?? ""} /> */}
-                {/* <CategoriesSelectedComponent cate_type={"DM003"} initialCategoryId={goals?.category.category_id} /> */}
+                <CardSelectedComponent />
                 <Form.Item>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                         <Button style={{ backgroundColor: '#f5222d', color: '#fff' }} onClick={onClose}>

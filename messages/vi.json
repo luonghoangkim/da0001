@@ -212,7 +212,8 @@
         "savingAmount": "Số tiền tiết kiệm",
         "savingGoal": "Mục tiêu tiết kiệm",
         "pleaseEnterAmount": "Vui lòng nhập số tiền",
-        "goalMustBeGreater": "Mục tiêu phải lớn hơn gửi vào"
+        "goalMustBeGreater": "Mục tiêu phải lớn hơn gửi vào",
+        "addMoreAmount" : "Thêm tiền vào tiết kiệm"
     },
     "Categories": {
         "addCategories": "Thêm danh mục",

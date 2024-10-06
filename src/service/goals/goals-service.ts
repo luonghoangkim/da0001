@@ -1,4 +1,4 @@
-import { CardModel } from '@/models/card-modal/credit-card.modal';
+import { UpdateAmountItem } from '@/models/goals-modal/goals-response.model';
 import { CreateGoalsModel } from '@/models/goals-modal/goals.modal';
 import axios from 'axios';
 
@@ -48,11 +48,11 @@ const searchData = async () => {
 };
 
 
-const updateItem = async (id: string, payload: CardModel) => {
+const updateAmountItem = async (id: string, payload: UpdateAmountItem) => {
     const token = localStorage.getItem('authToken');
 
     try {
-        const res = await axios.patch(`${API_URL}/api/v2/saving/update-card/${id}`, {
+        const res = await axios.patch(`${API_URL}/api/v2/saving/update-saving-amount/${id}`, {
             payload
         }, {
             headers: {
@@ -68,11 +68,11 @@ const updateItem = async (id: string, payload: CardModel) => {
     }
 };
 
-const deleteItem = async (id: string) => {
+const deleteItem = async (savingId: string, cardId: string) => {
     const token = localStorage.getItem('authToken');
 
     try {
-        const res = await axios.delete(`${API_URL}/api/v2/saving/delete-saving/${id}`, {
+        const res = await axios.delete(`${API_URL}/api/v2/saving/delete-saving/${savingId}/${cardId}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -107,7 +107,8 @@ const getBank = async () => {
 export const GOALS_SERVICE = {
     create,
     searchData,
-    updateItem,
+    // updateItem,
     deleteItem,
     getBank,
+    updateAmountItem,
 }

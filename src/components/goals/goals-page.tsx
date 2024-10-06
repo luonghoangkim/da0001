@@ -9,6 +9,7 @@ import GoalsEdit from "./goals-edit-form";
 import { GoalsResponse } from "@/models/goals-modal/goals-response.model";
 import { GoalsCard } from "./goals-card";
 import { GOALS_SERVICE } from "@/service/goals/goals-service";
+import DeleteConfirmationModal from "./goals-delete-form";
 
 const GoalsPage = () => {
     const [cards, setCards] = useState<GoalsResponse[]>([]);
@@ -50,10 +51,10 @@ const GoalsPage = () => {
         setIsDeleteModalVisible(true);
     };
 
-    const handleDeleteGoals = async () => {
+    const handleDeleteGoals = async (values: { card_id: string }): Promise<void> => {
         if (!selectedGoals) return;
         try {
-            await GOALS_SERVICE.deleteItem(selectedGoals);
+            await GOALS_SERVICE.deleteItem(selectedGoals, values.card_id);
             toast.success(t('removeSuccess'));
             handleSearchCreditCards();
         } catch (error) {
@@ -64,18 +65,18 @@ const GoalsPage = () => {
             setSelectedGoalId(null);
         }
     };
-    console.log({cards: cards})
+
     return (
         <>
             <Spin spinning={isLoadingSearch}>
                 <div className="flex flex-wrap bg-gray-100 justify-start gap-4">
                     {cards.map(goal => (
                         <GoalsCard
-                            key={goal.saving?._id}
-                            amount={goal.saving?.saving_amount}
-                            goals={goal.saving?.saving_goals_amount}
-                            categories={goal.category?.category_name}
-                            onRemove={() => showDeleteModal(goal.saving._id ?? "")}
+                            key={goal?._id}
+                            amount={goal?.saving_amount}
+                            goals={goal?.saving_goals_amount}
+                            categories={goal.category_id?.cate_name}
+                            onRemove={() => showDeleteModal(goal._id ?? "")}
                             onAdjust={() => showEditCardModal(goal)}
                         />
                     ))}
@@ -101,26 +102,12 @@ const GoalsPage = () => {
                 />
 
                 {/* Modal xác nhận xóa */}
-                <Modal
-                    title={t('confirmDelete')}
-                    open={isDeleteModalVisible}
+                <DeleteConfirmationModal
+                    isVisible={isDeleteModalVisible}
                     onCancel={() => setIsDeleteModalVisible(false)}
-                    footer={[
-                        <Button key="cancel" onClick={() => setIsDeleteModalVisible(false)}>
-                            {t('cancel')}
-                        </Button>,
-                        <Button
-                            key="delete"
-                            type="primary"
-                            danger
-                            onClick={handleDeleteGoals}
-                        >
-                            {t('remove')}
-                        </Button>,
-                    ]}
-                >
-                    <p>{t('confirmDeleteMessage')}</p>
-                </Modal>
+                    onConfirm={handleDeleteGoals}
+                    savingId={selectedGoals ?? ''}
+                />
             </Spin>
         </>
     );
