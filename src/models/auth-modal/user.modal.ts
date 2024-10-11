@@ -15,10 +15,9 @@ export interface VerifyPayload {
 }
 
 export interface UpdateUserPayload {
-  email: string;
-  image: string;
-  address: string;
-  phone: number;
   name: string;
+  phone: number;
+  email: string;
+  address: string;
   gender: boolean;
 }

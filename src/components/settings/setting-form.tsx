@@ -3,7 +3,7 @@ import { Tabs, Form, Input, Button, Spin, Select } from 'antd';
 import { EnvironmentOutlined, MailOutlined, ManOutlined, PhoneOutlined, UserOutlined, WomanOutlined, LockOutlined, GlobalOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
-import { SETTING_SERVICE } from '@/service/settings/settings-service';
+import { changePassword, SETTING_SERVICE } from '@/service/settings/settings-service';
 import Image from 'next/image'
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from 'next-intl';
@@ -69,7 +69,13 @@ const SettingsTabs = () => {
   const handleChangePassword = async (values: any) => {
     setIsSubmitting(true);
     try {
-      // await changePassword(values.currentPassword, values.newPassword);
+      const payload = {
+        oldPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      };
+
+      await changePassword(payload);
+
       toast.success(t('passwordChangeSuccess'));
       passwordForm.resetFields();
     } catch (error) {
@@ -141,7 +147,6 @@ const SettingsTabs = () => {
                   </Option>
                 </Select>
               </Form.Item>
-
               <Form.Item>
                 <Button type="primary" htmlType="submit" loading={isSubmitting}>
                   {t('updateProfile')}
